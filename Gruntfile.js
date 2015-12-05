@@ -1,5 +1,7 @@
 module.exports = function(grunt) {
     'use strict'; // включить строгий режим
+    // get build time
+    require('time-grunt')(grunt);
     // автоматически загружать задачи
     require('load-grunt-tasks')(grunt);
 
@@ -40,10 +42,11 @@ module.exports = function(grunt) {
         sass: {
             dist: {
                 options: {
-                    style: 'compressed'
+                    style: 'compact',
+                    unixNewlines: true
                 },
                 files: {
-                    'css/build/global.css': 'css/global.scss'
+                    'build/css/global.css': 'src/css/global.scss'
                 }
             }
         },
@@ -57,10 +60,18 @@ module.exports = function(grunt) {
                 options: {
                     spawn: false,
                 },
+            },
+            css: {
+                files: ['src/css/*.scss'],
+                tasks: ['sass'],
+                options: {
+                    spawn: false,
+                }
             }
         }
     });
 
     // регистрация задач
     grunt.registerTask('default', ['watch']);
+    grunt.registerTask('dev', ['sass', 'concat', 'jshint', 'uglify']);
 };
