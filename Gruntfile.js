@@ -15,6 +15,15 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
         config: 'config',
 
+        connect: {
+            server: {
+                options: {
+                    port: 9001,
+                    base: 'build'
+                }
+            }
+        },
+
         concat: {
             dist: {
                 src: ['src/js/*.js'],
@@ -61,6 +70,18 @@ module.exports = function(grunt) {
                 }
             }
         },
+        wiredep: {
+            task: {
+                // Point to the files that should be updated when
+                // you run `grunt wiredep`
+                src: [
+                    'src/*.jade'
+                ],
+                options: {
+                    // https://github.com/taptapship/wiredep#configuration
+                }
+            }
+        },
         watch: {
             options: {
                 livereload: true
@@ -90,6 +111,6 @@ module.exports = function(grunt) {
     });
 
     // регистрация задач
-    grunt.registerTask('default', ['watch']);
-    grunt.registerTask('dev', ['newer:jade', 'newer:sass', 'concat', 'jshint', 'uglify']);
+    grunt.registerTask('default', ['connect', 'watch']);
+    grunt.registerTask('dev', ['newer:jade', 'newer:sass', 'concat', 'jshint', 'uglify', 'wiredep']);
 };

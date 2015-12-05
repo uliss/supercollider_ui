@@ -1,0 +1,23 @@
+{
+  "name": "supercollider_ui",
+  "description": "SuperCollider Web UI",
+  "main": "Gruntfile.js",
+  "authors": [
+    "Serge Poltavski"
+  ],
+  "license": "GPL-3.0",
+  "moduleType": [
+    "amd"
+  ],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4"
+  }
+}
