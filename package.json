@@ -1,0 +1,22 @@
+{
+  "name": "supercollider_ui",
+  "version": "1.0.0",
+  "description": "SuperCollider Web UI",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "."
+  },
+  "author": "Serge Poltavski",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "grunt-contrib-connect": "^0.11.2",
+    "grunt-contrib-jshint": "^0.11.3",
+    "grunt-contrib-uglify": "^0.11.0",
+    "grunt-newer": "^1.1.1",
+    "load-grunt-tasks": "^3.3.0"
+  }
+}
