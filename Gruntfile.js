@@ -12,7 +12,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         config: 'config',
-        less: {},
+
         concat: {
             dist: {
                 src: ['src/js/*.js'],
@@ -37,20 +37,30 @@ module.exports = function(grunt) {
                 'src/js/*.js'
             ]
         },
+        sass: {
+            dist: {
+                options: {
+                    style: 'compressed'
+                },
+                files: {
+                    'css/build/global.css': 'css/global.scss'
+                }
+            }
+        },
         watch: {
             options: {
                 livereload: true
             },
-            less: {
-                files: ['<%= config.app %>/styles/{,*/}*.less'],
-                tasks: ['less:dev']
-            },
             js: {
-                files: ['<%= config.app %>/scripts/{,*/}*.js']
+                files: ['src/js/*.js'],
+                tasks: ['concat', 'jshint', 'uglify'],
+                options: {
+                    spawn: false,
+                },
             }
         }
     });
 
     // регистрация задач
-    grunt.registerTask('default', ['concat', 'jshint', 'uglify']);
+    grunt.registerTask('default', ['watch']);
 };
