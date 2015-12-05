@@ -49,6 +49,18 @@ module.exports = function(grunt) {
                 }
             }
         },
+        jade: {
+            compile: {
+                options: {
+                    data: {
+                        debug: false
+                    }
+                },
+                files: {
+                    "build/index.html": ["src/index.jade"]
+                }
+            }
+        },
         watch: {
             options: {
                 livereload: true
@@ -66,11 +78,18 @@ module.exports = function(grunt) {
                 options: {
                     spawn: false,
                 }
+            },
+            jade: {
+                files: ['src/*.jade'],
+                tasks: ['jade'],
+                options: {
+                    spawn: false,
+                }
             }
         }
     });
 
     // регистрация задач
     grunt.registerTask('default', ['watch']);
-    grunt.registerTask('dev', ['sass', 'concat', 'jshint', 'uglify']);
+    grunt.registerTask('dev', ['newer:jade', 'newer:sass', 'concat', 'jshint', 'uglify']);
 };
