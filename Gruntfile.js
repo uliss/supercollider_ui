@@ -51,7 +51,8 @@ module.exports = function(grunt) {
             dist: {
                 options: {
                     style: 'compact',
-                    unixNewlines: true
+                    unixNewlines: true,
+                    sourceMap: true
                 },
                 files: {
                     'build/css/global.css': 'src/css/global.scss'
@@ -59,6 +60,9 @@ module.exports = function(grunt) {
             }
         },
         jade: {
+            options: {
+                pretty: true,
+            },
             compile: {
                 options: {
                     data: {
@@ -70,16 +74,14 @@ module.exports = function(grunt) {
                 }
             }
         },
-        wiredep: {
-            task: {
-                // Point to the files that should be updated when
-                // you run `grunt wiredep`
-                src: [
-                    'src/*.jade'
-                ],
+        htmllint: {
+            all: {
                 options: {
-                    // https://github.com/taptapship/wiredep#configuration
-                }
+                    force: false
+                },
+                src: [
+                    'build/*.html'
+                ]
             }
         },
         watch: {
@@ -112,5 +114,5 @@ module.exports = function(grunt) {
 
     // регистрация задач
     grunt.registerTask('default', ['connect', 'watch']);
-    grunt.registerTask('dev', ['newer:jade', 'newer:sass', 'concat', 'jshint', 'uglify', 'wiredep']);
+    grunt.registerTask('dev', ['newer:jade', 'newer:htmllint', 'newer:sass', 'concat', 'jshint', 'uglify']);
 };
