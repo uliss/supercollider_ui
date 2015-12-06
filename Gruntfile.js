@@ -125,5 +125,6 @@ module.exports = function(grunt) {
 
     // регистрация задач
     grunt.registerTask('default', ['connect', 'watch']);
-    grunt.registerTask('dev', ['newer:jade', 'newer:htmllint', 'newer:sass', 'concat', 'jshint', 'uglify', 'bowercopy']);
+    grunt.registerTask('dev', ['newer:jade', 'newer:htmllint', 'newer:sass',
+        'concat', 'jshint', 'uglify', 'newer:bowercopy']);
 };
