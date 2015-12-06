@@ -51,11 +51,22 @@ module.exports = function(grunt) {
             dist: {
                 options: {
                     style: 'compact',
-                    unixNewlines: true,
-                    sourceMap: true
+                    unixNewlines: true
                 },
                 files: {
                     'build/css/global.css': 'src/css/global.scss'
+                }
+            }
+        },
+        bowercopy: {
+            options: {
+                destPrefix: 'build'
+            },
+            all: {
+                files: {
+                    '/js/lib/jquery.min.js': 'jquery/dist/jquery.min.js',
+                    '/js/lib/jquery.knob.min.js' : 'aterrien/jQuery-Knob/dist/jquery.knob.min.js',
+                    '/css/bootstrap.min.css' : 'bootstrap-css/css/bootstrap.min.css'
                 }
             }
         },
@@ -114,5 +125,5 @@ module.exports = function(grunt) {
 
     // регистрация задач
     grunt.registerTask('default', ['connect', 'watch']);
-    grunt.registerTask('dev', ['newer:jade', 'newer:htmllint', 'newer:sass', 'concat', 'jshint', 'uglify']);
+    grunt.registerTask('dev', ['newer:jade', 'newer:htmllint', 'newer:sass', 'concat', 'jshint', 'uglify', 'bowercopy']);
 };
