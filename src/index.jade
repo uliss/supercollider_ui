@@ -2,16 +2,11 @@ doctype html
 // htmllint indent-width=2 line-end-style=false class-style=dash
 html(lang="en-us")
     head
-        meta(charset="utf-8")
-        meta(name="viewport", content="width=device-width, initial-scale=1.0")
-        link(rel="stylesheet", media="screen", href="/css/bootstrap.min.css")
-        link(rel="stylesheet", media="screen", href="/css/global.css")
-        title SuperCollider Web UI
-        script(src="/socket.io/socket.io.js")
+        include jade/head.jade
     body
         .container-fluid
             h1 SuperCollider Web UI
-            
+
             .row
                 .col-md-2
                 .col-md-4.bg-info.catlink
@@ -33,3 +28,12 @@ html(lang="en-us")
                 .col-md-4.bg-info.catlink
                     a(href="/vlabel") Visual label
                 .col-md-2
+            .row
+                .col-md-2
+                .col-md-4.bg-info.catlink
+                    a(href="/utils") Utililities
+                .col-md-4.bg-info.catlink
+                    a(href="/info") Information
+                .col-md-2
+                
+        script var socket = io();
