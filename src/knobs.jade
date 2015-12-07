@@ -11,62 +11,23 @@ html(lang="en-us")
             
             .row
                 .col-md-2
-                .col-md-1
-                    input(class="knob" id="knob00")
-                .col-md-1
-                    input(class="knob" id="knob01")
-                .col-md-1
-                    input(class="knob" id="knob02")
-                .col-md-1
-                    input(class="knob" id="knob03")
-                .col-md-1
-                    input(class="knob" id="knob04")
-                .col-md-1
-                    input(class="knob" id="knob05")
-                .col-md-1
-                    input(class="knob" id="knob06")
-                .col-md-1
-                    input(class="knob" id="knob07")
+                - for (var i=0; i<8; i++)
+                    .col-md-1
+                        input(class="knob" id="knob0" + i)
                 .col-md-2
                 
             .row
                 .col-md-2
-                .col-md-1
-                    input(class="knob" id="knob10")
-                .col-md-1
-                    input(class="knob" id="knob11")
-                .col-md-1
-                    input(class="knob" id="knob12")
-                .col-md-1
-                    input(class="knob" id="knob13")
-                .col-md-1
-                    input(class="knob" id="knob14")
-                .col-md-1
-                    input(class="knob" id="knob15")
-                .col-md-1
-                    input(class="knob" id="knob16")
-                .col-md-1
-                    input(class="knob" id="knob17")
+                - for (var i=0; i<8; i++)
+                    .col-md-1
+                        input(class="knob" id="knob1" + i)
                 .col-md-2
                 
             .row
                 .col-md-2
-                .col-md-1
-                    input(class="knob knob2" id="knob20")
-                .col-md-1
-                    input(class="knob knob2" id="knob21")
-                .col-md-1
-                    input(class="knob knob2" id="knob22")
-                .col-md-1
-                    input(class="knob knob2" id="knob23")
-                .col-md-1
-                    input(class="knob knob2" id="knob24")
-                .col-md-1
-                    input(class="knob knob2" id="knob25")
-                .col-md-1
-                    input(class="knob knob2" id="knob26")
-                .col-md-1
-                    input(class="knob knob2" id="knob27")
+                - for (var i=0; i<8; i++)
+                    .col-md-1
+                        input(class="knob knob2" id="knob2" + i)
                 .col-md-2
             
             script(type='text/javascript').
