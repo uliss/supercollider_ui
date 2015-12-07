@@ -1,0 +1,76 @@
+doctype html
+// htmllint indent-width=2 line-end-style=false class-style=dash
+html(lang="en-us")
+    head
+        include jade/head.jade
+        script(src="/js/lib/jquery.min.js")
+        script(src="/js/lib/jquery.knob.min.js")
+    body
+        .container-fluid
+            h1 Knob Grid
+            
+            .row
+                .col-md-2
+                .col-md-1
+                    input(class="knob" id="knob00")
+                .col-md-1
+                    input(class="knob" id="knob01")
+                .col-md-1
+                    input(class="knob" id="knob02")
+                .col-md-1
+                    input(class="knob" id="knob03")
+                .col-md-1
+                    input(class="knob" id="knob04")
+                .col-md-1
+                    input(class="knob" id="knob05")
+                .col-md-1
+                    input(class="knob" id="knob06")
+                .col-md-1
+                    input(class="knob" id="knob07")
+                .col-md-2
+                
+            .row
+                .col-md-2
+                .col-md-1
+                    input(class="knob" id="knob10")
+                .col-md-1
+                    input(class="knob" id="knob11")
+                .col-md-1
+                    input(class="knob" id="knob12")
+                .col-md-1
+                    input(class="knob" id="knob13")
+                .col-md-1
+                    input(class="knob" id="knob14")
+                .col-md-1
+                    input(class="knob" id="knob15")
+                .col-md-1
+                    input(class="knob" id="knob16")
+                .col-md-1
+                    input(class="knob" id="knob17")
+                .col-md-2
+                
+            .row
+                .col-md-2
+                .col-md-1
+                    input(class="knob knob2" id="knob20")
+                .col-md-1
+                    input(class="knob knob2" id="knob21")
+                .col-md-1
+                    input(class="knob knob2" id="knob22")
+                .col-md-1
+                    input(class="knob knob2" id="knob23")
+                .col-md-1
+                    input(class="knob knob2" id="knob24")
+                .col-md-1
+                    input(class="knob knob2" id="knob25")
+                .col-md-1
+                    input(class="knob knob2" id="knob26")
+                .col-md-1
+                    input(class="knob knob2" id="knob27")
+                .col-md-2
+            
+            script $(document).ready($(".knob2").attr("data-cursor", "true").attr("data-min", -1.0).attr("data-max", 1.0).attr("data-step", 0.01));
+                
+            script $(document).ready($(".knob").attr("data-angleArc", 300).attr("value", 0).attr("data-angleOffset", -150).attr("data-width", 60).knob({stopper: true, height: 100, 'change': function(v){ if((this.cv == 0) && (v > 50)) {return false;} if((this.cv == 100) && (v < 50)) {return false;} this.cv = v; }}));
+            
+            

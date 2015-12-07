@@ -82,7 +82,8 @@ module.exports = function(grunt) {
                 },
                 files: {
                     "build/index.html": ["src/index.jade"],
-                    "build/info.html":  ["src/info.jade"]
+                    "build/info.html":  ["src/info.jade"],
+                    "build/knobs.html":  ["src/knobs.jade"],
                 }
             }
         },
