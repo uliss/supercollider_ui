@@ -4,6 +4,9 @@ var io = require('socket.io')(http);
 var keypress = require('keypress');
 var osc = require('node-osc');
 
+var NODE_PORT = 3000;
+var OSC_PORT = 3333;
+
 Number.prototype.toHHMMSS = function () {
     var seconds = Math.floor(this),
     hours = Math.floor(seconds / 3600);
@@ -17,10 +20,11 @@ Number.prototype.toHHMMSS = function () {
     return hours+':'+minutes+':'+seconds;
 };
 
-var oscServer = new osc.Server(3333, '0.0.0.0');
-oscServer.on("/sc/ping", function (msg, rinfo) {
-    oscServer.ping_time = new Date().getTime();
-});
+try {
+    var oscServer = new osc.Server(OSC_PORT, '0.0.0.0');
+} catch(e) {
+    throw new Error("Can't start OSC server");
+};
 
 oscServer.on("/sc/stat", function (msg, rinfo) {
     var json = JSON.parse(msg[1]);
@@ -65,18 +69,9 @@ io.on('connection', function(socket){
     console.log('connected:    ' + addr);
 
     socket.on('get_info', function(){
-        var current_time = new Date().getTime();
-        var state = false;
-        var time_diff = current_time - oscServer.ping_time;
-        // console.log(time_diff);
-        if(time_diff < 3000) {
-            state = true;
-        }
-
         io.to(socket.id).emit("info", {
             clientsCount: io.engine.clientsCount,
-            remoteAddress: addr,
-            superCollider: state
+            remoteAddress: addr
         });
     });
 
@@ -88,6 +83,6 @@ io.on('connection', function(socket){
     });
 });
 
-http.listen(3000, function(){
-    console.log('listening on *:3000');
+http.listen(NODE_PORT, function(){
+    console.log('listening on *:' + NODE_PORT);
 });
