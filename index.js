@@ -2,6 +2,7 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var keypress = require('keypress');
+var osc = require('node-osc');
 
 Number.prototype.toHHMMSS = function () {
     var seconds = Math.floor(this),
@@ -16,6 +17,17 @@ Number.prototype.toHHMMSS = function () {
     return hours+':'+minutes+':'+seconds;
 };
 
+var oscServer = new osc.Server(3333, '0.0.0.0');
+oscServer.on("/sc/ping", function (msg, rinfo) {
+    oscServer.ping_time = new Date().getTime();
+});
+
+oscServer.on("/sc/stat", function (msg, rinfo) {
+    var json = JSON.parse(msg[1]);
+    // console.log(json);
+    io.emit("/sc/stat", json);
+});
+
 app.get('/', function(req, res){
     res.sendFile(__dirname + '/build/index.html');
 });
@@ -25,8 +37,7 @@ app.get('/css/*.css', function(req, res){
     res.sendFile(__dirname + '/build' + req['url']);
 });
 
-// serve JS lib files
-app.get('/js/lib/*.js', function(req, res){
+app.get('/css/bootstrap/fonts/*', function(req, res){
     res.sendFile(__dirname + '/build' + req['url']);
 });
 
@@ -54,9 +65,18 @@ io.on('connection', function(socket){
     console.log('connected:    ' + addr);
 
     socket.on('get_info', function(){
-        io.emit("info", {
+        var current_time = new Date().getTime();
+        var state = false;
+        var time_diff = current_time - oscServer.ping_time;
+        // console.log(time_diff);
+        if(time_diff < 3000) {
+            state = true;
+        }
+
+        io.to(socket.id).emit("info", {
             clientsCount: io.engine.clientsCount,
-            remoteAddress: addr
+            remoteAddress: addr,
+            superCollider: state
         });
     });
 

@@ -62,11 +62,16 @@ module.exports = function(grunt) {
             options: {
                 destPrefix: 'build'
             },
-            all: {
+            libs: {
                 files: {
                     '/js/lib/jquery.min.js': 'jquery/dist/jquery.min.js',
                     '/js/lib/jquery.knob.min.js' : 'aterrien/jQuery-Knob/dist/jquery.knob.min.js',
-                    '/css/bootstrap.min.css' : 'bootstrap-css/css/bootstrap.min.css'
+                    '/css/bootstrap/css/bootstrap.min.css' : 'bootstrap-css/css/bootstrap.min.css'
+                }
+            },
+            folders: {
+                files: {
+                    '/css/bootstrap/fonts': 'bootstrap-css/fonts'
                 }
             }
         },
@@ -129,5 +134,5 @@ module.exports = function(grunt) {
     // регистрация задач
     grunt.registerTask('default', ['connect', 'watch']);
     grunt.registerTask('dev', ['newer:jade', 'newer:htmllint', 'newer:sass',
-        'concat', 'jshint', 'uglify', 'newer:bowercopy']);
+    'concat', 'jshint', 'uglify', 'bowercopy']);
 };

@@ -34,12 +34,20 @@ h1 {
 }
 
 table.info {
-    
+    margin-top: 50px;
+}
+
+.table-vcenter td {
+   vertical-align: middle!important;
 }
 
 #info {
     font-size: 1.1em;
     min-height: 100px;
+}
+
+#sc_state_icon {
+    font-size: 2em;
 }
 
 #timer1 {

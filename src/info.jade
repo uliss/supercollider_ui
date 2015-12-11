@@ -9,13 +9,30 @@ html(lang="en-us")
                 .col-md-3
                 .col-md-6#info
                     h1 Server Information
-                    table.table.info.table-condensed.table-striped
+                    table.table.table-striped.info.table-vcenter
                         tr
                             td Connected clients:
                             td.clients
                         tr
-                            td Remote address
+                            td Remote address:
                             td.remote-address
+                        tr
+                            td SuperCollider state:
+                            td 
+                                span#sc_state_icon
+                                scan#sc_state_text
+                        tr
+                            td Running servers:
+                            td#running-servers
+                        tr
+                            td Peak CPU:
+                            td#peak-cpu
+                        tr
+                            td Average CPU:
+                            td#avg-cpu
+                        tr 
+                            td MIDI-devices:
+                            td#midi-devices
                 .col-md-3
             
 
