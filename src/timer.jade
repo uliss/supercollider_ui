@@ -1,0 +1,21 @@
+doctype html
+// htmllint indent-width=2 line-end-style=false class-style=dash
+html(lang="en-us")
+    head
+        include jade/head.jade
+        script(src="/js/lib/jquery.min.js")
+    body
+        .container-fluid
+            h1 Timer
+            
+            #timer1 --:--:--
+            
+            script(type='text/javascript').
+                var socket = io();
+                $(document).ready(
+                    socket.on('timer1', 
+                        function(msg){
+                            $("#timer1").text(msg);
+                        })
+                );
+            

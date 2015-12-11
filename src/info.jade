@@ -3,19 +3,21 @@ doctype html
 html(lang="en-us")
     head
         include jade/head.jade
-        script(src="/js/lib/jquery.min.js")
     body
         .container-fluid
-            h1 Server Information
-            
             .row
                 .col-md-3
-                .col-md-6.bg-info#info
-                    p no information
+                .col-md-6#info
+                    h1 Server Information
+                    table.table.info.table-condensed.table-striped
+                        tr
+                            td Connected clients:
+                            td.clients
+                        tr
+                            td Remote address
+                            td.remote-address
                 .col-md-3
             
-                
-        
-        script(src="/js/supercollider_ui.min.js")
+
         script $(document).ready(get_info());
         

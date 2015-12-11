@@ -1,10 +1,13 @@
 var socket = io();
 
 function get_info() {
-    $("#info").text("...");
+    $(".info .clients").text("...");
     socket.emit('get_info');
 }
 
-socket.on('info', function(msg){
-    $("#info").text(msg);
+$(document).ready(function() {
+    socket.on('info', function(msg){
+        $(".info .clients").text(msg.clientsCount);
+        $(".info .remote-address").text(msg.remoteAddress);
+    });
 });

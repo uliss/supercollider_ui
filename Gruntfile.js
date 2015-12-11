@@ -84,6 +84,7 @@ module.exports = function(grunt) {
                     "build/index.html": ["src/index.jade"],
                     "build/info.html":  ["src/info.jade"],
                     "build/knobs.html":  ["src/knobs.jade"],
+                    "build/timer.html":  ["src/timer.jade"],
                 }
             }
         },
@@ -116,7 +117,7 @@ module.exports = function(grunt) {
                 }
             },
             jade: {
-                files: ['src/*.jade'],
+                files: ['src/*.jade', 'src/jade/*.jade'],
                 tasks: ['jade'],
                 options: {
                     spawn: false,
