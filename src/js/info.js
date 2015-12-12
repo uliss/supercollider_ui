@@ -2,7 +2,7 @@ var socket = io();
 
 function get_info() {
     $(".info .clients").text("...");
-    socket.emit('get_info');
+    socket.emit('/nodejs/info');
 }
 
 $(document).ready(function() {
@@ -34,17 +34,17 @@ $(document).ready(function() {
         set_poll_state(msg);
     });
 
-    socket.on('info', function(msg){
+    socket.on('/nodejs/info/update', function(msg){
         $(".info .clients").text(msg.clientsCount);
         $(".info .remote-address").text(msg.remoteAddress);
     });
 
-    socket.on("/sc/stat", function(obj){
+    socket.on("/info/sc/stat/update", function(obj){
         var opts = obj.serverOptions;
 
         $("#running-servers").text(obj.runningServers.join());
-        $("#peak-cpu").text((obj.peakCPU).toFixed(2));
-        $("#avg-cpu").text((obj.avgCPU).toFixed(2));
+        $("#peak-cpu").text(obj.peakCPU ? (obj.peakCPU).toFixed(2) : "");
+        $("#avg-cpu").text(obj.avgCPU ? (obj.avgCPU).toFixed(2) : "");
         $("#sample-rate").text(opts.sampleRate);
 
         if(obj.runningServers.length > 0) {

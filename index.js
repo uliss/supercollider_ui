@@ -5,8 +5,8 @@ var keypress = require('keypress');
 var osc = require('node-osc');
 
 var NODE_PORT = 3000;
-var OSC_PORT = 3333;
-var OSC_CLIENT_PORT = OSC_PORT + 1;
+var OSC_IN_PORT = 5000;
+var OSC_OUT_PORT = OSC_IN_PORT + 1;
 
 Number.prototype.toHHMMSS = function () {
     var seconds = Math.floor(this),
@@ -22,16 +22,18 @@ Number.prototype.toHHMMSS = function () {
 };
 
 try {
-    var oscServer = new osc.Server(OSC_PORT, '0.0.0.0');
-    var oscClient = new osc.Client('127.0.0.1', OSC_CLIENT_PORT);
+    var oscServer = new osc.Server(OSC_IN_PORT, '0.0.0.0');
+    var oscClient = new osc.Client('127.0.0.1', OSC_OUT_PORT);
 } catch(e) {
     throw new Error("Can't start OSC server");
 };
 
+// OSC
 oscServer.on("/sc/stat", function (msg, rinfo) {
     var json = JSON.parse(msg[1]);
     // console.log(json);
-    io.emit("/sc/stat", json);
+    // send to browsers
+    io.emit("/info/sc/stat/update", json);
 });
 
 app.get('/', function(req, res){
@@ -70,17 +72,20 @@ io.on('connection', function(socket){
     var addr = socket.request.connection.remoteAddress.substring(7);
     console.log('connected:    ' + addr);
 
-    socket.on('get_info', function(){
-        io.to(socket.id).emit("info", {
+    socket.on('/nodejs/info', function(){
+        // send to dedicated client
+        io.to(socket.id).emit("/nodejs/info/update", {
             clientsCount: io.engine.clientsCount,
             remoteAddress: addr
         });
     });
 
     socket.on('/info/poll', function(msg){
+        // send to other clients
         socket.broadcast.emit("/info/poll/update", msg);
-        oscClient.send('/sp/info/poll', msg);
-        console.log(msg);
+        // send to supercollider
+        // console.log(msg);
+        oscClient.send('/nodejs/stat/control', msg);
     });
 
     // ping/pong NodeJS
