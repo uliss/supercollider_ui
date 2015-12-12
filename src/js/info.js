@@ -6,6 +6,34 @@ function get_info() {
 }
 
 $(document).ready(function() {
+    function set_poll_state(state) {
+        var obj = $("#poll-info");
+        if(state == 1) {
+            obj.addClass("btn-info");
+            obj.text("ON");
+            obj.attr("value", 1);
+        } else {
+            obj.removeClass("btn-info");
+            obj.text("OFF");
+            obj.attr("value", 0);
+        }
+    }
+
+    $("#poll-info").click(function(){
+        if($(this).attr("value") == 1) {
+            set_poll_state(0);
+            socket.emit("/info/poll", 0);
+        }
+        else {
+            set_poll_state(1);
+            socket.emit("/info/poll", 1);
+        }
+    });
+
+    socket.on('/info/poll/update', function(msg){
+        set_poll_state(msg);
+    });
+
     socket.on('info', function(msg){
         $(".info .clients").text(msg.clientsCount);
         $(".info .remote-address").text(msg.remoteAddress);

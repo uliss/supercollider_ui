@@ -6,6 +6,7 @@ var osc = require('node-osc');
 
 var NODE_PORT = 3000;
 var OSC_PORT = 3333;
+var OSC_CLIENT_PORT = OSC_PORT + 1;
 
 Number.prototype.toHHMMSS = function () {
     var seconds = Math.floor(this),
@@ -22,6 +23,7 @@ Number.prototype.toHHMMSS = function () {
 
 try {
     var oscServer = new osc.Server(OSC_PORT, '0.0.0.0');
+    var oscClient = new osc.Client('127.0.0.1', OSC_CLIENT_PORT);
 } catch(e) {
     throw new Error("Can't start OSC server");
 };
@@ -75,7 +77,13 @@ io.on('connection', function(socket){
         });
     });
 
-    // ping/pong
+    socket.on('/info/poll', function(msg){
+        socket.broadcast.emit("/info/poll/update", msg);
+        oscClient.send('/sp/info/poll', msg);
+        console.log(msg);
+    });
+
+    // ping/pong NodeJS
     socket.on('/ping', function(){ io.emit('/pong');});
 
     socket.on('disconnect', function(){
