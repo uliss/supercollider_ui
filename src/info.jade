@@ -1,5 +1,5 @@
 doctype html
-// htmllint indent-width=2 line-end-style=false class-style=dash
+// htmllint indent-width=2 line-end-style=false class-style=dash id-class-style=dash id-no-dup=true
 html(lang="en-us")
     head
         include jade/head.jade
@@ -19,8 +19,7 @@ html(lang="en-us")
                         tr
                             td SuperCollider state:
                             td 
-                                span#sc_state_icon
-                                scan#sc_state_text
+                                span#state-icon
                         tr
                             td Running servers:
                             td#running-servers
@@ -30,9 +29,15 @@ html(lang="en-us")
                         tr
                             td Average CPU:
                             td#avg-cpu
+                        tr
+                            td Sample rate:
+                            td#sample-rate
                         tr 
                             td MIDI-devices:
                             td#midi-devices
+                        tr
+                            td Audio-devices:
+                            td#audio-devices
                 .col-md-3
             
 

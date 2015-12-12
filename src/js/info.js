@@ -12,15 +12,18 @@ $(document).ready(function() {
     });
 
     socket.on("/sc/stat", function(obj){
+        var opts = obj.serverOptions;
+
         $("#running-servers").text(obj.runningServers.join());
-        $("#peak-cpu").text(obj.peakCPU);
-        $("#avg-cpu").text(obj.avgCPU);
+        $("#peak-cpu").text((obj.peakCPU).toFixed(2));
+        $("#avg-cpu").text((obj.avgCPU).toFixed(2));
+        $("#sample-rate").text(opts.sampleRate);
 
         if(obj.runningServers.length > 0) {
-            $("#sc_state_icon").attr("class", "glyphicon glyphicon-volume-up");
+            $("#state-icon").attr("class", "glyphicon glyphicon-volume-up");
         }
         else {
-            $("#sc_state_icon").attr("class", "glyphicon glyphicon-volume-off");
+            $("#state-icon").attr("class", "glyphicon glyphicon-volume-off");
             $("#peak-cpu").text("...");
             $("#avg-cpu").text("...");
         }
@@ -30,6 +33,13 @@ $(document).ready(function() {
         $.each(obj.midiDevices, function(i) {
             var li = $('<li/>').text(obj.midiDevices[i]);
             li.appendTo(ul);
+        });
+
+        var audio_ul = $('<ul/>');
+        $("#audio-devices").html(audio_ul);
+        $.each(obj.audioDevices, function(i) {
+            var li = $('<li/>').text(obj.audioDevices[i]);
+            li.appendTo(audio_ul);
         });
     });
 });
