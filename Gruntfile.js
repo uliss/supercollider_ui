@@ -28,6 +28,10 @@ module.exports = function(grunt) {
             dist: {
                 src: ['src/js/*.js'],
                 dest: 'build/js/<%= pkg.name %>.js'
+            },
+            ui: {
+                src: ['bower_components/jquery-ui/ui/*.js'],
+                dest: 'build/js/lib/jquery-ui.js'
             }
         },
         uglify: {
@@ -38,6 +42,10 @@ module.exports = function(grunt) {
                 src: 'build/js/<%= pkg.name %>.js',
                 dest: 'build/js/<%= pkg.name %>.min.js'
             },
+            ui: {
+                src: 'build/js/lib/jquery-ui.js',
+                dest: 'build/js/lib/jquery-ui.min.js',
+            }
         },
         jshint: {
             options: {
@@ -90,6 +98,7 @@ module.exports = function(grunt) {
                     "build/info.html":  ["src/info.jade"],
                     "build/knobs.html":  ["src/knobs.jade"],
                     "build/timer.html":  ["src/timer.jade"],
+                    "build/speakers.html" : ["src/speakers.jade"]
                 }
             }
         },

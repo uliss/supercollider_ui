@@ -1,0 +1,34 @@
+doctype html
+// htmllint indent-width=2 line-end-style=false class-style=dash id-class-style=dash id-no-dup=true
+html(lang="en-us")
+    head
+        include jade/head.jade 
+        script(src="//code.jquery.com/ui/1.11.4/jquery-ui.js")
+    body
+        .container-fluid
+            .row
+                .col-md-3
+                .col-md-6#info
+                    h1 Speakers test
+                    //- button(type="button" class="btn" id="poll-info") OFF
+                .col-md-3
+            .row
+                .col-md-3.col-xs-1
+                .col-md-1.col-xs-2
+                    #speaker-front-l
+                .col-md-4.col-xs-4
+                .col-md-1.col-xs-2
+                    #speaker-front-r
+                .col-md-3.col-xs-1
+            .row
+                .col-md-12.speaker-space
+            .row
+                .col-md-3.col-xs-1
+                .col-md-1.col-xs-2
+                    #speaker-back-l
+                .col-md-4.col-xs-4
+                .col-md-1.col-xs-2
+                    #speaker-back-r
+                .col-md-3.col-xs-1
+            
+        script $(document).ready(get_info());

@@ -54,6 +54,10 @@ app.get('/js/*.js', function(req, res){
     res.sendFile(__dirname + '/build' + req['url']);
 });
 
+app.get('/speakers', function(req, res) {
+    res.sendFile(__dirname + '/build/speakers.html');
+});
+
 app.get('/info', function(req, res) {
     res.sendFile(__dirname + '/build/info.html');
 });
@@ -78,6 +82,13 @@ io.on('connection', function(socket){
             clientsCount: io.engine.clientsCount,
             remoteAddress: addr
         });
+    });
+
+    socket.on('/speakers/test', function(msg){
+        // console.log("send " + msg);
+        // send to other devices
+        socket.broadcast.emit("/speakers/test/update", msg);
+        oscClient.send('/nodejs/speaker/control', msg[0], msg[1]);
     });
 
     socket.on('/info/poll', function(msg){
