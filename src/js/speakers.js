@@ -121,4 +121,23 @@ $(document).ready(function() {
         var sel = "#speaker-" + lst[msg[0]];
         $(sel).speaker("state", msg[1]);
     });
+
+    function startSpeakerLoop(i) {
+        // var lst = ["front-l", "front-r", "back-l", "back-r"];
+        // var sel = "#speaker-" + lst[i % 4];
+        // // console.log(sel);
+        // $(sel).speaker("toggle");
+        // // if($(sel).speaker("state") === 1) {
+        // //     setTimeout(startSpeakerLoop, 500, i);
+        // // }
+        // // else {
+        //     setTimeout(startSpeakerLoop, 1500, i+1);
+        // // }
+    }
+
+    // Circular motion
+    $("#speaker-circular").click(function() {
+        if($(this).prop("checked"))
+        startSpeakerLoop(0);
+    });
 });
