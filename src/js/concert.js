@@ -4,28 +4,40 @@ $(document).ready(function() {
     socket.on("/concert/info", function(msg){
         $("h2").text(msg.date + " / " + msg.place);
         $("#pieces").html("<ol/>");
-        // var json = JSON.parse(msg);
-        // console.log(json);
     });
 
     socket.on("/concert/add", function(msg){
-        console.log(msg);
-        $("#pieces ol").append("<li><span class=composer>" + msg.composer + "</span> / " +
-        "<span class=title>" + msg.title + "</span> <div><button class=\"btn btn-primary\" id=" + msg.id + ">Start</button></div>" +  "</li>");
-    });
+        // console.log(msg);
+        var ol = $("#pieces ol");
+        var li = $("<li><span class=composer>" + msg.composer + "</span> / " +
+        "<span class=title>" + msg.title + "</span></li>");
 
-    $(document).on('click', 'button', function () {
-        var path = "/concert/control";
-        var msg;
-        if(this.textContent == "Start") {
-            this.textContent = "Stop";
-            msg = "start";
-        }
-        else {
-            this.textContent = "Start";
-            msg = "pause";
-        }
+        var div = $("<div>").appendTo(li);
+        var b = $("<button/>")
+        .addClass("btn")
+        .addClass("btn-primary")
+        .attr("id", msg.id)
+        .text("Start").
+        click(function(e){
+            var msg;
+            var path = "/concert/control";
+            if($(this).text() == "Start") {
+                $(this).text("Stop");
+                $(this).addClass("btn-success");
+                $(this).removeClass("btn-primary");
+                msg = "start";
+            }
+            else {
+                $(this).removeClass("btn-success");
+                $(this).addClass("btn-primary");
+                $(this).text("Start");
+                msg = "stop";
+            }
 
-        socket.emit(path, [this.id, msg]);
+            socket.emit(path, [this.id, msg]);
+        })
+        .appendTo(div);
+
+        li.appendTo(ol);
     });
 });
