@@ -60,6 +60,20 @@ table.info {
     text-align: center;
 }
 
+#pieces {
+    margin-top: 40px;
+}
+
+#pieces li {
+    font-size: 1.5em;
+    height: 3em;
+    margin-top: 20px;
+}
+
+#pieces li .title {
+    font-weight: bold;
+}
+
 
 // SPEAKER TESTS
 .speaker-space {

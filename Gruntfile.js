@@ -43,8 +43,8 @@ module.exports = function(grunt) {
                 dest: 'build/js/<%= pkg.name %>.min.js'
             },
             ui: {
-                src: 'build/js/lib/jquery-ui.js',
-                dest: 'build/js/lib/jquery-ui.min.js',
+                // src: 'build/js/lib/jquery-ui.js',
+                // dest: 'build/js/lib/jquery-ui.min.js',
             }
         },
         jshint: {
@@ -98,7 +98,8 @@ module.exports = function(grunt) {
                     "build/info.html":  ["src/info.jade"],
                     "build/knobs.html":  ["src/knobs.jade"],
                     "build/timer.html":  ["src/timer.jade"],
-                    "build/speakers.html" : ["src/speakers.jade"]
+                    "build/speakers.html" : ["src/speakers.jade"],
+                    "build/concert.html" : ["src/concert.jade"],
                 }
             }
         },

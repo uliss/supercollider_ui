@@ -1,0 +1,21 @@
+doctype html
+// htmllint indent-width=2 line-end-style=false class-style=dash id-class-style=dash id-no-dup=true
+html(lang="en-us")
+    head
+        include jade/head.jade 
+    body
+        .container-fluid
+            .row
+                .col-md-3.col-xs-1
+                .col-md-6.col-xs-10#info
+                    h1 Concert
+                    h2 ...
+                    //- button(type="button" class="btn" id="poll-info") OFF
+                .col-md-3.col-xs-1
+            .row
+                .col-md-3.col-xs-1
+                .col-md-6.col-xs-10
+                    #pieces
+                .col-md-3.col-xs-1
+            
+        script $(document).ready(get_info());

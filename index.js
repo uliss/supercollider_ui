@@ -36,6 +36,16 @@ oscServer.on("/sc/stat", function (msg, rinfo) {
     io.emit("/info/sc/stat/update", json);
 });
 
+oscServer.on("/sc/concert/info", function(msg, rinfo) {
+    var json = JSON.parse(msg[1]);
+    io.emit("/concert/info", json);
+});
+
+oscServer.on("/sc/concert/add", function(msg, rinfo) {
+    var json = JSON.parse(msg[1]);
+    io.emit("/concert/add", json);
+});
+
 app.get('/', function(req, res){
     res.sendFile(__dirname + '/build/index.html');
 });
@@ -60,6 +70,10 @@ app.get('/speakers', function(req, res) {
 
 app.get('/info', function(req, res) {
     res.sendFile(__dirname + '/build/info.html');
+});
+
+app.get('/concert', function(req, res) {
+    res.sendFile(__dirname + '/build/concert.html');
 });
 
 app.get('/timer', function(req, res) {
@@ -97,6 +111,16 @@ io.on('connection', function(socket){
         // send to supercollider
         // console.log(msg);
         oscClient.send('/nodejs/stat/control', msg);
+    });
+
+    socket.on("/concert/info/get", function(msg){
+        console.log("get info requiest");
+        oscClient.send('/concert/info/get', msg);
+    });
+
+    socket.on("/concert/control", function(msg){
+        console.log(msg);
+        oscClient.send('/concert/' + msg[0], msg[1]);
     });
 
     // ping/pong NodeJS
