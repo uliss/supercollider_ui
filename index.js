@@ -3,6 +3,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var keypress = require('keypress');
 var osc = require('node-osc');
+var timer = require('./mod_timer');
 
 var NODE_PORT = 3000;
 var OSC_IN_PORT = 5000;
@@ -76,19 +77,22 @@ app.get('/concert', function(req, res) {
     res.sendFile(__dirname + '/build/concert.html');
 });
 
-app.get('/timer', function(req, res) {
-    res.sendFile(__dirname + '/build/timer.html');
-});
-
-var timer_seconds = 0;
-setInterval(function(){
-    io.emit("timer1", timer_seconds .toHHMMSS());
-    timer_seconds += 1;
-}, 1000);
+// init timer staff
+app.get('/timer', timer.httpGet);
+var serverTimer = new timer.ServerTimer(io, '/server/timer');
+var clientTimer = new timer.ClientTimer(io, '/client/timer');
 
 io.on('connection', function(socket){
     var addr = socket.request.connection.remoteAddress.substring(7);
     console.log('connected:    ' + addr);
+
+    socket.on('/timer/server/control', function(msg){
+        timer.control(serverTimer, msg);
+    });
+
+    socket.on('/timer/client/control', function(msg){
+        timer.control(clientTimer, msg);
+    });
 
     socket.on('/nodejs/info', function(){
         // send to dedicated client
