@@ -21,8 +21,7 @@ function TimerControl(element, timer) {
     .addClass("btn")
     .addClass("btn-lg")
     .addClass("btn-info")
-    .addClass("col-md-4")
-    .css("height", "200px")
+    .addClass("timer-button")
     .click(function(){
         $(this).toggleClass("active");
         $(this).toggleClass("btn-info");
@@ -41,10 +40,6 @@ function TimerControl(element, timer) {
     })
     .appendTo(this.element);
 
-    $("<div></div>")
-    .addClass("col-md-4")
-    .appendTo(this.element);
-
     $("<button>")
     .attr("id", "timerReset")
     .attr("value", 0)
@@ -52,19 +47,18 @@ function TimerControl(element, timer) {
     .addClass("btn")
     .addClass("btn-lg")
     .addClass("btn-warning")
-    .addClass("col-md-4")
-    .css("height", "200px")
+    .addClass("timer-button")
     .click(function(){ timer.reset(); })
     .appendTo(this.element);
 }
 
 function ServerTimer(element) {
     this.socketPath = '/timer/server/control';
-    element.text(0 .toHHMMSS());
+    var n = 0;
+    element.text(n.toHHMMSS());
 
     socket.on('/server/timer', function(msg) {
-        element.text(msg);
-        console.log(msg);
+        element.text(msg .toHHMMSS());
     });
 
     this.reset = function() {
@@ -84,24 +78,44 @@ function ClientTimer(element) {
     this.currentTime = 0;
     this.timerId = null;
     this.element = element;
+    this.socketPath = '/timer/client/control';
+    socket.emit(this.socketPath, 'debug');
 
-    this.init = function() {
+    var self = this;
+    socket.on('/client/timer', function(msg) {
+        self.currentTime = msg;
+        self.update();
+    });
 
-    };
 
     this.start = function() {
+        var self = this;
+        this.timerId = setInterval(function(){
+            self.next();
+        }, 1000);
 
+        socket.emit(this.socketPath, 'start');
     };
 
     this.stop = function() {
-
+        clearInterval(this.timerId);
+        socket.emit(this.socketPath, 'stop');
     };
 
     this.reset = function() {
-        currentTime = 0;
+        this.currentTime = 0;
+        this.update();
+        socket.emit(this.socketPath, 'reset');
     };
 
     this.update = function() {
         this.element.text(this.currentTime .toHHMMSS());
     };
+
+    this.next = function() {
+        this.currentTime++;
+        this.update();
+    };
+
+    this.update();
 }

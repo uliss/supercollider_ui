@@ -3,21 +3,22 @@ doctype html
 html(lang="en-us")
     head
         include jade/head.jade
+        script(src='/js/lib/jquery.fittext.min.js')
     body
         .container-fluid
             h1 Timer
             
             #timer1 --:--:--
             
-            .row
-                .col-md-12
-                    #timerControl
+            #timerControl
             
             script(type='text/javascript').
                 $(document).ready(
                     function(){
-                        var serverTimer = new ServerTimer($("#timer1"));
-                        var control = new TimerControl($("#timerControl"), serverTimer);
+                        var timer = new ServerTimer($("#timer1"));
+                        var control = new TimerControl($("#timerControl"), timer);
+                        
+                        $("#timer1").fitText(0.5);
                     }
                 );
             

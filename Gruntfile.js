@@ -45,6 +45,10 @@ module.exports = function(grunt) {
             ui: {
                 // src: 'build/js/lib/jquery-ui.js',
                 // dest: 'build/js/lib/jquery-ui.min.js',
+            },
+            libs: {
+                src: 'build/js/lib/jquery.fittext.js',
+                dest: 'build/js/lib/jquery.fittext.min.js'
             }
         },
         jshint: {
@@ -74,7 +78,8 @@ module.exports = function(grunt) {
                 files: {
                     '/js/lib/jquery.min.js': 'jquery/dist/jquery.min.js',
                     '/js/lib/jquery.knob.min.js' : 'aterrien/jQuery-Knob/dist/jquery.knob.min.js',
-                    '/css/bootstrap/css/bootstrap.min.css' : 'bootstrap-css/css/bootstrap.min.css'
+                    '/css/bootstrap/css/bootstrap.min.css' : 'bootstrap-css/css/bootstrap.min.css',
+                    '/js/lib/jquery.fittext.js': 'FitText.js/jquery.fittext.js'
                 }
             },
             folders: {
@@ -143,6 +148,6 @@ module.exports = function(grunt) {
 
     // регистрация задач
     grunt.registerTask('default', ['connect', 'watch']);
-    grunt.registerTask('dev', ['newer:jade', 'newer:htmllint', 'newer:sass',
+    grunt.registerTask('dev', ['newer:jade', 'newer:sass',
     'concat', 'jshint', 'uglify', 'bowercopy']);
 };

@@ -7,24 +7,29 @@ function ServerTimer(io, socket_path) {
     this.socketPath = socket_path;
     this.currentTime = 0;
     this.timerId = null;
+    this.debug_ = false;
 }
 
 ServerTimer.prototype.isRunning = function() {
     return this.timerId != null;
 }
 
-ServerTimer.prototype.current = function() {
-    return this.currentTime .toHHMMSS()
+ServerTimer.prototype.debug = function(value) {
+    return this.debug_ = value;
+}
+
+ServerTimer.prototype.update = function() {
+    this.io.emit(this.socketPath, this.currentTime);
 }
 
 ServerTimer.prototype.reset = function() {
     this.currentTime = 0;
-    this.io.emit(this.socketPath, this.current());
+    this.update();
 }
 
 ServerTimer.prototype.next = function() {
     this.currentTime++;
-    this.io.emit(this.socketPath, this.current());
+    this.update();
 }
 
 ServerTimer.prototype.start = function() {
@@ -44,16 +49,15 @@ ServerTimer.prototype.stop = function() {
 
 function ClientTimer(io, socketPath) {
     ServerTimer.call(this, io, socketPath);
-    syncTimeout = 5;
 }
 
 ClientTimer.prototype = Object.create(ServerTimer.prototype);
 ClientTimer.prototype.constructor = ClientTimer;
 
-ClientTimer.prototype.next = function(speed) {
+ClientTimer.prototype.next = function() {
     this.currentTime++;
-    if(this.currentTime % this.syncTimeout == 0) {
-        this.io.emit(this.socketPath, this.current());
+    if(this.currentTime % 5 == 0) {
+        this.update();
     }
 };
 
@@ -67,6 +71,9 @@ function control(timer, msg) {
         break;
         case 'stop':
             timer.stop();
+        break;
+        case 'debug':
+            timer.debug(true);
         break;
     }
 }

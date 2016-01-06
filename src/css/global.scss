@@ -56,8 +56,21 @@ table.info {
 }
 
 #timer1 {
-    font-size: 14em;
+    // font-size: 14em;
     text-align: center;
+    width:100vw;
+}
+
+button.timer-button {
+    width: 25%;
+    margin-left: 10px;
+    height: 100px;
+    height: 15vh;
+}
+
+#timerControl {
+    text-align: center;
+    margin: 0 0 10px 0;
 }
 
 #pieces {
