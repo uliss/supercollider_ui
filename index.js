@@ -88,10 +88,12 @@ io.on('connection', function(socket){
 
     socket.on('/timer/server/control', function(msg){
         timer.control(serverTimer, msg);
+        socket.broadcast.emit('/timer/server/control', msg);
     });
 
     socket.on('/timer/client/control', function(msg){
         timer.control(clientTimer, msg);
+        socket.broadcast.emit('/timer/client/control', msg);
     });
 
     socket.on('/nodejs/info', function(){

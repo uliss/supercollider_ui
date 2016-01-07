@@ -11,6 +11,24 @@ Number.prototype.toHHMMSS = function () {
     return hours+':'+minutes+':'+seconds;
 };
 
+function timerControlSetStarted() {
+    $("#timerStart")
+    .removeClass("btn-info")
+    .addClass("active")
+    .addClass("btn-danger")
+    .text("Stop")
+    .attr("value", 1);
+}
+
+function timerControlSetStopped() {
+    $("#timerStart")
+    .addClass("btn-info")
+    .removeClass("active")
+    .removeClass("btn-danger")
+    .text("Start")
+    .attr("value", 0);
+}
+
 function TimerControl(element, timer) {
     this.element = element;
 
@@ -23,18 +41,12 @@ function TimerControl(element, timer) {
     .addClass("btn-info")
     .addClass("timer-button")
     .click(function(){
-        $(this).toggleClass("active");
-        $(this).toggleClass("btn-info");
-        $(this).toggleClass("btn-danger");
-
         if($(this).attr("value") == 1) {
-            $(this).text("Start");
-            $(this).attr("value", 0);
+            timerControlSetStopped();
             timer.stop();
         }
         else {
-            $(this).text("Stop");
-            $(this).attr("value", 1);
+            timerControlSetStarted();
             timer.start();
         }
     })
@@ -55,7 +67,21 @@ function TimerControl(element, timer) {
 function ServerTimer(element) {
     this.socketPath = '/timer/server/control';
     var n = 0;
+    var self = this;
+
     element.text(n.toHHMMSS());
+
+    socket.on(this.socketPath, function(msg){
+        console.log(msg);
+        switch(msg) {
+            case 'start':
+            timerControlSetStarted();
+            break;
+            case 'stop':
+            timerControlSetStopped();
+            break;
+        }
+    });
 
     socket.on('/server/timer', function(msg) {
         element.text(msg .toHHMMSS());
