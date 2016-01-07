@@ -70,6 +70,7 @@ function ServerTimer(element) {
     var self = this;
 
     element.text(n.toHHMMSS());
+    socket.emit(this.socketPath, 'get');
 
     socket.on(this.socketPath, function(msg){
         console.log(msg);

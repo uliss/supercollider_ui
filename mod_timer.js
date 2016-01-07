@@ -8,6 +8,7 @@ function ServerTimer(io, socket_path) {
     this.currentTime = 0;
     this.timerId = null;
     this.debug_ = false;
+    this.controlPath = '/timer/server/control';
 }
 
 ServerTimer.prototype.isRunning = function() {
@@ -20,6 +21,10 @@ ServerTimer.prototype.debug = function(value) {
 
 ServerTimer.prototype.update = function() {
     this.io.emit(this.socketPath, this.currentTime);
+}
+
+ServerTimer.prototype.emitControl = function(msg) {
+    this.io.emit(this.controlPath, msg);
 }
 
 ServerTimer.prototype.reset = function() {
@@ -61,16 +66,25 @@ ClientTimer.prototype.next = function() {
     }
 };
 
-function control(timer, msg) {
+function control(socket, timer, msg) {
     switch(msg) {
         case 'reset':
             timer.reset();
         break;
         case 'start':
             timer.start();
+            socket.broadcast.emit(timer.controlPath, msg);
         break;
         case 'stop':
             timer.stop();
+            socket.broadcast.emit(timer.controlPath, msg);
+        break;
+        case 'get':
+            timer.update();
+            if(timer.isRunning())
+                timer.emitControl('start');
+            else
+                timer.emitControl('stop');
         break;
         case 'debug':
             timer.debug(true);

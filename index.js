@@ -80,20 +80,13 @@ app.get('/concert', function(req, res) {
 // init timer staff
 app.get('/timer', timer.httpGet);
 var serverTimer = new timer.ServerTimer(io, '/server/timer');
-var clientTimer = new timer.ClientTimer(io, '/client/timer');
 
 io.on('connection', function(socket){
     var addr = socket.request.connection.remoteAddress.substring(7);
     console.log('connected:    ' + addr);
 
-    socket.on('/timer/server/control', function(msg){
-        timer.control(serverTimer, msg);
-        socket.broadcast.emit('/timer/server/control', msg);
-    });
-
-    socket.on('/timer/client/control', function(msg){
-        timer.control(clientTimer, msg);
-        socket.broadcast.emit('/timer/client/control', msg);
+    socket.on(serverTimer.controlPath, function(msg){
+        timer.control(socket, serverTimer, msg);
     });
 
     socket.on('/nodejs/info', function(){
