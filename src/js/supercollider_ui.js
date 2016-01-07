@@ -6,6 +6,13 @@ $(document).ready(function() {
         this.run = function() {
             $("h1").attr("class", "connected_process");
 
+            var homelink = $("<a>")
+            .attr("href", "/")
+            .addClass("homelink")
+            .addClass("glyphicon")
+            .addClass("glyphicon-home")
+            .appendTo($("h1"));
+
             interval = setInterval(function(){
                 socket.emit("/ping");
                 answered = false;
