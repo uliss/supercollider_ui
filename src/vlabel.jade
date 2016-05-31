@@ -5,18 +5,20 @@ html(lang="en-us")
         include jade/head.jade
         script(src='/js/lib/jquery.fittext.min.js')
     body
-        .container-fluid
-            h1 VLabel
+        .container-fluid.vlabel
+            h1 Visual Label
             
-            #timer1 --:--:--
+            #label DEFAULT
             
             script(type='text/javascript').
                 $(document).ready(
                     function(){
                         socket.on('/vlabel/set', function(msg){
-                            $("#timer1").html(msg);
-                            $("#timer1").fitText(0.5);
-                        })
+                            $("#label").html(msg);
+                            $("#label").fitText(0.5);
+                        });
+                        // init
+                        $("#label").fitText(0.5);
                     }
                 );
             

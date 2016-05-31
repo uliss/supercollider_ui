@@ -34,6 +34,7 @@ module.exports = function(grunt) {
                 dest: 'build/js/lib/jquery-ui.js'
             }
         },
+
         uglify: {
             options: {
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
@@ -59,11 +60,13 @@ module.exports = function(grunt) {
                 'src/js/*.js'
             ]
         },
+        
         sass: {
             dist: {
                 options: {
                     style: 'compact',
-                    unixNewlines: true
+                    unixNewlines: true,
+                    loadPath: 'src/css',
                 },
                 files: {
                     'build/css/global.css': 'src/css/global.scss'
@@ -149,6 +152,6 @@ module.exports = function(grunt) {
 
     // регистрация задач
     grunt.registerTask('default', ['connect', 'watch']);
-    grunt.registerTask('dev', ['newer:jade', 'newer:sass',
+    grunt.registerTask('dev', ['newer:jade', 'sass',
     'concat', 'jshint', 'uglify', 'bowercopy']);
 };
