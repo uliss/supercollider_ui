@@ -105,6 +105,7 @@ module.exports = function(grunt) {
                     "build/timer.html":  ["src/timer.jade"],
                     "build/speakers.html" : ["src/speakers.jade"],
                     "build/concert.html" : ["src/concert.jade"],
+                    "build/vlabel.html" : ["src/vlabel.jade"],
                 }
             }
         },

@@ -9,6 +9,19 @@ var NODE_PORT = 3000;
 var OSC_IN_PORT = 5000;
 var OSC_OUT_PORT = OSC_IN_PORT + 1;
 
+
+var S_options = {verbose: 1};
+
+function postmsg(msg, prefix = '[NodeJS]: ') {
+    console.log(prefix  +  msg);
+}
+
+function postln(msg) {
+    if(S_options['verbose'] != 0) {
+        postmsg(msg);
+    }
+}
+
 Number.prototype.toHHMMSS = function () {
     var seconds = Math.floor(this),
     hours = Math.floor(seconds / 3600);
@@ -37,9 +50,50 @@ oscServer.on("/sc/stat", function (msg, rinfo) {
     io.emit("/info/sc/stat/update", json);
 });
 
+oscServer.on("/server/set", function (msg, rinfo) {
+    var k = msg[1];
+
+    if(k == "help") {
+        postmsg(msg[0] + ' KEY VALUE');
+        postmsg('- sets server variable', '    ');
+        return;
+    }
+
+    S_options[k] = msg[2];
+    postmsg('SET ' + k + ' = ' + S_options[k]);
+});
+
+oscServer.on("/server/get", function (msg, rinfo) {
+    var k = msg[1];
+    var v = S_options[k];
+
+    if(k == "help") {
+        postmsg(msg[0] + ' KEY');
+        postmsg('- reads server variable and sends it back to osc://localhost:' + OSC_OUT_PORT + '/server/get', '    ');
+        return;
+    }
+
+    oscClient.send("/server/get", k, v);
+    postmsg('var ' + k + ' == ' + v);
+});
+
+oscServer.on("/server/help", function (msg, rinfo) {
+    postmsg("Available commands:");
+    postmsg(["set", "get", "echo", "help"].map(function(v){return "/server/" + v}).join("\n    "), "    ");
+});
+
+oscServer.on("/server/echo", function (msg, rinfo) {
+    postmsg(msg[1]);
+});
+
 oscServer.on("/sc/concert/info", function(msg, rinfo) {
     var json = JSON.parse(msg[1]);
     io.emit("/concert/info", json);
+});
+
+oscServer.on("/sc/vlabel/set", function(msg, rinfo) {
+    // console.log("OSC: " + msg[1]);
+    io.emit("/vlabel/set", msg[1]);
 });
 
 oscServer.on("/sc/concert/add", function(msg, rinfo) {
@@ -73,6 +127,10 @@ app.get('/info', function(req, res) {
     res.sendFile(__dirname + '/build/info.html');
 });
 
+app.get('/vlabel', function(req, res) {
+    res.sendFile(__dirname + '/build/vlabel.html');
+});
+
 app.get('/concert', function(req, res) {
     res.sendFile(__dirname + '/build/concert.html');
 });
@@ -83,7 +141,7 @@ var serverTimer = new timer.ServerTimer(io, '/server/timer');
 
 io.on('connection', function(socket){
     var addr = socket.request.connection.remoteAddress.substring(7);
-    console.log('connected:    ' + addr);
+    postln('connected:    ' + addr);
 
     socket.on(serverTimer.controlPath, function(msg){
         timer.control(socket, serverTimer, msg);
@@ -113,12 +171,12 @@ io.on('connection', function(socket){
     });
 
     socket.on("/concert/info/get", function(msg){
-        console.log("get info requiest");
+        postln("get info requiest");
         oscClient.send('/concert/info/get', msg);
     });
 
     socket.on("/concert/control", function(msg){
-        console.log(msg);
+        postln(msg);
         oscClient.send('/concert/' + msg[0], msg[1]);
     });
 
@@ -126,10 +184,11 @@ io.on('connection', function(socket){
     socket.on('/ping', function(){ io.emit('/pong');});
 
     socket.on('disconnect', function(){
-        console.log('disconnected: ' + addr);
+        postln('disconnected: ' + addr);
     });
 });
 
 http.listen(NODE_PORT, function(){
-    console.log('listening on *:' + NODE_PORT);
+    postln('listening HTTP on *:' + NODE_PORT);
+    postln('listening OSC on *:' + OSC_IN_PORT);
 });
