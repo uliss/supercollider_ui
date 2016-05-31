@@ -1,0 +1,22 @@
+doctype html
+// htmllint indent-width=2 line-end-style=false class-style=dash
+html(lang="en-us")
+    head
+        include jade/head.jade
+        script(src='/js/lib/jquery.fittext.min.js')
+    body
+        .container-fluid
+            h1 VLabel
+            
+            #timer1 --:--:--
+            
+            script(type='text/javascript').
+                $(document).ready(
+                    function(){
+                        socket.on('/vlabel/set', function(msg){
+                            $("#timer1").html(msg);
+                            $("#timer1").fitText(0.5);
+                        })
+                    }
+                );
+            
