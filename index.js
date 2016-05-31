@@ -92,8 +92,13 @@ oscServer.on("/sc/concert/info", function(msg, rinfo) {
 });
 
 oscServer.on("/sc/vlabel/set", function(msg, rinfo) {
-    // console.log("OSC: " + msg[1]);
+    postln('label text = "' +  msg[1] + '"');
     io.emit("/vlabel/set", msg[1]);
+});
+
+oscServer.on("/sc/vlabel/css", function(msg, rinfo) {
+    postln('label css: {' +  msg[1] + ':' + msg[2] + '}');
+    io.emit("/vlabel/css", [msg[1], msg[2]]);
 });
 
 oscServer.on("/sc/concert/add", function(msg, rinfo) {

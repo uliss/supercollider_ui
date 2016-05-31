@@ -17,6 +17,10 @@ html(lang="en-us")
                             $("#label").html(msg);
                             $("#label").fitText(0.5);
                         });
+                        
+                        socket.on('/vlabel/css', function(msg){
+                            $("#label").css(msg[0], msg[1]);
+                        });
                         // init
                         $("#label").fitText(0.5);
                     }
