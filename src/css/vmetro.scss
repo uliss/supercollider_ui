@@ -1,29 +1,39 @@
+$metro-color: #4CD4B0 ! important;
+$bar-color: #E3000E;
+$box-border: 1px solid #DDD;
+$box-width: 300px;
+$box-height: 250px;
+
+.vmetro-ref {
+    background-color: $metro-color;
+}
+
 .vmetro {
-    #bar-number {
+    h1 {
+        color: $metro-color;
+    }
+
+    @mixin box {
         font-size: 160px;
-        width: 250px;
-        height: 250px;
+        width: $box-width;
+        height: $box-height;
         margin: 30px;
-        border: 3px solid #777;
-        color: #FF0000;
-        float: left;
+        border: $box-border;
         text-align: center;
         background-color: #AAA;
     }
 
+    #bar-number {
+        @include box;
+        color: $bar-color;
+        float: left;
+    }
+
     #mark {
-        font-size: 160px;
-        width: 250px;
-        height: 250px;
-        margin: 30px;
-        border: 3px solid #777;
+        @include box;
         color: blue;
-        // background: yellow;
         background-color: #AAA;
         float: right;
-        text-align: center;
-
-        // clear: both;
     }
 
     ul#beats {

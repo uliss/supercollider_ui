@@ -4,13 +4,13 @@ $(document).ready(function() {
         this.answered = false;
 
         this.run = function() {
-            $("h1").attr("class", "connected_process");
+            $("h1").addClass("connected_process");
 
             var homelink = $("<a>")
             .attr("href", "/")
-            .addClass("homelink")
             .addClass("glyphicon")
             .addClass("glyphicon-home")
+            .addClass("homelink")
             .appendTo($("h1"));
 
             interval = setInterval(function(){
@@ -19,13 +19,18 @@ $(document).ready(function() {
 
                 setTimeout(function(){
                     if(!answered) {
-                        $("h1").attr("class", "disconnected");
+                        $("h1").removeClass("connected_process");
+                        $("h1").removeClass("connected");
+                        $("h1").addClass("class", "disconnected");
                     }
+
                 }, 1000);
             }, 4000);
 
             socket.on('/pong', function(msg){
-                $("h1").attr("class", "connected");
+                $("h1").removeClass("connected_process");
+                $("h1").removeClass("disconnected");
+                $("h1").addClass("connected");
                 answered = true;
             });
         };

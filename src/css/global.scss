@@ -1,21 +1,45 @@
+$color-bg: #60646D;
+$color-ok: #97CE68;
+$color-error: #E01931;
+$color-text: #000;
+$color-warning: #FCB941;
+$color-index: #83D6DE;
+
 @import "vlabel";
 @import "vmetro";
+@import "timer";
+@import "concert";
 
-.catlink {
+.module {
     padding: 20px;
     font-size: 2em;
     text-align: center;
-    border: #FFFFFF 1px solid;
+    border: $color-bg 1px solid;
     font-weight: 200;
+    background-color: #3B3C3D;
+    a {
+        color: #DDD;
+    }
+}
+
+html, body {
+    background-color: $color-bg;
+    color: $color-text;
 }
 
 h1 {
+    background-color: $color-bg;
+    color: $color-text;
     margin-left: 1.3em;
 }
 
 h1 .homelink {
     float:right;
     font-size: 1em;
+
+    a, a:hover, a:active, a:visited {
+        color: green ! important;
+    }
 }
 
 @mixin bullet {
@@ -28,12 +52,12 @@ h1 .homelink {
 
 .connected:before {
     @include bullet;
-    color: green;
+    color: $color-ok;
 }
 
 .disconnected:before {
     @include bullet;
-    color: red;
+    color: $color-error;
 }
 
 .connected_process:before {
@@ -61,24 +85,6 @@ table.info {
 #poll-info {
     width: 70px;
     height: 70px;
-}
-
-#timer1 {
-    // font-size: 14em;
-    text-align: center;
-    width:100vw;
-}
-
-button.timer-button {
-    width: 25%;
-    margin-left: 10px;
-    height: 100px;
-    height: 15vh;
-}
-
-#timerControl {
-    text-align: center;
-    margin: 0 0 10px 0;
 }
 
 #pieces {
