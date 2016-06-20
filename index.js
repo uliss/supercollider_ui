@@ -127,6 +127,11 @@ oscServer.on("/sc/vmetro/css", function(msg, rinfo) {
     io.emit("/vmetro/css", [msg[1], msg[2]]);
 });
 
+oscServer.on("/sc/css", function(msg, rinfo) {
+    postln('metro css: ' + msg[1] + '{' +  msg[2] + ':' + msg[3] + '}');
+    io.emit("/css", [msg[1], msg[2], msg[3]]);
+});
+
 
 oscServer.on("/sc/concert/add", function(msg, rinfo) {
     var json = JSON.parse(msg[1]);
