@@ -60,7 +60,7 @@ module.exports = function(grunt) {
                 'src/js/*.js'
             ]
         },
-        
+
         sass: {
             dist: {
                 options: {
@@ -109,6 +109,7 @@ module.exports = function(grunt) {
                     "build/speakers.html" : ["src/speakers.jade"],
                     "build/concert.html" : ["src/concert.jade"],
                     "build/vlabel.html" : ["src/vlabel.jade"],
+                    "build/vmetro.html" : ["src/vmetro.jade"],
                 }
             }
         },

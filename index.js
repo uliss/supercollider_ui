@@ -101,6 +101,33 @@ oscServer.on("/sc/vlabel/css", function(msg, rinfo) {
     io.emit("/vlabel/css", [msg[1], msg[2]]);
 });
 
+// visual Metronome
+oscServer.on("/sc/vmetro/bar", function(msg, rinfo) {
+    postln('bar = "' +  msg[1] + '"');
+    io.emit("/vmetro/bar", msg[1]);
+});
+
+oscServer.on("/sc/vmetro/numBeats", function(msg, rinfo) {
+    postln('num beats: ' + msg[1]);
+    io.emit("/vmetro/numBeats", msg[1]);
+});
+
+oscServer.on("/sc/vmetro/beat", function(msg, rinfo) {
+    postln('beats: ' + msg[1]);
+    io.emit("/vmetro/beat", msg[1]);
+});
+
+oscServer.on("/sc/vmetro/mark", function(msg, rinfo) {
+    postln('mark: ' + msg[1]);
+    io.emit("/vmetro/mark", msg[1]);
+});
+
+oscServer.on("/sc/vmetro/css", function(msg, rinfo) {
+    postln('metro css: {' +  msg[1] + ':' + msg[2] + '}');
+    io.emit("/vmetro/css", [msg[1], msg[2]]);
+});
+
+
 oscServer.on("/sc/concert/add", function(msg, rinfo) {
     var json = JSON.parse(msg[1]);
     io.emit("/concert/add", json);
@@ -134,6 +161,10 @@ app.get('/info', function(req, res) {
 
 app.get('/vlabel', function(req, res) {
     res.sendFile(__dirname + '/build/vlabel.html');
+});
+
+app.get('/vmetro', function(req, res) {
+    res.sendFile(__dirname + '/build/vmetro.html');
 });
 
 app.get('/concert', function(req, res) {

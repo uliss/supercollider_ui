@@ -1,0 +1,46 @@
+doctype html
+// htmllint indent-width=2 line-end-style=false class-style=dash
+html(lang="en-us")
+    head
+        include jade/head.jade
+        script(src='/js/lib/jquery.fittext.min.js')
+    body
+        .container-fluid.vmetro
+            h1 Visual Metronome
+            
+            #bar-number -1
+            
+            #mark
+            
+            
+            ul#beats
+            
+            script(type='text/javascript').
+                $(document).ready(
+                    function(){
+                        socket.on('/vmetro/bar', function(msg){
+                            $("#bar-number").html(msg);
+                        });
+                        
+                        socket.on('/vmetro/numBeats', function(msg){
+                            $("#beats").empty();
+                            for(i = 0; i < msg; i++) {
+                                $("#beats").append('<li id="beat_' + (i+1) + '">&nbsp;</li> ');
+                            }
+                        });
+                        
+                        socket.on('/vmetro/beat', function(msg){
+                            console.log("beat_" + (msg+1));
+                            $("#beat_" + (msg+1)).css("background-color", "red");
+                        });
+                        
+                        socket.on('/vmetro/mark', function(msg){
+                            $("#mark").html(msg);
+                        });
+                        
+                        socket.on('/vmetro/css', function(msg){
+                            $(".vmetro").css(msg[0], msg[1]);
+                        });
+                    }
+                );
+            

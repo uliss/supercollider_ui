@@ -1,0 +1,64 @@
+.vmetro {
+    #bar-number {
+        font-size: 160px;
+        width: 250px;
+        height: 250px;
+        margin: 30px;
+        border: 3px solid #777;
+        color: #FF0000;
+        float: left;
+        text-align: center;
+        background-color: #AAA;
+    }
+
+    #mark {
+        font-size: 160px;
+        width: 250px;
+        height: 250px;
+        margin: 30px;
+        border: 3px solid #777;
+        color: blue;
+        // background: yellow;
+        background-color: #AAA;
+        float: right;
+        text-align: center;
+
+        // clear: both;
+    }
+
+    ul#beats {
+        text-align: justify;
+        width: 100%;
+        // background-color: gray;
+        height: 120px;
+        clear: both;
+    }
+
+    ul#beats  li {
+        display: inline-block;
+        position: relative;
+        width: 120px;
+        height: 120px;
+        background-color: orange;
+    }
+
+    li.active {
+        background-color: #FA4204;
+    }
+
+    ul#beats:before{
+        content: '';
+        display: block;
+        width: 100%;
+        height: 0;
+    }
+
+    ul#beats:after {
+        width: 100%;
+        height: 0;
+        visibility: hidden;
+        overflow: hidden;
+        content: '';
+        display: inline-block;
+    }
+}
