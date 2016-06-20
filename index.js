@@ -132,6 +132,11 @@ oscServer.on("/sc/css", function(msg, rinfo) {
     io.emit("/css", [msg[1], msg[2], msg[3]]);
 });
 
+oscServer.on("/sc/redirect", function(msg, rinfo) {
+    postln('redirect to: ' + msg[1]);
+    io.emit("/redirect", msg[1]);
+});
+
 
 oscServer.on("/sc/concert/add", function(msg, rinfo) {
     var json = JSON.parse(msg[1]);
@@ -232,4 +237,5 @@ io.on('connection', function(socket){
 http.listen(NODE_PORT, function(){
     postln('listening HTTP on *:' + NODE_PORT);
     postln('listening OSC on *:' + OSC_IN_PORT);
+    postln('sending OSC to localhost:' + OSC_OUT_PORT);
 });

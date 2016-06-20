@@ -36,7 +36,12 @@ $(document).ready(function() {
 
     // handle css
     socket.on('/css', function(msg){
-        console.log(msg);
         $(msg[0]).css(msg[1], msg[2]);
+    });
+
+    // hangle redirect
+    socket.on('/redirect', function(msg){
+        console.log("redirect to: " + msg);
+        window.location.href = msg;
     });
 });
