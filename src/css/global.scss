@@ -42,6 +42,10 @@ h1 .homelink {
     }
 }
 
+#title {
+    margin-left: 1em;
+}
+
 @mixin bullet {
     position: absolute;
     content: "•";

@@ -113,8 +113,8 @@ oscServer.on("/sc/vmetro/numBeats", function(msg, rinfo) {
 });
 
 oscServer.on("/sc/vmetro/beat", function(msg, rinfo) {
-    postln('beats: ' + msg[1]);
-    io.emit("/vmetro/beat", msg[1]);
+    postln('beats: ' + [msg[1], msg[2]]);
+    io.emit("/vmetro/beat", [msg[1], msg[2]]);
 });
 
 oscServer.on("/sc/vmetro/mark", function(msg, rinfo) {
@@ -137,6 +137,10 @@ oscServer.on("/sc/redirect", function(msg, rinfo) {
     io.emit("/redirect", msg[1]);
 });
 
+oscServer.on("/sc/title", function(msg, rinfo) {
+    postln('setting title: ' + msg[1]);
+    io.emit("/title", msg[1]);
+});
 
 oscServer.on("/sc/concert/add", function(msg, rinfo) {
     var json = JSON.parse(msg[1]);

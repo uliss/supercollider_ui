@@ -44,9 +44,14 @@ $(document).ready(function() {
         $(msg[0]).css(msg[1], msg[2]);
     });
 
-    // hangle redirect
+    // handle redirect
     socket.on('/redirect', function(msg){
         console.log("redirect to: " + msg);
         window.location.href = msg;
+    });
+
+    // handle redirect
+    socket.on('/title', function(msg){
+        $("h1 #title").html(msg);
     });
 });
