@@ -75,8 +75,8 @@ $(document).ready(function() {
 
                 var btn = $('<input/>',
                     { type: "button", class: "commandButton", id: "btn_" + widget.idx, value: widget.label })
-                .css("top", widget.x)
-                .css("left", widget.y)
+                .css("left", widget.x)
+                .css("top", widget.y)
                 .addClass("btn")
                 .addClass("btn-lg")
                 .addClass(widget.style);
