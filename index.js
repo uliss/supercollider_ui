@@ -137,9 +137,31 @@ oscServer.on("/sc/redirect", function(msg, rinfo) {
     io.emit("/redirect", msg[1]);
 });
 
+oscServer.on("/sc/reload", function(msg, rinfo) {
+    postln('reloading page...');
+    io.emit("/reload", msg[1]);
+});
+
 oscServer.on("/sc/title", function(msg, rinfo) {
     postln('setting title: ' + msg[1]);
     io.emit("/title", msg[1]);
+});
+
+oscServer.on("/sc/addWidget", function(msg, rinfo) {
+    if(msg.length < 2) {
+        postln("ERROR! Argument required!");
+        postln("Usage: /sc/addWidget JSON");
+        return;
+    }
+
+    var json = JSON.parse(msg[1]);
+    if(!json) {
+        postln("ERROR! invalid JSON given");
+        return;
+    }
+
+    postln('adding widget: ' + JSON.stringify(json));
+    io.emit("/addWidget", json);
 });
 
 oscServer.on("/sc/concert/add", function(msg, rinfo) {
@@ -203,6 +225,11 @@ io.on('connection', function(socket){
             clientsCount: io.engine.clientsCount,
             remoteAddress: addr
         });
+    });
+
+    socket.on('/nodejs/button', function(msg){
+        postln('button: ' + JSON.stringify(msg));
+        oscClient.send("/sc/button", JSON.stringify(msg));
     });
 
     socket.on('/speakers/test', function(msg){

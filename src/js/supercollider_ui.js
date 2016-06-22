@@ -51,7 +51,70 @@ $(document).ready(function() {
     });
 
     // handle redirect
+    socket.on('/reload', function(){
+        window.location.reload();
+    });
+
+    // handle redirect
     socket.on('/title', function(msg){
         $("h1 #title").html(msg);
+    });
+
+    // handle redirect
+    socket.on('/addWidget', function(msg){
+        var widget = msg;
+        console.log(widget);
+
+        switch(widget.type) {
+            case "button": {
+                if(!widget.style) widget.style = "default";
+                if(!widget.url)   widget.url = "/nodejs/button";
+                if(!widget.x)     widget.x = "20px";
+                if(!widget.y)     widget.y = "100px";
+                if(!widget.act)   widget.act = "single";
+
+                var btn = $('<input/>',
+                    { type: "button", class: "commandButton", id: "btn_" + widget.idx, value: widget.label })
+                .css("top", widget.x)
+                .css("left", widget.y)
+                .addClass("btn")
+                .addClass("btn-lg")
+                .addClass(widget.style);
+
+                switch(widget.act) {
+                    case "single":
+                        btn.on('click', function(){socket.emit(widget.url, widget);});
+                    break;
+                    case "toggle":
+                        btn.on('click', function(){
+                            $(this).toggleClass('active');
+                            widget.on = $(this).hasClass("active");
+                            socket.emit(widget.url, widget);
+                        });
+                    break;
+                    default:
+                        console.log("Unkown button act:" + widget.act);
+                        btn.on('click', function(){socket.emit(widget.url, widget);});
+                    break;
+                }
+
+
+                if(widget.height) btn.css("height", widget.height);
+                if(widget.width) btn.css("width", widget.width);
+                if(widget.style) btn.addClass("btn-" + widget.style);
+
+                if(widget.action) {
+                    btn.on('click', function(){
+                        setTimeout(widget.action, 0);
+                    });
+                }
+
+                $("body").append(btn);
+            }
+            break;
+            default:
+                alert("unknown widget");
+            break;
+        }
     });
 });
