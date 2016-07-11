@@ -60,7 +60,6 @@ $(document).ready(function() {
         $("h1 #title").html(msg);
     });
 
-
     var widgets = {};
 
     socket.on('/widget/remove', function(msg){
@@ -170,7 +169,7 @@ $(document).ready(function() {
             }
             break;
             case "pan": {
-                // default value
+                // default values
                 if(!widget.width) wd = 60;
                 if(!widget.height) ht = 105;
 
@@ -197,6 +196,76 @@ $(document).ready(function() {
 
                 $("#" + widget.idx).css("margin", "0 5px");
                 console.log(pan);
+            }
+            break;
+            case "slider": {
+                if(!widget.size) {
+                    if(!widget.width) wd = 35;
+                    if(!widget.height) ht = 180;
+                }
+                else {
+                    wd = 35;
+                    ht = widget.size;
+                }
+
+                if(widget.horizontal) {
+                    tmp = wd;
+                    wd = ht;
+                    ht = tmp;
+                }
+
+                var slider = nx.add("slider",  {"x" : x, "y" : y,
+                    "h": ht, "w" : wd,
+                    "name": widget.idx, "parent": "ui-elements"});
+
+                if(min) slider.min = min;
+                if(max) slider.max = max;
+
+                if(!widget.relative) slider.mode = "absolute";
+                if(widget.horizontal) slider.hslider = true;
+                if(widget.value) slider.val.value = value;
+                slider.label = label;
+                slider.draw();
+
+                if(!sockPath) sockPath = "/nodejs/ui";
+                slider.oscPath = sockPath;
+                slider.on('value', function(data){
+                    socket.emit(sockPath, [slider.canvasID, data]);
+                });
+
+                widgets[widget.idx] = slider;
+                $("#" + widget.idx).css("margin", "0 5px");
+                console.log(slider);
+            }
+            break;
+            case "toggle": {
+                // default values
+                if(!widget.size) {
+                    wd = 60;
+                    ht = 60;
+                }
+                else {
+                    wd = widget.size;
+                    ht = widget.size;
+                }
+
+                var tgl = nx.add("toggle", { "x" : x, "y" : y,
+                    "h": ht, "w" : wd,
+                    "name": widget.idx, "parent": "ui-elements"});
+
+                if(widget.value) tgl.val.value = value;
+                tgl.label = label;
+                tgl.draw();
+
+                if(!sockPath) sockPath = "/nodejs/ui";
+                tgl.oscPath = sockPath;
+                tgl.on('value', function(data){
+                    socket.emit(sockPath, [tgl.canvasID, data]);
+                });
+
+                console.log(tgl);
+                $("#" + widget.idx).css("margin", "0 5px");
+                widgets[widget.idx] = tgl;
             }
             break;
             default:
