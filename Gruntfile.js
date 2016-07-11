@@ -43,9 +43,13 @@ module.exports = function(grunt) {
                 src: 'build/js/<%= pkg.name %>.js',
                 dest: 'build/js/<%= pkg.name %>.min.js'
             },
+            nexus: {
+                src: 'src/js/nexus/nexusUI.js',
+                dest: 'build/js/lib/nexusUI.min.js'
+            },
             ui: {
-                // src: 'build/js/lib/jquery-ui.js',
-                // dest: 'build/js/lib/jquery-ui.min.js',
+                src: 'build/js/lib/jquery-ui.js',
+                dest: 'build/js/lib/jquery-ui.min.js',
             },
             libs: {
                 src: 'build/js/lib/jquery.fittext.js',
@@ -73,6 +77,7 @@ module.exports = function(grunt) {
                 }
             }
         },
+
         bowercopy: {
             options: {
                 destPrefix: 'build'
@@ -80,17 +85,21 @@ module.exports = function(grunt) {
             libs: {
                 files: {
                     '/js/lib/jquery.min.js': 'jquery/dist/jquery.min.js',
-                    '/js/lib/jquery.knob.min.js' : 'aterrien/jQuery-Knob/dist/jquery.knob.min.js',
+                    '/js/lib/jquery.js': 'jquery/dist/jquery.js',
                     '/css/bootstrap/css/bootstrap.min.css' : 'bootstrap-css/css/bootstrap.min.css',
-                    '/js/lib/jquery.fittext.js': 'FitText.js/jquery.fittext.js'
+                    '/js/lib/jquery.fittext.js': 'FitText.js/jquery.fittext.js',
+                    '/js/lib/jquery/dist/jquery.min.js': 'jquery/dist/jquery.min.js',
                 }
             },
             folders: {
                 files: {
-                    '/css/bootstrap/fonts': 'bootstrap-css/fonts'
+                    '/css/bootstrap/fonts': 'bootstrap-css/fonts',
+                    '/js/lib/jqwidgets/styles': 'jqwidgets/jqwidgets/styles',
+                    '/js/lib/jqwidgets': 'jqwidgets/jqwidgets'
                 }
             }
         },
+
         jade: {
             options: {
                 pretty: true,
@@ -110,9 +119,11 @@ module.exports = function(grunt) {
                     "build/concert.html" : ["src/concert.jade"],
                     "build/vlabel.html" : ["src/vlabel.jade"],
                     "build/vmetro.html" : ["src/vmetro.jade"],
+                    "build/ui.html" : ["src/ui.jade"],
                 }
             }
         },
+
         htmllint: {
             all: {
                 options: {
@@ -123,6 +134,21 @@ module.exports = function(grunt) {
                 ]
             }
         },
+
+        copy: {
+            // js: {
+            //     files: [
+            //         // includes files within path
+            //         {
+            //             expand: true,
+            //             src: ['node_modules/nexusui/dist/*.js'],
+            //             flatten: true,
+            //             dest: 'build/js/lib',
+            //             filter: 'isFile'},
+            //     ],
+            // },
+        },
+
         watch: {
             options: {
                 livereload: true

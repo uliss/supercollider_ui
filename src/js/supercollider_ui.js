@@ -60,10 +60,48 @@ $(document).ready(function() {
         $("h1 #title").html(msg);
     });
 
-    // handle redirect
-    socket.on('/addWidget', function(msg){
+
+    var widgets = {};
+
+    socket.on('/widget/remove', function(msg){
+        $("#" + msg).remove();
+        widgets[msg.idx] = null;
+    });
+
+    socket.on('/widget/update', function(msg){
+        console.log(msg);
+        if(!msg.idx) {
+            console.log("ERROR: no widget id!");
+            return;
+        }
+
+        if(msg.value) widgets[msg.idx].val.value = msg.value;
+        if(msg.label) widgets[msg.idx].label = msg.label;
+        widgets[msg.idx].draw();
+    });
+
+    // handle widget add
+    socket.on('/widget/add', function(msg){
         var widget = msg;
         console.log(widget);
+
+        var x = 0, y = 0, ht = 100, wd = 100;
+        if(widget.x) x = widget.x;
+        if(widget.y) y = widget.y;
+        if(widget.height) ht = widget.height;
+        if(widget.width) wd = widget.width;
+
+        var sockPath;
+        if(widget.sockPath) sockPath = widget.sockPath;
+        var label;
+        if(widget.label !== null) label = widget.label;
+
+        var min = 0, max = 1, value = 0;
+        if(widget.min !== null) min = widget.min;
+        if(widget.max !== null) max = widget.max;
+        if(widget.value) value = widget.value;
+
+        if(!widget.idx) console.log("ERROR: no widget id!");
 
         switch(widget.type) {
             case "button": {
@@ -110,6 +148,53 @@ $(document).ready(function() {
                 }
 
                 $("body").append(btn);
+            }
+            break;
+            case "knob": {
+                var knob = nx.add("dial", { "x" : x, "y" : y, "w" : wd,
+                    "name": widget.idx, "parent": "ui-elements"});
+
+                // knob.min = min;
+                // knob.max = max;
+                knob.label = label;
+                knob.val.value = value;
+                knob.draw();
+
+                if(!sockPath) sockPath = "/nodejs/ui";
+                knob.oscPath = sockPath;
+                knob.on('value', function(data){
+                    socket.emit(sockPath, [knob.canvasID, data]);
+                });
+
+                console.log(knob);
+            }
+            break;
+            case "pan": {
+                // default value
+                if(!widget.width) wd = 60;
+                if(!widget.height) ht = 105;
+
+                var pan = nx.add("dial", { "x" : x, "y" : y,
+                    "h": ht, "w" : wd,
+                    "name": widget.idx, "parent": "ui-elements"});
+
+                pan.min = -1.0;
+                pan.max = 1.0;
+                pan.label = label;
+                pan.val.value = value;
+                pan.colors.borderhl = "#FFF";
+                pan.colors.accent = "#f1c40f";
+                pan.colors.fill = "#e67e22";
+                pan.draw();
+
+                if(!sockPath) sockPath = "/nodejs/ui";
+                pan.oscPath = sockPath;
+                pan.on('value', function(data){
+                    socket.emit(sockPath, [pan.canvasID, data]);
+                });
+
+                widgets[widget.idx] = pan;
+                console.log(pan);
             }
             break;
             default:

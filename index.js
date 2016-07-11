@@ -1,3 +1,4 @@
+const url = require('url');
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -20,6 +21,10 @@ function postln(msg) {
     if(S_options['verbose'] != 0) {
         postmsg(msg);
     }
+}
+
+function get_http_request(res, path) {
+    res.sendFile(__dirname + '/build/' + path + '.html');
 }
 
 Number.prototype.toHHMMSS = function () {
@@ -147,10 +152,10 @@ oscServer.on("/sc/title", function(msg, rinfo) {
     io.emit("/title", msg[1]);
 });
 
-oscServer.on("/sc/addWidget", function(msg, rinfo) {
+oscServer.on("/sc/widget/add", function(msg, rinfo) {
     if(msg.length < 2) {
         postln("ERROR! Argument required!");
-        postln("Usage: /sc/addWidget JSON");
+        postln("Usage: /sc/widget/add JSON");
         return;
     }
 
@@ -161,7 +166,29 @@ oscServer.on("/sc/addWidget", function(msg, rinfo) {
     }
 
     postln('adding widget: ' + JSON.stringify(json));
-    io.emit("/addWidget", json);
+    io.emit("/widget/add", json);
+});
+
+oscServer.on("/sc/widget/update", function(msg, rinfo) {
+    if(msg.length < 2) {
+        postln("ERROR! Argument required!");
+        postln("Usage: /sc/widget/update JSON");
+        return;
+    }
+
+    var json = JSON.parse(msg[1]);
+    if(!json) {
+        postln("ERROR! invalid JSON given");
+        return;
+    }
+
+    postln('updating widget: ' + JSON.stringify(json));
+    io.emit("/widget/update", json);
+});
+
+oscServer.on("/sc/widget/remove", function(msg, rinfo) {
+    postln('removing widget: ' + msg[1]);
+    io.emit("/widget/remove", msg[1]);
 });
 
 oscServer.on("/sc/concert/add", function(msg, rinfo) {
@@ -183,7 +210,7 @@ app.get('/css/bootstrap/fonts/*', function(req, res){
 });
 
 // serve JS lib files
-app.get('/js/*.js', function(req, res){
+app.get('/js/*', function(req, res){
     res.sendFile(__dirname + '/build' + req['url']);
 });
 
@@ -207,6 +234,10 @@ app.get('/concert', function(req, res) {
     res.sendFile(__dirname + '/build/concert.html');
 });
 
+app.get('/ui', function(req, res) {
+    get_http_request(res, 'ui');
+});
+
 // init timer staff
 app.get('/timer', timer.httpGet);
 var serverTimer = new timer.ServerTimer(io, '/server/timer');
@@ -227,9 +258,9 @@ io.on('connection', function(socket){
         });
     });
 
-    socket.on('/nodejs/button', function(msg){
-        postln('button: ' + JSON.stringify(msg));
-        oscClient.send("/sc/button", JSON.stringify(msg));
+    socket.on('/nodejs/ui', function(msg){
+        postln('nexus UI: ' + JSON.stringify(msg));
+        oscClient.send("/sc/ui/" + msg[0], msg[1]);
     });
 
     socket.on('/speakers/test', function(msg){
