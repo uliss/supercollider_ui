@@ -194,6 +194,8 @@ $(document).ready(function() {
                 });
 
                 widgets[widget.idx] = pan;
+
+                $("#" + widget.idx).css("margin", "0 5px");
                 console.log(pan);
             }
             break;
