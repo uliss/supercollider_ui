@@ -104,49 +104,33 @@ $(document).ready(function() {
 
         switch(widget.type) {
             case "button": {
-                if(!widget.style) widget.style = "default";
-                if(!widget.url)   widget.url = "/nodejs/button";
-                if(!widget.x)     widget.x = "20px";
-                if(!widget.y)     widget.y = "100px";
-                if(!widget.act)   widget.act = "single";
-
-                var btn = $('<input/>',
-                    { type: "button", class: "commandButton", id: "btn_" + widget.idx, value: widget.label })
-                .css("left", widget.x)
-                .css("top", widget.y)
-                .addClass("btn")
-                .addClass("btn-lg")
-                .addClass(widget.style);
-
-                switch(widget.act) {
-                    case "single":
-                        btn.on('click', function(){socket.emit(widget.url, widget);});
-                    break;
-                    case "toggle":
-                        btn.on('click', function(){
-                            $(this).toggleClass('active');
-                            widget.on = $(this).hasClass("active");
-                            socket.emit(widget.url, widget);
-                        });
-                    break;
-                    default:
-                        console.log("Unkown button act:" + widget.act);
-                        btn.on('click', function(){socket.emit(widget.url, widget);});
-                    break;
+                // default values
+                if(!widget.size) {
+                    wd = 60;
+                    ht = 60;
+                }
+                else {
+                    wd = widget.size;
+                    ht = widget.size;
                 }
 
+                var btn = nx.add("button", { "x" : x, "y" : y,
+                    "h": ht, "w" : wd,
+                    "name": widget.idx, "parent": "ui-elements"});
 
-                if(widget.height) btn.css("height", widget.height);
-                if(widget.width) btn.css("width", widget.width);
-                if(widget.style) btn.addClass("btn-" + widget.style);
+                btn.mode = "single";
+                btn.label = label;
+                btn.draw();
 
-                if(widget.action) {
-                    btn.on('click', function(){
-                        setTimeout(widget.action, 0);
-                    });
-                }
+                if(!sockPath) sockPath = "/nodejs/ui";
+                btn.oscPath = sockPath;
+                btn.on('press', function(data){
+                    socket.emit(sockPath, [btn.canvasID, data]);
+                });
 
-                $("body").append(btn);
+                console.log(btn);
+                $("#" + widget.idx).css("margin", "0 5px");
+                widgets[widget.idx] = btn;
             }
             break;
             case "knob": {
@@ -165,6 +149,7 @@ $(document).ready(function() {
                     socket.emit(sockPath, [knob.canvasID, data]);
                 });
 
+                $("#" + widget.idx).css("margin", "0 5px");
                 console.log(knob);
             }
             break;
@@ -238,6 +223,10 @@ $(document).ready(function() {
                 console.log(slider);
             }
             break;
+            case "newline": {
+                $("#ui-elements").append("<div/>");
+            }
+            break;
             case "toggle": {
                 // default values
                 if(!widget.size) {
@@ -268,9 +257,19 @@ $(document).ready(function() {
                 widgets[widget.idx] = tgl;
             }
             break;
+
             default:
                 alert("unknown widget");
             break;
         }
+
+        if(widget.colors) {
+            // widgets[widget.idx].colors.borderhl = "#FFF";
+            widgets[widget.idx].colors.accent = "#0F0";
+            widgets[widget.idx].colors.accenthl = "#0A0";
+            // widgets[widget.idx].colors.fill = "#00F";
+            widgets[widget.idx].draw();
+        }
+
     });
 });
