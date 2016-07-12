@@ -81,82 +81,32 @@ $(document).ready(function() {
 
     // handle widget add
     socket.on('/widget/add', function(msg){
-        var widget = msg;
-        console.log(widget);
+        var params = msg;
+        console.log(params);
 
-        var x = 0, y = 0, ht = 100, wd = 100;
-        if(widget.x) x = widget.x;
-        if(widget.y) y = widget.y;
-        if(widget.height) ht = widget.height;
-        if(widget.width) wd = widget.width;
-
-        var sockPath = "/nodejs/ui";
-        if(widget.sockPath) sockPath = widget.sockPath;
-        var label;
-        if(widget.label !== null) label = widget.label;
-
-        var min = 0, max = 1, value = 0;
-        if(widget.min !== null) min = widget.min;
-        if(widget.max !== null) max = widget.max;
-        if(widget.value) value = widget.value;
-
-        var parent = "ui-elements";
-        if(widget.parent) parent = widget.parent;
-
-        if(!widget.idx) console.log("ERROR: no widget id!");
-        if(widgets[widget.idx]) {
+        if(!params.idx) console.log("ERROR: no widget id!");
+        if(widgets[params.idx]) {
             console.log("ERROR: widget already on UI");
             return;
         }
 
-        var nwidget;
+        var widget = null;
 
-        switch(widget.type) {
+        switch(params.type) {
             case "button": {
-                nwidget = ui_make_button(widget);
+                widget = ui_make_button(params);
             }
             break;
             case "knob": {
-                nwidget = ui_make_knob(widget);
+                widget = ui_make_knob(params);
             }
             break;
             case "pan": {
-                nwidget = ui_make_pan(widget);
+                widget = ui_make_pan(params);
             }
             break;
             case "slider": {
-                if(!widget.size) {
-                    if(!widget.width) wd = 35;
-                    if(!widget.height) ht = 180;
-                }
-                else {
-                    wd = 35;
-                    ht = widget.size;
-                }
-
-                if(widget.horizontal) {
-                    tmp = wd;
-                    wd = ht;
-                    ht = tmp;
-                }
-
-                var slider = nx.add("slider",  {"x" : x, "y" : y,
-                    "h": ht, "w" : wd,
-                    "name": widget.idx, "parent": "ui-elements"});
-
-                if(min) slider.min = min;
-                if(max) slider.max = max;
-
-                if(!widget.relative) slider.mode = "absolute";
-                if(widget.horizontal) slider.hslider = true;
-                if(widget.value) slider.val.value = value;
-
-                slider.on('value', function(data){
-                    socket.emit(sockPath, [slider.canvasID, data]);
-                });
-
-                widgets[widget.idx] = slider;
-                $("#" + widget.idx).css("margin", "0 5px");
+                widget = ui_make_slider(params);
             }
             break;
             case "newline": {
@@ -164,7 +114,7 @@ $(document).ready(function() {
             }
             break;
             case "toggle": {
-                nwidget = ui_make_toggle(widget);
+                widget = ui_make_toggle(params);
             }
             break;
             default:
@@ -172,10 +122,10 @@ $(document).ready(function() {
             break;
         }
 
-        if(nwidget) {
-            console.log(nwidget);
-            nwidget.draw();
-            widgets[widget.idx] = nwidget;
+        if(widget) {
+            console.log(widget);
+            widget.draw();
+            widgets[params.idx] = widget;
         }
     });
 });

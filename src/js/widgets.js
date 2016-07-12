@@ -19,7 +19,7 @@ function ui_make_params(params) {
 }
 
 function ui_make_widget(type, params) {
-    p = ui_make_params(params);
+    var p = ui_make_params(params);
     var widget = nx.add(type, p);
 
     widget.label = p.label;
@@ -88,6 +88,31 @@ function ui_make_toggle(params) {
         params.w = params.h = params.size;
 
     var widget = ui_make_widget("toggle", params);
+    ui_bind_to_value(widget);
+    return widget;
+}
+
+function ui_make_slider(params) {
+    if(!params.size) {
+        params.w = 40;
+        params.h = 200;
+    }
+    else {
+        params.w = 40;
+        params.h = params.size;
+    }
+
+    if(params.horizontal) {
+        tmp = params.w;
+        params.w = params.h;
+        params.h = tmp;
+    }
+
+    var widget = ui_make_widget("slider", params);
+
+    if(!params.relative) widget.mode = "absolute";
+    if(params.horizontal) widget.hslider = true;
+
     ui_bind_to_value(widget);
     return widget;
 }
