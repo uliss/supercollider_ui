@@ -121,27 +121,7 @@ $(document).ready(function() {
             }
             break;
             case "pan": {
-                // default values
-                if(!widget.width) wd = 60;
-                if(!widget.height) ht = 105;
-
-                nwidget = nx.add("dial", { "x" : x, "y" : y,
-                    "h": ht, "w" : wd,
-                    "name": widget.idx,
-                    "parent": parent});
-
-                pan.min = -1.0;
-                pan.max = 1.0;
-                pan.val.value = value;
-                pan.colors.borderhl = "#FFF";
-                pan.colors.accent = "#f1c40f";
-                pan.colors.fill = "#e67e22";
-
-                pan.on('value', function(data){
-                    socket.emit(sockPath, [pan.canvasID, data]);
-                });
-
-                $("#" + widget.idx).css("margin", "0 5px");
+                nwidget = ui_make_pan(widget);
             }
             break;
             case "slider": {
@@ -218,14 +198,6 @@ $(document).ready(function() {
         if(nwidget) {
             console.log(nwidget);
             nwidget.draw();
-
-            if(widget.colors) {
-                // widgets[widget.idx].colors.borderhl = "#FFF";
-                nwidget.colors.accent = "#0F0";
-                nwidget.colors.accenthl = "#0A0";
-                // widgets[widget.idx].colors.fill = "#00F";
-            }
-
             widgets[widget.idx] = nwidget;
         }
     });
