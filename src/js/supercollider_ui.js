@@ -90,7 +90,7 @@ $(document).ready(function() {
         if(widget.height) ht = widget.height;
         if(widget.width) wd = widget.width;
 
-        var sockPath;
+        var sockPath = "/nodejs/ui";
         if(widget.sockPath) sockPath = widget.sockPath;
         var label;
         if(widget.label !== null) label = widget.label;
@@ -100,57 +100,24 @@ $(document).ready(function() {
         if(widget.max !== null) max = widget.max;
         if(widget.value) value = widget.value;
 
+        var parent = "ui-elements";
+        if(widget.parent) parent = widget.parent;
+
         if(!widget.idx) console.log("ERROR: no widget id!");
+        if(widgets[widget.idx]) {
+            console.log("ERROR: widget already on UI");
+            return;
+        }
+
+        var nwidget;
 
         switch(widget.type) {
             case "button": {
-                // default values
-                if(!widget.size) {
-                    wd = 60;
-                    ht = 60;
-                }
-                else {
-                    wd = widget.size;
-                    ht = widget.size;
-                }
-
-                var btn = nx.add("button", { "x" : x, "y" : y,
-                    "h": ht, "w" : wd,
-                    "name": widget.idx, "parent": "ui-elements"});
-
-                btn.mode = "single";
-                btn.label = label;
-                btn.draw();
-
-                if(!sockPath) sockPath = "/nodejs/ui";
-                btn.oscPath = sockPath;
-                btn.on('press', function(data){
-                    socket.emit(sockPath, [btn.canvasID, data]);
-                });
-
-                console.log(btn);
-                $("#" + widget.idx).css("margin", "0 5px");
-                widgets[widget.idx] = btn;
+                nwidget = ui_make_button(widget);
             }
             break;
             case "knob": {
-                var knob = nx.add("dial", { "x" : x, "y" : y, "w" : wd,
-                    "name": widget.idx, "parent": "ui-elements"});
-
-                // knob.min = min;
-                // knob.max = max;
-                knob.label = label;
-                knob.val.value = value;
-                knob.draw();
-
-                if(!sockPath) sockPath = "/nodejs/ui";
-                knob.oscPath = sockPath;
-                knob.on('value', function(data){
-                    socket.emit(sockPath, [knob.canvasID, data]);
-                });
-
-                $("#" + widget.idx).css("margin", "0 5px");
-                console.log(knob);
+                nwidget = ui_make_knob(widget);
             }
             break;
             case "pan": {
@@ -158,29 +125,23 @@ $(document).ready(function() {
                 if(!widget.width) wd = 60;
                 if(!widget.height) ht = 105;
 
-                var pan = nx.add("dial", { "x" : x, "y" : y,
+                nwidget = nx.add("dial", { "x" : x, "y" : y,
                     "h": ht, "w" : wd,
-                    "name": widget.idx, "parent": "ui-elements"});
+                    "name": widget.idx,
+                    "parent": parent});
 
                 pan.min = -1.0;
                 pan.max = 1.0;
-                pan.label = label;
                 pan.val.value = value;
                 pan.colors.borderhl = "#FFF";
                 pan.colors.accent = "#f1c40f";
                 pan.colors.fill = "#e67e22";
-                pan.draw();
 
-                if(!sockPath) sockPath = "/nodejs/ui";
-                pan.oscPath = sockPath;
                 pan.on('value', function(data){
                     socket.emit(sockPath, [pan.canvasID, data]);
                 });
 
-                widgets[widget.idx] = pan;
-
                 $("#" + widget.idx).css("margin", "0 5px");
-                console.log(pan);
             }
             break;
             case "slider": {
@@ -209,18 +170,13 @@ $(document).ready(function() {
                 if(!widget.relative) slider.mode = "absolute";
                 if(widget.horizontal) slider.hslider = true;
                 if(widget.value) slider.val.value = value;
-                slider.label = label;
-                slider.draw();
 
-                if(!sockPath) sockPath = "/nodejs/ui";
-                slider.oscPath = sockPath;
                 slider.on('value', function(data){
                     socket.emit(sockPath, [slider.canvasID, data]);
                 });
 
                 widgets[widget.idx] = slider;
                 $("#" + widget.idx).css("margin", "0 5px");
-                console.log(slider);
             }
             break;
             case "newline": {
@@ -238,23 +194,19 @@ $(document).ready(function() {
                     ht = widget.size;
                 }
 
-                var tgl = nx.add("toggle", { "x" : x, "y" : y,
+                nwidget = nx.add("toggle", { "x" : x, "y" : y,
                     "h": ht, "w" : wd,
                     "name": widget.idx, "parent": "ui-elements"});
 
-                if(widget.value) tgl.val.value = value;
-                tgl.label = label;
-                tgl.draw();
-
-                if(!sockPath) sockPath = "/nodejs/ui";
-                tgl.oscPath = sockPath;
-                tgl.on('value', function(data){
-                    socket.emit(sockPath, [tgl.canvasID, data]);
+                if(widget.value) nwidget.val.value = value;
+                nwidget.draw();
+                nwidget.on('value', function(data){
+                    console.log(sockPath);
+                    // console.log(data);
+                    socket.emit(sockPath, [nwidget.canvasID, data]);
                 });
 
-                console.log(tgl);
                 $("#" + widget.idx).css("margin", "0 5px");
-                widgets[widget.idx] = tgl;
             }
             break;
 
@@ -263,13 +215,18 @@ $(document).ready(function() {
             break;
         }
 
-        if(widget.colors) {
-            // widgets[widget.idx].colors.borderhl = "#FFF";
-            widgets[widget.idx].colors.accent = "#0F0";
-            widgets[widget.idx].colors.accenthl = "#0A0";
-            // widgets[widget.idx].colors.fill = "#00F";
-            widgets[widget.idx].draw();
-        }
+        if(nwidget) {
+            console.log(nwidget);
+            nwidget.draw();
 
+            if(widget.colors) {
+                // widgets[widget.idx].colors.borderhl = "#FFF";
+                nwidget.colors.accent = "#0F0";
+                nwidget.colors.accenthl = "#0A0";
+                // widgets[widget.idx].colors.fill = "#00F";
+            }
+
+            widgets[widget.idx] = nwidget;
+        }
     });
 });
