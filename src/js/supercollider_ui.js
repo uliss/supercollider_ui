@@ -164,32 +164,9 @@ $(document).ready(function() {
             }
             break;
             case "toggle": {
-                // default values
-                if(!widget.size) {
-                    wd = 60;
-                    ht = 60;
-                }
-                else {
-                    wd = widget.size;
-                    ht = widget.size;
-                }
-
-                nwidget = nx.add("toggle", { "x" : x, "y" : y,
-                    "h": ht, "w" : wd,
-                    "name": widget.idx, "parent": "ui-elements"});
-
-                if(widget.value) nwidget.val.value = value;
-                nwidget.draw();
-                nwidget.on('value', function(data){
-                    console.log(sockPath);
-                    // console.log(data);
-                    socket.emit(sockPath, [nwidget.canvasID, data]);
-                });
-
-                $("#" + widget.idx).css("margin", "0 5px");
+                nwidget = ui_make_toggle(widget);
             }
             break;
-
             default:
                 alert("unknown widget");
             break;
