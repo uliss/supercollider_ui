@@ -260,7 +260,15 @@ io.on('connection', function(socket){
 
     socket.on('/nodejs/ui', function(msg){
         postln('nexus UI: ' + JSON.stringify(msg));
-        oscClient.send("/sc/ui/" + msg[0], msg[1]);
+        if(msg.length == 2) {
+            oscClient.send("/sc/ui/" + msg[0], msg[1]);
+        }
+        else if (msg.length > 2) {
+            oscClient.send("/sc/ui/" + msg[0], msg.slice(1));
+        }
+        else {
+            oscClient.send("/sc/ui/" + msg);
+        }
     });
 
     socket.on('/speakers/test', function(msg){

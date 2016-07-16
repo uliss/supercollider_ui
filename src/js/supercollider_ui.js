@@ -117,6 +117,10 @@ $(document).ready(function() {
                 widget = ui_make_toggle(params);
             }
             break;
+            case "pianoroll": {
+                widget = ui_make_pianoroll(params);
+            }
+            break;
             default:
                 alert("unknown widget");
             break;
