@@ -97,6 +97,10 @@ $(document).ready(function() {
                 widget = ui_make_button(params);
             }
             break;
+            case "crossfade": {
+                widget = ui_make_crossfade(params);
+            }
+            break;
             case "knob": {
                 widget = ui_make_knob(params);
             }
@@ -111,6 +115,10 @@ $(document).ready(function() {
             break;
             case "newline": {
                 $("#ui-elements").append("<div/>");
+            }
+            break;
+            case "matrix": {
+                widget = ui_make_matrix(params);
             }
             break;
             case "toggle": {

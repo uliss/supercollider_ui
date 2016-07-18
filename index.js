@@ -205,8 +205,8 @@ app.get('/css/*.css', function(req, res){
     res.sendFile(__dirname + '/build' + req['url']);
 });
 
-app.get('/css/bootstrap/fonts/*', function(req, res){
-    res.sendFile(__dirname + '/build' + req['url']);
+app.get('/css/*', function(req, res){
+    res.sendFile(__dirname + '/build' + req['path']);
 });
 
 // serve JS lib files

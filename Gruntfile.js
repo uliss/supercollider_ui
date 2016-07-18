@@ -89,13 +89,13 @@ module.exports = function(grunt) {
                     '/css/bootstrap/css/bootstrap.min.css' : 'bootstrap-css/css/bootstrap.min.css',
                     '/js/lib/jquery.fittext.js': 'FitText.js/jquery.fittext.js',
                     '/js/lib/jquery/dist/jquery.min.js': 'jquery/dist/jquery.min.js',
+                    '/css/open-sans/open-sans.css': 'open-sans-fontface/open-sans.css'
                 }
             },
             folders: {
                 files: {
                     '/css/bootstrap/fonts': 'bootstrap-css/fonts',
-                    '/js/lib/jqwidgets/styles': 'jqwidgets/jqwidgets/styles',
-                    '/js/lib/jqwidgets': 'jqwidgets/jqwidgets'
+                    '/css/open-sans/fonts': 'open-sans-fontface/fonts'
                 }
             }
         },
@@ -136,17 +136,17 @@ module.exports = function(grunt) {
         },
 
         copy: {
-            // js: {
-            //     files: [
-            //         // includes files within path
-            //         {
-            //             expand: true,
-            //             src: ['node_modules/nexusui/dist/*.js'],
-            //             flatten: true,
-            //             dest: 'build/js/lib',
-            //             filter: 'isFile'},
-            //     ],
-            // },
+            js: {
+                files: [
+                    // includes files within path
+                    {
+                        expand: true,
+                        src: ['node_modules/nexusui/dist/nexusUI.js'],
+                        flatten: true,
+                        dest: 'build/js/lib',
+                        filter: 'isFile'},
+                ],
+            },
         },
 
         watch: {

@@ -54,6 +54,45 @@ function ui_make_button(params) {
     return widget;
 }
 
+function ui_make_crossfade(params) {
+    if(!params.size)
+        params.w = 200;
+    else
+        params.w = params.size;
+
+    params.h = params.w * 0.15;
+
+    var widget = ui_make_widget("crossfade", params);
+    widget.on('*', function(data) {
+        console.log(data);
+        socket.emit(params.oscPath, [widget.canvasID, data.L, data.R]);
+    });
+    return widget;
+}
+
+function ui_make_matrix(params) {
+    if(!params.size)
+        params.w = 200;
+    else
+        params.w = params.size;
+
+    if(!params.row) params.row = 4;
+    if(!params.col) params.col = 4;
+
+    params.h = params.w;
+
+    var widget = ui_make_widget("matrix", params);
+    widget.row = params.row;
+    widget.col = params.col;
+    widget.init();
+    widget.on('*', function(data) {
+        console.log(data);
+        socket.emit(params.oscPath, [widget.canvasID, data.row, data.col, data.level]);
+    });
+    return widget;
+
+}
+
 function ui_make_knob(params) {
     if(!params.size)
         params.w = 100;
