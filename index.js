@@ -5,11 +5,11 @@ var io = require('socket.io')(http);
 var keypress = require('keypress');
 var osc = require('node-osc');
 var timer = require('./lib/timer');
+var server = require('./lib/server');
 
 var NODE_PORT = 3000;
 var OSC_IN_PORT = 5000;
 var OSC_OUT_PORT = OSC_IN_PORT + 1;
-
 
 var S_options = {verbose: 1};
 
@@ -21,10 +21,6 @@ function postln(msg) {
     if(S_options['verbose'] != 0) {
         postmsg(msg);
     }
-}
-
-function get_http_request(res, path) {
-    res.sendFile(__dirname + '/build/' + path + '.html');
 }
 
 Number.prototype.toHHMMSS = function () {
@@ -196,50 +192,9 @@ oscServer.on("/sc/concert/add", function(msg, rinfo) {
     io.emit("/concert/add", json);
 });
 
-app.get('/', function(req, res){
-    res.sendFile(__dirname + '/build/index.html');
-});
-
-// serve CSS files
-app.get('/css/*.css', function(req, res){
-    res.sendFile(__dirname + '/build' + req['url']);
-});
-
-app.get('/css/*', function(req, res){
-    res.sendFile(__dirname + '/build' + req['path']);
-});
-
-// serve JS lib files
-app.get('/js/*', function(req, res){
-    res.sendFile(__dirname + '/build' + req['url']);
-});
-
-app.get('/speakers', function(req, res) {
-    res.sendFile(__dirname + '/build/speakers.html');
-});
-
-app.get('/info', function(req, res) {
-    res.sendFile(__dirname + '/build/info.html');
-});
-
-app.get('/vlabel', function(req, res) {
-    res.sendFile(__dirname + '/build/vlabel.html');
-});
-
-app.get('/vmetro', function(req, res) {
-    res.sendFile(__dirname + '/build/vmetro.html');
-});
-
-app.get('/concert', function(req, res) {
-    res.sendFile(__dirname + '/build/concert.html');
-});
-
-app.get('/ui', function(req, res) {
-    get_http_request(res, 'ui');
-});
+server.registerHttpCallbacks(app);
 
 // init timer staff
-app.get('/timer', timer.httpGet);
 var serverTimer = new timer.ServerTimer(io, '/server/timer');
 
 io.on('connection', function(socket){
