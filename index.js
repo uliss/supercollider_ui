@@ -4,7 +4,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var keypress = require('keypress');
 var osc = require('node-osc');
-var timer = require('./mod_timer');
+var timer = require('./lib/timer');
 
 var NODE_PORT = 3000;
 var OSC_IN_PORT = 5000;
