@@ -62,12 +62,13 @@ $(document).ready(function() {
 
     var widgets = {};
 
-    socket.on('/widget/remove', function(msg){
+    socket.on('/cli/widget/remove', function(msg) {
+        widgets[msg].destroy();
+        delete widgets[msg];
         $("#" + msg).remove();
-        widgets[msg.idx] = null;
     });
 
-    socket.on('/widget/update', function(msg){
+    socket.on('/cli/widget/update', function(msg){
         console.log(msg);
         if(!msg.idx) {
             console.log("ERROR: no widget id!");
@@ -80,13 +81,14 @@ $(document).ready(function() {
     });
 
     // handle widget add
-    socket.on('/widget/add', function(msg){
+    socket.on('/cli/widget/add', function(msg){
         var params = msg;
-        console.log(params);
+        // console.log(params);
 
         if(!params.idx) console.log("ERROR: no widget id!");
         if(widgets[params.idx]) {
-            console.log("ERROR: widget already on UI");
+            console.log(widgets[params.idx]);
+            console.log("ERROR: widget already on UI:" + params.idx);
             return;
         }
 

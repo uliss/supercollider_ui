@@ -1,3 +1,7 @@
+function sendUI2Node(path, msg) {
+    socket.emit("/node" + path, msg);
+}
+
 function ui_make_params(params) {
     var defaults = {
         "x": 0,
@@ -5,7 +9,7 @@ function ui_make_params(params) {
         "name": params.idx,
         "value": 0,
         "parent": "ui-elements",
-        "oscPath": "/nodejs/ui",
+        "oscPath": "/ui",
         "colors": {
             "accent": "#ff5500",
             "accenthl": "#ff6f26",
@@ -27,13 +31,16 @@ function ui_make_widget(type, params) {
     widget.colors = $.extend({}, widget.colors, p.colors);
     if(p.min !== null) widget.min = p.min;
     if(p.max !== null) widget.max = p.max;
-    if(p.value !== null) widget.val.value = p.value;
+    if(p.value !== null) {
+        widget.val.value = p.value;
+        widget.value = p.value;
+    }
     return widget;
 }
 
 function ui_bind_to_value(widget) {
     widget.on('value', function(data){
-        socket.emit(widget.oscPath, [widget.canvasID, data]);
+        sendUI2Node(widget.oscPath, [widget.canvasID, data]);
     });
 }
 
@@ -48,7 +55,7 @@ function ui_make_button(params) {
 
     widget.mode = "single";
     widget.on('press', function(data) {
-        socket.emit(params.oscPath, [widget.canvasID, data]);
+        sendUI2Node(params.oscPath, [widget.canvasID, data]);
     });
 
     return widget;
@@ -65,7 +72,7 @@ function ui_make_crossfade(params) {
     var widget = ui_make_widget("crossfade", params);
     widget.on('*', function(data) {
         console.log(data);
-        socket.emit(params.oscPath, [widget.canvasID, data.L, data.R]);
+        sendUI2Node(params.oscPath, [widget.canvasID, data.L, data.R]);
     });
     return widget;
 }
@@ -87,7 +94,7 @@ function ui_make_matrix(params) {
     widget.init();
     widget.on('*', function(data) {
         console.log(data);
-        socket.emit(params.oscPath, [widget.canvasID, data.row, data.col, data.level]);
+        sendUI2Node(params.oscPath, [widget.canvasID, data.row, data.col, data.level]);
     });
     return widget;
 
@@ -149,7 +156,7 @@ function ui_make_pianoroll(params) {
 
     widget.on('midi', function(data) {
         var v = data.split(' ');
-        socket.emit(params.oscPath, [widget.canvasID, parseInt(v[0]), parseInt(v[1])]);
+        send2Node(params.oscPath, [widget.canvasID, parseInt(v[0]), parseInt(v[1])]);
     });
 
     return widget;

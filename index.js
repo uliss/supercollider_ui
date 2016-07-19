@@ -6,6 +6,7 @@ var keypress = require('keypress');
 var osc = require('node-osc');
 var timer = require('./lib/timer');
 var server = require('./lib/server');
+var ui = require('./lib/ui');
 
 var NODE_PORT = 3000;
 var OSC_IN_PORT = 5000;
@@ -148,51 +149,15 @@ oscServer.on("/sc/title", function(msg, rinfo) {
     io.emit("/title", msg[1]);
 });
 
-oscServer.on("/sc/widget/add", function(msg, rinfo) {
-    if(msg.length < 2) {
-        postln("ERROR! Argument required!");
-        postln("Usage: /sc/widget/add JSON");
-        return;
-    }
-
-    var json = JSON.parse(msg[1]);
-    if(!json) {
-        postln("ERROR! invalid JSON given");
-        return;
-    }
-
-    postln('adding widget: ' + JSON.stringify(json));
-    io.emit("/widget/add", json);
-});
-
-oscServer.on("/sc/widget/update", function(msg, rinfo) {
-    if(msg.length < 2) {
-        postln("ERROR! Argument required!");
-        postln("Usage: /sc/widget/update JSON");
-        return;
-    }
-
-    var json = JSON.parse(msg[1]);
-    if(!json) {
-        postln("ERROR! invalid JSON given");
-        return;
-    }
-
-    postln('updating widget: ' + JSON.stringify(json));
-    io.emit("/widget/update", json);
-});
-
-oscServer.on("/sc/widget/remove", function(msg, rinfo) {
-    postln('removing widget: ' + msg[1]);
-    io.emit("/widget/remove", msg[1]);
-});
-
 oscServer.on("/sc/concert/add", function(msg, rinfo) {
     var json = JSON.parse(msg[1]);
     io.emit("/concert/add", json);
 });
 
 server.registerHttpCallbacks(app);
+
+
+ui.init(oscServer, oscClient, io);
 
 // init timer staff
 var serverTimer = new timer.ServerTimer(io, '/server/timer');
@@ -213,18 +178,7 @@ io.on('connection', function(socket){
         });
     });
 
-    socket.on('/nodejs/ui', function(msg){
-        postln('nexus UI: ' + JSON.stringify(msg));
-        if(msg.length == 2) {
-            oscClient.send("/sc/ui/" + msg[0], msg[1]);
-        }
-        else if (msg.length > 2) {
-            oscClient.send("/sc/ui/" + msg[0], msg.slice(1));
-        }
-        else {
-            oscClient.send("/sc/ui/" + msg);
-        }
-    });
+    ui.bindClient(socket);
 
     socket.on('/speakers/test', function(msg){
         // console.log("send " + msg);
