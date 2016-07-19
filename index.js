@@ -52,42 +52,6 @@ oscServer.on("/sc/stat", function (msg, rinfo) {
     io.emit("/info/sc/stat/update", json);
 });
 
-oscServer.on("/server/set", function (msg, rinfo) {
-    var k = msg[1];
-
-    if(k == "help") {
-        postmsg(msg[0] + ' KEY VALUE');
-        postmsg('- sets server variable', '    ');
-        return;
-    }
-
-    S_options[k] = msg[2];
-    postmsg('SET ' + k + ' = ' + S_options[k]);
-});
-
-oscServer.on("/server/get", function (msg, rinfo) {
-    var k = msg[1];
-    var v = S_options[k];
-
-    if(k == "help") {
-        postmsg(msg[0] + ' KEY');
-        postmsg('- reads server variable and sends it back to osc://localhost:' + OSC_OUT_PORT + '/server/get', '    ');
-        return;
-    }
-
-    oscClient.send("/server/get", k, v);
-    postmsg('var ' + k + ' == ' + v);
-});
-
-oscServer.on("/server/help", function (msg, rinfo) {
-    postmsg("Available commands:");
-    postmsg(["set", "get", "echo", "help"].map(function(v){return "/server/" + v}).join("\n    "), "    ");
-});
-
-oscServer.on("/server/echo", function (msg, rinfo) {
-    postmsg(msg[1]);
-});
-
 oscServer.on("/sc/concert/info", function(msg, rinfo) {
     var json = JSON.parse(msg[1]);
     io.emit("/concert/info", json);
@@ -154,7 +118,8 @@ oscServer.on("/sc/concert/add", function(msg, rinfo) {
     io.emit("/concert/add", json);
 });
 
-server.registerHttpCallbacks(app);
+server.bindHttp(app);
+server.bindOsc(oscServer, oscClient);
 
 
 ui.init(oscServer, oscClient, io);
