@@ -93,8 +93,10 @@ function ui_make_matrix(params) {
     widget.col = params.col;
     widget.init();
     widget.on('*', function(data) {
-        console.log(data);
-        sendUI2Node(params.oscPath, [widget.canvasID, data.row, data.col, data.level]);
+        if(data.row) {
+            sendUI2Node(params.oscPath, [widget.canvasID, data.row, data.col, data.level]);
+            // console.log(data.grid);
+        }
     });
     return widget;
 
@@ -162,6 +164,51 @@ function ui_make_pianoroll(params) {
     return widget;
 }
 
+function ui_make_life(params) {
+    params.row = 10;
+    params.col = 10;
+    if(!params.time) params.time = 1000;
+    var w = ui_make_matrix(params);
+    w.on('*', function(data) {
+        if(data.grid) {
+            console.log(data.grid);
+            sendUI2Node(params.oscPath, [w.canvasID, data.grid]);
+        }
+    });
+    for(var i = 0; i < 10; i++) { w.matrix[i].fill(0);}
+
+    var ctrl = $('<div class="ctrl"></div>');
+
+
+    var btn1 = $("<button>")
+    .attr("value", 0)
+    .text("Start")
+    .addClass("btn")
+    .addClass("btn-lg")
+    .addClass("btn-success")
+    .data("start", 1)
+    .click(
+        function() {
+            $(this).toggleClass("btn-success");
+            $(this).toggleClass("btn-danger");
+            if($(this).data("start") == 1) {
+                $(this).data("start", 0);
+                $(this).text("Stop");
+                $(this).data("intervalId", setInterval(w.life, params.time));
+            }
+            else {
+                $(this).data("start", 1);
+                $(this).text("Start");
+                clearInterval($(this).data("intervalId"));
+            }
+        }
+    )
+    .appendTo(ctrl);
+
+    $("#" + w.canvasID).after(ctrl);
+    return w;
+}
+
 function ui_make_slider(params) {
     if(!params.size) {
         params.w = 40;
@@ -185,4 +232,143 @@ function ui_make_slider(params) {
 
     ui_bind_to_value(widget);
     return widget;
+}
+
+function _widget_make_btn(text, icon) {
+    var btn = $("<button>")
+    .attr("value", 0)
+    .attr("id", "ui-playcontrol-" + icon)
+    .addClass("btn")
+    .addClass("btn-lg");
+
+    if(icon) {
+        var label = $("<span>")
+        .addClass("glyphicon")
+        .addClass("glyphicon-" + icon);
+
+        btn.append(label);
+    }
+
+    if(text) {
+        btn.append(text);
+    }
+
+    return btn;
+}
+
+function ui_make_playcontrol(params) {
+    var w = $('<div id="ui-playcontrol"></div>');
+    $("#ui-elements").append(w);
+
+    var fsm = StateMachine.create({
+        initial: { state: 's_stop', event: 'init', defer: true },
+        error: function(eventName, from, to, args, errorCode, errorMessage) {
+            return 'event ' + eventName + ' was naughty :- ' + errorMessage;
+        },
+        events: [
+            { name: 'startup', from: 'none',  to: 's_stop' },
+            { name: 'stop',  from: 's_pause', to: 's_stop' },
+            { name: 'stop',  from: 's_play',  to: 's_stop' },
+            { name: 'play',  from: 's_stop',  to: 's_play' },
+            { name: 'play',  from: 's_pause', to: 's_play' },
+            { name: 'pause', from: 's_play',  to: 's_pause'  }
+        ],
+        callbacks: {
+            oninit: function(event, from, to, msg) {
+                console.log("init");
+                $('#ui-playcontrol-play').prop('disabled',  false);
+                $('#ui-playcontrol-pause').prop('disabled', true);
+                $('#ui-playcontrol-stop').prop('disabled',  true);
+
+                $('#ui-playcontrol-play').addClass('btn-success');
+
+                $('#ui-playcontrol-pause').addClass('btn-default');
+                $('#ui-playcontrol-stop').addClass('btn-default');
+            },
+            onplay:  function(event, from, to, msg) {
+                console.log("play");
+                $('#ui-playcontrol-play').prop('disabled',  true);
+                $('#ui-playcontrol-pause').prop('disabled', false);
+                $('#ui-playcontrol-stop').prop('disabled',  false);
+
+                $('#ui-playcontrol-play').removeClass('btn-success');
+                $('#ui-playcontrol-pause').addClass('btn-warning');
+                $('#ui-playcontrol-stop').addClass('btn-danger');
+
+                $('#ui-playcontrol-play').addClass('btn-default');
+                $('#ui-playcontrol-pause').removeClass('btn-default');
+                $('#ui-playcontrol-stop').removeClass('btn-default');
+
+                sendUI2Node("/ui", ["playcontrol", "play"]);
+            },
+            onstop:  function(event, from, to, msg) {
+                console.log("stop");
+                $('#ui-playcontrol-play').prop('disabled',  false);
+                $('#ui-playcontrol-pause').prop('disabled', true);
+                $('#ui-playcontrol-stop').prop('disabled',  true);
+
+                $('#ui-playcontrol-play').addClass('btn-success');
+                $('#ui-playcontrol-pause').removeClass('btn-warning');
+                $('#ui-playcontrol-stop').removeClass('btn-danger');
+
+                $('#ui-playcontrol-play').removeClass('btn-default');
+                $('#ui-playcontrol-pause').addClass('btn-default');
+                $('#ui-playcontrol-stop').addClass('btn-default');
+
+                sendUI2Node("/ui", ["playcontrol", "stop"]);
+            },
+            onpause:  function(event, from, to, msg) {
+                console.log("pause");
+                $('#ui-playcontrol-play').prop('disabled',  false);
+                $('#ui-playcontrol-pause').prop('disabled', false);
+                $('#ui-playcontrol-stop').prop('disabled',  false);
+
+                $('#ui-playcontrol-play').removeClass('btn-success');
+                $('#ui-playcontrol-pause').addClass('btn-warning');
+                $('#ui-playcontrol-stop').removeClass('btn-danger');
+
+                $('#ui-playcontrol-play').addClass('btn-default');
+                $('#ui-playcontrol-pause').removeClass('btn-default');
+                $('#ui-playcontrol-stop').addClass('btn-default');
+
+                sendUI2Node("/ui", ["playcontrol", "pause"]);
+            },
+        }
+    });
+    w.data("fsm", fsm);
+
+    var btn_play = _widget_make_btn("Play", "play")
+    .click(function() {$("#ui-playcontrol").data("fsm").play();});
+
+    var btn_pause = _widget_make_btn("Pause", "pause")
+    .click(function(){$("#ui-playcontrol").data("fsm").pause();});
+
+    var btn_stop = _widget_make_btn("Stop", "stop")
+    .click(function(){$("#ui-playcontrol").data("fsm").stop();});
+
+    if(params.back) {
+        var btn_fast_backward = _widget_make_btn("", "fast-backward")
+        .click(function(){sendUI2Node("/ui", ["playcontrol", "begin"]);})
+        w.append(btn_fast_backward);
+
+        var btn_backward = _widget_make_btn("", "step-backward")
+        .click(function(){sendUI2Node("/ui", ["playcontrol", "prev"]);})
+        w.append(btn_backward);
+    }
+
+    w.append(btn_play);
+    w.append(btn_pause);
+    w.append(btn_stop);
+
+    if(params.forward) {
+        var btn_forward = _widget_make_btn("", "step-forward")
+        .click(function(){sendUI2Node("/ui", ["playcontrol", "next"]);})
+        w.append(btn_forward);
+
+        var btn_fast_forward = _widget_make_btn("", "fast-forward")
+        .click(function(){sendUI2Node("/ui", ["playcontrol", "end"]);})
+        w.append(btn_fast_forward);
+    }
+
+    w.data("fsm").init();
 }

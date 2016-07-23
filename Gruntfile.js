@@ -89,7 +89,9 @@ module.exports = function(grunt) {
                     '/css/bootstrap/css/bootstrap.min.css' : 'bootstrap-css/css/bootstrap.min.css',
                     '/js/lib/jquery.fittext.js': 'FitText.js/jquery.fittext.js',
                     '/js/lib/jquery/dist/jquery.min.js': 'jquery/dist/jquery.min.js',
-                    '/css/open-sans/open-sans.css': 'open-sans-fontface/open-sans.css'
+                    '/css/open-sans/open-sans.css': 'open-sans-fontface/open-sans.css',
+                    '/js/lib/state-machine.js': 'javascript-state-machine/state-machine.js',
+                    '/js/lib/state-machine.min.js': 'javascript-state-machine/state-machine.min.js',
                 }
             },
             folders: {

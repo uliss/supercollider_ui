@@ -62,12 +62,14 @@ $(document).ready(function() {
 
     var widgets = {};
 
+    // handle widget remove
     socket.on('/cli/widget/remove', function(msg) {
         widgets[msg].destroy();
         delete widgets[msg];
         $("#" + msg).remove();
     });
 
+    // handle widget update
     socket.on('/cli/widget/update', function(msg){
         console.log(msg);
         if(!msg.idx) {
@@ -119,6 +121,10 @@ $(document).ready(function() {
                 $("#ui-elements").append("<div/>");
             }
             break;
+            case "playcontrol": {
+                ui_make_playcontrol(params);
+            }
+            break;
             case "matrix": {
                 widget = ui_make_matrix(params);
             }
@@ -131,6 +137,10 @@ $(document).ready(function() {
                 widget = ui_make_pianoroll(params);
             }
             break;
+            case "life": {
+                widget = ui_make_life(params);
+            }
+            break;
             default:
                 alert("unknown widget");
             break;
@@ -140,6 +150,15 @@ $(document).ready(function() {
             console.log(widget);
             widget.draw();
             widgets[params.idx] = widget;
+        }
+    });
+
+    // handle widget command
+    socket.on('/cli/widget/command', function(msg){
+        console.log(msg);
+        if(!msg.idx) {
+            console.log("ERROR: no widget id!");
+            return;
         }
     });
 });
