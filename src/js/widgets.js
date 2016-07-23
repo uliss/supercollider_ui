@@ -348,11 +348,11 @@ function ui_make_playcontrol(params) {
 
     if(params.back) {
         var btn_fast_backward = _widget_make_btn("", "fast-backward")
-        .click(function(){sendUI2Node("/ui", ["playcontrol", "begin"]);})
+        .click(function(){sendUI2Node("/ui", ["playcontrol", "begin"]);});
         w.append(btn_fast_backward);
 
         var btn_backward = _widget_make_btn("", "step-backward")
-        .click(function(){sendUI2Node("/ui", ["playcontrol", "prev"]);})
+        .click(function(){sendUI2Node("/ui", ["playcontrol", "prev"]);});
         w.append(btn_backward);
     }
 
@@ -362,11 +362,11 @@ function ui_make_playcontrol(params) {
 
     if(params.forward) {
         var btn_forward = _widget_make_btn("", "step-forward")
-        .click(function(){sendUI2Node("/ui", ["playcontrol", "next"]);})
+        .click(function(){sendUI2Node("/ui", ["playcontrol", "next"]);});
         w.append(btn_forward);
 
         var btn_fast_forward = _widget_make_btn("", "fast-forward")
-        .click(function(){sendUI2Node("/ui", ["playcontrol", "end"]);})
+        .click(function(){sendUI2Node("/ui", ["playcontrol", "end"]);});
         w.append(btn_fast_forward);
     }
 
