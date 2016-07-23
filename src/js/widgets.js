@@ -256,10 +256,98 @@ function _widget_make_btn(text, icon) {
     return btn;
 }
 
-function ui_make_playcontrol(params) {
-    var w = $('<div id="ui-playcontrol"></div>');
-    $("#ui-elements").append(w);
+function PlaycontrolTimer(element) {
+    this.currentTime = 0;
+    this.timerId = null;
+    this.element = element;
+    this.isRunning = false;
 
+    this.start = function() {
+        this.isRunning = true;
+        var self = this;
+        this.timerId = setInterval(function(){
+            self.next();
+        }, 1000);
+    };
+
+    this.pause = function() {
+        this.isRunning = false;
+        clearInterval(this.timerId);
+    };
+
+    this.stop = function() {
+        this.isRunning = false;
+        clearInterval(this.timerId);
+        this.reset();
+    };
+
+    this.reset = function() {
+        this.currentTime = 0;
+        this.update();
+    };
+
+    this.update = function() {
+        this.element.text(this.currentTime .toHHMMSS());
+    };
+
+    this.next = function() {
+        this.currentTime++;
+        this.update();
+    };
+
+    this.setTime = function(tm) {
+        this.currentTime = tm;
+        if(this.isRunning) {
+            this.pause();
+            this.start();
+        }
+        this.update();
+    };
+
+    this.update();
+}
+
+function ui_process_playcontrol_command(id, cmd) {
+    console.log("[playcontrol] command: " + id + " = " + JSON.stringify(cmd));
+    // process "part" message
+    if(cmd.part) { $(id + " .part").text(cmd.part); }
+
+    // process "sync"
+    if(cmd.sync) {
+        console.log($(id).data("timer"));
+        $(id).data("timer").setTime(cmd.sync);
+    }
+
+    if(cmd.state) {
+        var ctrl = $(id).data("fsm");
+        switch(cmd.state) {
+            case "play": ctrl.play(); break;
+            case "stop": ctrl.stop(); break;
+            case "pause": ctrl.pause(); break;
+            default: console.log("[playcontrol] unknown command: " + cmd.state);
+        }
+    }
+}
+
+function ui_make_playcontrol(params) {
+    // set default values
+    if(!params.oscPath) params.oscPath = "/ui";
+    if(!params.idx) params.idx = "playcontrol";
+
+    // control ID
+    var ctrl_sel = "#" + params.idx;
+    // check for double insert
+    if($(ctrl_sel).length > 0) {
+        console.log("[playcontrol]: already has element with such id: " + ctrl_sel);
+        return;
+    }
+
+    // create container
+    var w = $('<div class="ui-playcontrol"/>')
+    .attr('id', params.idx)
+    .data('oncommand', ui_process_playcontrol_command);
+
+    // create Finite State Machine
     var fsm = StateMachine.create({
         initial: { state: 's_stop', event: 'init', defer: true },
         error: function(eventName, from, to, args, errorCode, errorMessage) {
@@ -299,7 +387,8 @@ function ui_make_playcontrol(params) {
                 $('#ui-playcontrol-pause').removeClass('btn-default');
                 $('#ui-playcontrol-stop').removeClass('btn-default');
 
-                sendUI2Node("/ui", ["playcontrol", "play"]);
+                sendUI2Node(params.oscPath, [params.idx, "play"]);
+                $(ctrl_sel).data("timer").start();
             },
             onstop:  function(event, from, to, msg) {
                 console.log("stop");
@@ -315,37 +404,41 @@ function ui_make_playcontrol(params) {
                 $('#ui-playcontrol-pause').addClass('btn-default');
                 $('#ui-playcontrol-stop').addClass('btn-default');
 
-                sendUI2Node("/ui", ["playcontrol", "stop"]);
+                sendUI2Node(params.oscPath, [params.idx, "stop"]);
+                $(ctrl_sel).data("timer").stop();
             },
             onpause:  function(event, from, to, msg) {
                 console.log("pause");
                 $('#ui-playcontrol-play').prop('disabled',  false);
-                $('#ui-playcontrol-pause').prop('disabled', false);
+                $('#ui-playcontrol-pause').prop('disabled', true);
                 $('#ui-playcontrol-stop').prop('disabled',  false);
 
-                $('#ui-playcontrol-play').removeClass('btn-success');
+                $('#ui-playcontrol-play').addClass('btn-success');
                 $('#ui-playcontrol-pause').addClass('btn-warning');
-                $('#ui-playcontrol-stop').removeClass('btn-danger');
+                $('#ui-playcontrol-stop').addClass('btn-danger');
 
-                $('#ui-playcontrol-play').addClass('btn-default');
-                $('#ui-playcontrol-pause').removeClass('btn-default');
-                $('#ui-playcontrol-stop').addClass('btn-default');
-
-                sendUI2Node("/ui", ["playcontrol", "pause"]);
+                sendUI2Node(params.oscPath, [params.idx, "pause"]);
+                $(ctrl_sel).data("timer").pause();
             },
         }
     });
+    // save FSM in widget
     w.data("fsm", fsm);
 
-    var btn_play = _widget_make_btn("Play", "play")
-    .click(function() {$("#ui-playcontrol").data("fsm").play();});
+    // display staff
+    if(params.display) {
+        var display = $('<div class="label"/>');
+        var part = $('<div class="part">&nbsp;</div>');
+        var time = $('<div class="time">00:00:00</div>');
+        display.append(part);
+        display.append(time);
+        w.append(display);
 
-    var btn_pause = _widget_make_btn("Pause", "pause")
-    .click(function(){$("#ui-playcontrol").data("fsm").pause();});
+        var timer = new PlaycontrolTimer(time);
+        w.data('timer', timer);
+    }
 
-    var btn_stop = _widget_make_btn("Stop", "stop")
-    .click(function(){$("#ui-playcontrol").data("fsm").stop();});
-
+    // create back buttons
     if(params.back) {
         var btn_fast_backward = _widget_make_btn("", "fast-backward")
         .click(function(){sendUI2Node("/ui", ["playcontrol", "begin"]);});
@@ -356,10 +449,21 @@ function ui_make_playcontrol(params) {
         w.append(btn_backward);
     }
 
+    // create buttons
+    var btn_play = _widget_make_btn("Play", "play")
+    .click(function() {$(ctrl_sel).data("fsm").play();});
+
+    var btn_pause = _widget_make_btn("Pause", "pause")
+    .click(function(){$(ctrl_sel).data("fsm").pause();});
+
+    var btn_stop = _widget_make_btn("Stop", "stop")
+    .click(function(){$(ctrl_sel).data("fsm").stop();});
+
     w.append(btn_play);
     w.append(btn_pause);
     w.append(btn_stop);
 
+    // create forward buttons
     if(params.forward) {
         var btn_forward = _widget_make_btn("", "step-forward")
         .click(function(){sendUI2Node("/ui", ["playcontrol", "next"]);});
@@ -370,5 +474,7 @@ function ui_make_playcontrol(params) {
         w.append(btn_fast_forward);
     }
 
+    // DO NOT change order!
+    $("#ui-elements").append(w);
     w.data("fsm").init();
 }

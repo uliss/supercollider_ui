@@ -155,10 +155,17 @@ $(document).ready(function() {
 
     // handle widget command
     socket.on('/cli/widget/command', function(msg){
-        console.log(msg);
         if(!msg.idx) {
             console.log("ERROR: no widget id!");
             return;
+        }
+
+        var cmd = $("#" + msg.idx).data("oncommand");
+        if(cmd) {
+            cmd("#" + msg.idx, msg);
+        }
+        else {
+            console.log("no function");
         }
     });
 });
