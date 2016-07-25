@@ -7,7 +7,6 @@ var osc = require('node-osc');
 var timer = require('./lib/timer');
 var server = require('./lib/server');
 var ui = require('./lib/ui');
-var img = require('./lib/images');
 var utils = require('./lib/utils');
 
 var NODE_PORT = 3000;
@@ -93,7 +92,6 @@ oscServer.on("/sc/concert/add", function(msg, rinfo) {
 
 server.init(app, oscServer, oscClient, io);
 ui.init(oscServer, oscClient, io);
-img.init(oscServer, oscClient);
 
 // init timer staff
 var serverTimer = new timer.ServerTimer(io, '/server/timer');
