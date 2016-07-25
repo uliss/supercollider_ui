@@ -40,23 +40,23 @@ $(document).ready(function() {
     ping_server.run();
 
     // handle css
-    socket.on('/css', function(msg){
+    socket.on('/cli/css', function(msg){
         $(msg[0]).css(msg[1], msg[2]);
     });
 
     // handle redirect
-    socket.on('/redirect', function(msg){
+    socket.on('/cli/redirect', function(msg){
         console.log("redirect to: " + msg);
         window.location.href = msg;
     });
 
-    // handle redirect
-    socket.on('/reload', function(){
+    // handle reload
+    socket.on('/cli/reload', function(){
         window.location.reload();
     });
 
-    // handle redirect
-    socket.on('/title', function(msg){
+    // handle title
+    socket.on('/cli/title', function(msg){
         $("h1 #title").html(msg);
     });
 
