@@ -86,32 +86,12 @@ oscServer.on("/sc/vmetro/css", function(msg, rinfo) {
     io.emit("/vmetro/css", [msg[1], msg[2]]);
 });
 
-oscServer.on("/sc/css", function(msg, rinfo) {
-    postln('global css: ' + msg[1] + '{' +  msg[2] + ':' + msg[3] + '}');
-    io.emit("/css", [msg[1], msg[2], msg[3]]);
-});
-
-oscServer.on("/sc/redirect", function(msg, rinfo) {
-    postln('redirect to: ' + msg[1]);
-    io.emit("/redirect", msg[1]);
-});
-
-oscServer.on("/sc/reload", function(msg, rinfo) {
-    postln('reloading page...');
-    io.emit("/reload", msg[1]);
-});
-
-oscServer.on("/sc/title", function(msg, rinfo) {
-    postln('setting title: ' + msg[1]);
-    io.emit("/title", msg[1]);
-});
-
 oscServer.on("/sc/concert/add", function(msg, rinfo) {
     var json = JSON.parse(msg[1]);
     io.emit("/concert/add", json);
 });
 
-server.init(app, oscServer, oscClient);
+server.init(app, oscServer, oscClient, io);
 ui.init(oscServer, oscClient, io);
 img.init(oscServer, oscClient);
 
