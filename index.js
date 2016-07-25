@@ -7,22 +7,15 @@ var osc = require('node-osc');
 var timer = require('./lib/timer');
 var server = require('./lib/server');
 var ui = require('./lib/ui');
+var img = require('./lib/images');
+var utils = require('./lib/utils');
 
 var NODE_PORT = 3000;
 var OSC_IN_PORT = 5000;
 var OSC_OUT_PORT = OSC_IN_PORT + 1;
 
-var S_options = {verbose: 1};
-
-function postmsg(msg, prefix = '[NodeJS]: ') {
-    console.log(prefix  +  msg);
-}
-
-function postln(msg) {
-    if(S_options['verbose'] != 0) {
-        postmsg(msg);
-    }
-}
+var postmsg = utils.postmsg;
+var postln = utils.postln;
 
 Number.prototype.toHHMMSS = function () {
     var seconds = Math.floor(this),
@@ -94,7 +87,7 @@ oscServer.on("/sc/vmetro/css", function(msg, rinfo) {
 });
 
 oscServer.on("/sc/css", function(msg, rinfo) {
-    postln('metro css: ' + msg[1] + '{' +  msg[2] + ':' + msg[3] + '}');
+    postln('global css: ' + msg[1] + '{' +  msg[2] + ':' + msg[3] + '}');
     io.emit("/css", [msg[1], msg[2], msg[3]]);
 });
 
@@ -118,11 +111,9 @@ oscServer.on("/sc/concert/add", function(msg, rinfo) {
     io.emit("/concert/add", json);
 });
 
-server.bindHttp(app);
-server.bindOsc(oscServer, oscClient);
-
-
+server.init(app, oscServer, oscClient);
 ui.init(oscServer, oscClient, io);
+img.init(oscServer, oscClient);
 
 // init timer staff
 var serverTimer = new timer.ServerTimer(io, '/server/timer');

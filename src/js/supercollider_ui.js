@@ -141,6 +141,10 @@ $(document).ready(function() {
                 widget = ui_make_life(params);
             }
             break;
+            case "image": {
+                ui_make_image(params);
+            }
+            break;
             default:
                 alert("unknown widget");
             break;

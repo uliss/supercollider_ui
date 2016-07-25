@@ -209,6 +209,27 @@ function ui_make_life(params) {
     return w;
 }
 
+function ui_make_image(params) {
+    var cont = $('<div class="image">');
+    var img = $("<img/>")
+    .attr("src", params.url)
+    .attr("id", params.idx)
+    .data('oncommand', function(id, cmd){
+        console.log("[widgets:image] command: " + id + " = " + JSON.stringify(cmd));
+        if(cmd.url) {
+            $(id).attr("src", cmd.url);
+        }
+    });
+
+    if(params.width)
+        img.attr("width", params.width);
+    if(params.height)
+        img.attr("height", params.height);
+
+    img.appendTo(cont);
+    cont.appendTo($("#" + params.parent));
+}
+
 function ui_make_slider(params) {
     if(!params.size) {
         params.w = 40;
