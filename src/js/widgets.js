@@ -47,9 +47,9 @@ function ui_bind_to_value(widget) {
 function ui_make_button(params) {
     // default values
     if(!params.size)
-        params.w = params.h = 100;
+    params.w = params.h = 100;
     else
-        params.w = params.h = params.size;
+    params.w = params.h = params.size;
 
     var widget = ui_make_widget("button", params);
 
@@ -63,9 +63,9 @@ function ui_make_button(params) {
 
 function ui_make_crossfade(params) {
     if(!params.size)
-        params.w = 200;
+    params.w = 200;
     else
-        params.w = params.size;
+    params.w = params.size;
 
     params.h = params.w * 0.15;
 
@@ -79,9 +79,9 @@ function ui_make_crossfade(params) {
 
 function ui_make_matrix(params) {
     if(!params.size)
-        params.w = 200;
+    params.w = 200;
     else
-        params.w = params.size;
+    params.w = params.size;
 
     if(!params.row) params.row = 4;
     if(!params.col) params.col = 4;
@@ -104,9 +104,9 @@ function ui_make_matrix(params) {
 
 function ui_make_knob(params) {
     if(!params.size)
-        params.w = 100;
+    params.w = 100;
     else
-        params.w = params.size;
+    params.w = params.size;
 
     params.h = params.w * 1.7;
 
@@ -131,9 +131,9 @@ function ui_make_pan(params) {
 
 function ui_make_toggle(params) {
     if(!params.size)
-        params.w = params.h = 100;
+    params.w = params.h = 100;
     else
-        params.w = params.h = params.size;
+    params.w = params.h = params.size;
 
     var widget = ui_make_widget("toggle", params);
     ui_bind_to_value(widget);
@@ -222,11 +222,85 @@ function ui_make_image(params) {
     });
 
     if(params.width)
-        img.attr("width", params.width);
+    img.attr("width", params.width);
     if(params.height)
-        img.attr("height", params.height);
+    img.attr("height", params.height);
 
     img.appendTo(cont);
+    cont.appendTo($("#" + params.parent));
+}
+
+function ui_make_slideshow(params) {
+    // control ID
+    var ctrl_sel = "#" + params.idx;
+
+    // check for double insert
+    if($(ctrl_sel).length > 0) {
+        console.log("[slideshow]: already has element with such id: " + ctrl_sel);
+        return;
+    }
+
+    var cont = $('<div class="slideshow"></div>')
+    .css("position", "absolute")
+    .css("top", "40vh")
+    .css("width", "97vw")
+    // .css("left", "2vw")
+    .attr("id", params.idx)
+    .data('oncommand', function(id, cmd) {
+        // console.log("[widgets:image] command: " + id + " = " + JSON.stringify(cmd));
+        if(cmd.url) {
+            var win = $(window);
+            var win_w = win.width();
+            var win_h = win.height();
+            var bgcolor = "#60646D";
+            $bg = $("html");
+            $bg.css("background-color", bgcolor);
+            $bg.css("background-attachment", "fixed");
+            $bg.css("background-position", "center center");
+            $bg.css("background-repeat", "no-repeat");
+            $bg.css("background-image", "url('" + cmd.url + "')");
+            $bg.css("height", win_h + "px");
+            $bg.css("width", win_w + "px");
+            $bg.css("background-size", "contain");
+            $("body, h1").css({'background-color': "transparent"});
+        }
+    });
+
+    var opacity = 0.2;
+    var size = "150px";
+    var font_size = "50px";
+
+    $(document).keydown(function(e) {
+        if(e.keyCode == 32 || e.keyCode == 39) { sendUI2Node("/ui", [params.idx, "next"]);}
+        if(e.keyCode == 37) { sendUI2Node("/ui", [params.idx, "prev"]);}
+        if(e.keyCode == 35) { sendUI2Node("/ui", [params.idx, "last"]); }
+        if(e.keyCode == 36) { sendUI2Node("/ui", [params.idx, "first"]); }
+    });
+
+    $('html').on('swipe', function(e, Dx, Dy){
+        if(Dx == 1) { sendUI2Node("/ui", [params.idx, "next"]); }
+        if(Dx == -1) { sendUI2Node("/ui", [params.idx, "prev"]); }
+    });
+
+    var prev = _widget_make_btn("", "step-backward")
+    .css("bacgkround-color", "transparent")
+    .css("opacity", opacity)
+    .css("font-size", font_size)
+    .css("float", "left")
+    .css("height", size)
+    .css("width", size)
+    .click(function(){sendUI2Node("/ui", [params.idx, "prev"]);});
+    cont.append(prev);
+    var next = _widget_make_btn("", "step-forward")
+    .css("bacgkround-color", "transparent")
+    .css("opacity", opacity)
+    .css("font-size", font_size)
+    .css("float", "right")
+    .css("height", size)
+    .css("width", size)
+    .click(function(){sendUI2Node("/ui", [params.idx, "next"]);});
+    cont.append(next);
+
     cont.appendTo($("#" + params.parent));
 }
 

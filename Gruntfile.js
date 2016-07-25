@@ -85,6 +85,7 @@ module.exports = function(grunt) {
             libs: {
                 files: {
                     '/js/lib/jquery.min.js': 'jquery/dist/jquery.min.js',
+                    '/js/lib/jq-swipe.min.js': 'jq-swipe/dist/jq-swipe.min.js',
                     '/js/lib/jquery.js': 'jquery/dist/jquery.js',
                     '/css/bootstrap/css/bootstrap.min.css' : 'bootstrap-css/css/bootstrap.min.css',
                     '/js/lib/jquery.fittext.js': 'FitText.js/jquery.fittext.js',

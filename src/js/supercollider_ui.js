@@ -145,6 +145,10 @@ $(document).ready(function() {
                 ui_make_image(params);
             }
             break;
+            case "slideshow": {
+                ui_make_slideshow(params);
+            }
+            break;
             default:
                 alert("unknown widget");
             break;
