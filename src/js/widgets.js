@@ -70,9 +70,9 @@ function ui_make_crossfade(params) {
     params.h = params.w * 0.15;
 
     var widget = ui_make_widget("crossfade", params);
+    widget.setFont(10);
     widget.on('*', function(data) {
-        console.log(data);
-        sendUI2Node(params.oscPath, [widget.canvasID, data.L, data.R]);
+        sendUI2Node(params.oscPath, [widget.canvasID, data.value]);
     });
     return widget;
 }
