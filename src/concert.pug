@@ -2,7 +2,7 @@ doctype html
 // htmllint indent-width=2 line-end-style=false class-style=dash id-class-style=dash id-no-dup=true
 html(lang="en-us")
     head
-        include jade/head.jade 
+        include pug/head.pug
     body
         .container-fluid
             .row
@@ -17,5 +17,5 @@ html(lang="en-us")
                 .col-md-6.col-xs-10
                     #pieces
                 .col-md-3.col-xs-1
-            
+
         script $(document).ready(get_info());

@@ -2,45 +2,43 @@ doctype html
 // htmllint indent-width=2 line-end-style=false class-style=dash
 html(lang="en-us")
     head
-        include jade/head.jade
+        include pug/head.pug
     body
         .container-fluid
             h1 Knob Grid
-            
+
             .row
                 .col-md-2
                 - for (var i=0; i<8; i++)
                     .col-md-1
                         input(class="knob" id="knob0" + i)
                 .col-md-2
-                
+
             .row
                 .col-md-2
                 - for (var i=0; i<8; i++)
                     .col-md-1
                         input(class="knob" id="knob1" + i)
                 .col-md-2
-                
+
             .row
                 .col-md-2
                 - for (var i=0; i<8; i++)
                     .col-md-1
                         input(class="knob knob2" id="knob2" + i)
                 .col-md-2
-            
+
             script(type='text/javascript').
                 $(document).ready($(".knob2").attr("data-cursor", "true")
                     .attr("data-min", -1.0).attr("data-max", 1.0).attr("data-step", 0.01));
-                
+
             script(type='text/javascript').
                 $(document).ready($(".knob").attr("data-angleArc", 300).attr("value", 0)
                     .attr("data-angleOffset", -150).attr("data-width", 60)
-                    .knob({stopper: true, height: 100, 'change': 
-                        function(v){ 
-                            if((this.cv == 0) && (v > 50)) {return false;} 
-                            if((this.cv == 100) && (v < 50)) {return false;} 
-                            this.cv = v; 
+                    .knob({stopper: true, height: 100, 'change':
+                        function(v){
+                            if((this.cv == 0) && (v > 50)) {return false;}
+                            if((this.cv == 100) && (v < 50)) {return false;}
+                            this.cv = v;
                         }
                     }));
-            
-            

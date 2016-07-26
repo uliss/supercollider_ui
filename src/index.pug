@@ -2,7 +2,7 @@ doctype html
 // htmllint indent-width=2 line-end-style=false class-style=dash id-class-style=dash id-no-dup=true
 html(lang="en-us")
     head
-        include jade/head.jade
+        include pug/head.pug
     body
         .container-fluid
             h1 SuperCollider Web UI
@@ -33,7 +33,7 @@ html(lang="en-us")
                 .col-md-4.module.ui-ref
                     a(href="/ui") UI
                 .col-md-4.module
-                    &nbsp;
+                    | &nbsp;
                 .col-md-2
-                
+
         script var socket = io();

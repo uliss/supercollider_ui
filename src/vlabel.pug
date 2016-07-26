@@ -2,14 +2,14 @@ doctype html
 // htmllint indent-width=2 line-end-style=false class-style=dash
 html(lang="en-us")
     head
-        include jade/head.jade
+        include pug/head.pug
         script(src='/js/lib/jquery.fittext.min.js')
     body
         .container-fluid.vlabel
             h1 Visual Label
-            
+
             #label DEFAULT
-            
+
             script(type='text/javascript').
                 $(document).ready(
                     function(){
@@ -17,7 +17,7 @@ html(lang="en-us")
                             $("#label").html(msg);
                             $("#label").fitText(0.5);
                         });
-                        
+
                         socket.on('/vlabel/css', function(msg){
                             $("#label").css(msg[0], msg[1]);
                         });
@@ -25,4 +25,3 @@ html(lang="en-us")
                         $("#label").fitText(0.5);
                     }
                 );
-            

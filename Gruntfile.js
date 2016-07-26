@@ -103,7 +103,7 @@ module.exports = function(grunt) {
             }
         },
 
-        jade: {
+        pug: {
             options: {
                 pretty: true,
             },
@@ -114,15 +114,15 @@ module.exports = function(grunt) {
                     }
                 },
                 files: {
-                    "build/index.html": ["src/index.jade"],
-                    "build/info.html":  ["src/info.jade"],
-                    "build/knobs.html":  ["src/knobs.jade"],
-                    "build/timer.html":  ["src/timer.jade"],
-                    "build/speakers.html" : ["src/speakers.jade"],
-                    "build/concert.html" : ["src/concert.jade"],
-                    "build/vlabel.html" : ["src/vlabel.jade"],
-                    "build/vmetro.html" : ["src/vmetro.jade"],
-                    "build/ui.html" : ["src/ui.jade"],
+                    "build/index.html": ["src/index.pug"],
+                    "build/info.html":  ["src/info.pug"],
+                    "build/knobs.html":  ["src/knobs.pug"],
+                    "build/timer.html":  ["src/timer.pug"],
+                    "build/speakers.html" : ["src/speakers.pug"],
+                    "build/concert.html" : ["src/concert.pug"],
+                    "build/vlabel.html" : ["src/vlabel.pug"],
+                    "build/vmetro.html" : ["src/vmetro.pug"],
+                    "build/ui.html" : ["src/ui.pug"],
                 }
             }
         },
@@ -171,8 +171,8 @@ module.exports = function(grunt) {
                 }
             },
             jade: {
-                files: ['src/*.jade', 'src/jade/*.jade'],
-                tasks: ['jade'],
+                files: ['src/*.pug', 'src/pug/*.pug'],
+                tasks: ['pug'],
                 options: {
                     spawn: false,
                 }
@@ -182,6 +182,6 @@ module.exports = function(grunt) {
 
     // регистрация задач
     grunt.registerTask('default', ['connect', 'watch']);
-    grunt.registerTask('dev', ['newer:jade', 'sass',
+    grunt.registerTask('dev', ['newer:pug', 'sass',
     'concat', 'jshint', 'uglify', 'bowercopy']);
 };

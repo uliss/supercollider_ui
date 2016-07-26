@@ -2,7 +2,7 @@ doctype html
 // htmllint indent-width=2 line-end-style=false class-style=dash id-class-style=dash id-no-dup=true
 html(lang="en-us")
     head
-        include jade/head.jade 
+        include pug/head.pug
     body
         .container-fluid
             .row
@@ -18,7 +18,7 @@ html(lang="en-us")
                         label
                             input(type="checkbox", id="speaker-circular")
                             | Circular motion
-                            
+
             .row
                 .col-md-3.col-xs-1
                 .col-md-1.col-xs-2
@@ -37,5 +37,5 @@ html(lang="en-us")
                 .col-md-1.col-xs-2
                     #speaker-back-r
                 .col-md-3.col-xs-1
-            
+
         script $(document).ready(get_info());

@@ -2,7 +2,7 @@ doctype html
 // htmllint indent-width=2 line-end-style=false class-style=dash id-class-style=dash id-no-dup=true
 html(lang="en-us")
     head
-        include jade/head.jade
+        include pug/head.pug
     body
         .container-fluid
             .row
@@ -19,7 +19,7 @@ html(lang="en-us")
                             td.remote-address
                         tr
                             td SuperCollider state:
-                            td 
+                            td
                                 span#state-icon
                         tr
                             td Running servers:
@@ -33,14 +33,13 @@ html(lang="en-us")
                         tr
                             td Sample rate:
                             td#sample-rate
-                        tr 
+                        tr
                             td MIDI-devices:
                             td#midi-devices
                         tr
                             td Audio-devices:
                             td#audio-devices
                 .col-md-3
-            
+
 
         script $(document).ready(get_info());
-        
