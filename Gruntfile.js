@@ -47,10 +47,6 @@ module.exports = function(grunt) {
                 src: 'src/js/nexus/nexusUI.js',
                 dest: 'build/js/lib/nexusUI.min.js'
             },
-            ui: {
-                src: 'build/js/lib/jquery-ui.js',
-                dest: 'build/js/lib/jquery-ui.min.js',
-            },
             libs: {
                 src: 'build/js/lib/jquery.fittext.js',
                 dest: 'build/js/lib/jquery.fittext.min.js'
@@ -170,7 +166,7 @@ module.exports = function(grunt) {
                     spawn: false,
                 }
             },
-            jade: {
+            pug: {
                 files: ['src/*.pug', 'src/pug/*.pug'],
                 tasks: ['pug'],
                 options: {
@@ -183,5 +179,5 @@ module.exports = function(grunt) {
     // регистрация задач
     grunt.registerTask('default', ['connect', 'watch']);
     grunt.registerTask('dev', ['newer:pug', 'sass',
-    'concat', 'jshint', 'uglify', 'bowercopy']);
+    'concat', 'jshint', 'bowercopy', 'newer:uglify']);
 };

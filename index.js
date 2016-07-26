@@ -2,7 +2,6 @@ const url = require('url');
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var keypress = require('keypress');
 var osc = require('node-osc');
 var timer = require('./lib/timer');
 var server = require('./lib/server');
