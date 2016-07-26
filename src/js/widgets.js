@@ -95,6 +95,24 @@ function ui_make_position(params) {
     return widget;
 }
 
+function ui_make_tilt(params) {
+    if(!params.size)
+        params.w = 150;
+    else
+        params.w = params.size;
+
+    params.h = params.w;
+
+    if(params.width) params.w = params.width;
+    if(params.height) params.w = params.height;
+
+    var widget = ui_make_widget("tilt", params);
+    widget.on('*', function(data) {
+        sendUI2Node(params.oscPath, [widget.canvasID, data.x, data.y, data.z]);
+    });
+    return widget;
+}
+
 function ui_make_matrix(params) {
     if(!params.size)
     params.w = 200;

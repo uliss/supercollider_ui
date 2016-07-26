@@ -176,6 +176,10 @@ $(document).ready(function() {
                 widget = ui_make_position(params);
             }
             break;
+            case "tilt": {
+                widget = ui_make_tilt(params);
+            }
+            break;
             default:
                 alert("unknown widget");
             break;
