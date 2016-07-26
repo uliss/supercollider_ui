@@ -192,6 +192,10 @@ $(document).ready(function() {
                 widget = ui_make_number(params);
             }
             break;
+            case "sc_button": {
+                ui_make_sc_button(params);
+            }
+            break;
             default:
                 alert("unknown widget");
             break;
@@ -211,7 +215,13 @@ $(document).ready(function() {
             return;
         }
 
-        var cmd = $("#" + msg.idx).data("oncommand");
+        var el = $("#" + msg.idx);
+        if(!el.length) {
+            console.log("[command] element not found: " + msg.idx);
+            return;
+        }
+
+        var cmd = el.data("oncommand");
         if(cmd) {
             cmd("#" + msg.idx, msg);
         }
