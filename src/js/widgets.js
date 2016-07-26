@@ -147,7 +147,7 @@ function ui_make_multitouch(params) {
     if(params.mode) widget.mode = params.mode;
     if(params.rows) widget.rows = params.rows;
     if(params.cols) widget.cols = params.cols;
-    widget.matrixLabels = [ "A", "A#", "B", "C" ];
+    if(params.matrixLabels) widget.matrixLabels = params.matrixLabels;
 
     widget.on('*', function(data) {
         sendUI2Node(params.oscPath, [widget.canvasID, JSON.stringify(data)]);
