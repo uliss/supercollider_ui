@@ -172,6 +172,10 @@ $(document).ready(function() {
                 ui_make_slideshow(params);
             }
             break;
+            case "position": {
+                widget = ui_make_position(params);
+            }
+            break;
             default:
                 alert("unknown widget");
             break;
