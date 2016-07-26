@@ -188,6 +188,10 @@ $(document).ready(function() {
                 widget = ui_make_multitouch(params);
             }
             break;
+            case "number": {
+                widget = ui_make_number(params);
+            }
+            break;
             default:
                 alert("unknown widget");
             break;
