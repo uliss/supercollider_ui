@@ -180,6 +180,10 @@ $(document).ready(function() {
                 widget = ui_make_tilt(params);
             }
             break;
+            case "motion": {
+                widget = ui_make_motion(params);
+            }
+            break;
             default:
                 alert("unknown widget");
             break;
