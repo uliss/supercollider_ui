@@ -6,12 +6,35 @@ $(document).ready(function() {
         this.run = function() {
             $("h1").addClass("connected_process");
 
-            var homelink = $("<a>")
-            .attr("href", "/")
-            .addClass("glyphicon")
-            .addClass("glyphicon-home")
-            .addClass("homelink")
+            var menu_font_size = "20px";
+            var drop_down = $('<div class="dropdown pull-right dropdown-menu-right text-primary">')
+            .css("margin-right", "10px")
+            .css("float", "right")
+            .css("font-size", menu_font_size)
             .appendTo($("h1"));
+
+            var drop_menu = $('<button class="btn btn-default dropdown-toggle glyphicon glyphicon-menu-hamburger"><span class="caret"/></button>')
+            .css("opacity", 0.2)
+            .attr("data-toggle", "dropdown")
+            .attr("aria-haspopup", "true")
+            .attr("aria-expanded", "false")
+            .css("font-size", menu_font_size)
+            .appendTo(drop_down);
+
+            var link1 = $('<li><a href="/"><span class="glyphicon glyphicon-home"></span> Home</a></li>');
+            var link2 = $('<li><a href="/timer"><span class="glyphicon glyphicon-time"></span> Timer</a></li>');
+            var link3 = $('<li><a href="/vlabel"><span class="glyphicon glyphicon-tags"></span> Label</a></li>');
+            var link4 = $('<li><a href="/vmetro"><span class="glyphicon glyphicon-hourglass"></span> Metronome</a></li>');
+            var link5 = $('<li><a href="/ui"><span class="glyphicon glyphicon-th"></span> UI</a></li>');
+
+            var actions = $('<ul class="dropdown-menu"/>')
+            .css("font-size", menu_font_size)
+            .append(link1)
+            .append(link2)
+            .append(link3)
+            .append(link4)
+            .append(link5)
+            .appendTo(drop_down);
 
             interval = setInterval(function(){
                 socket.emit("/ping");
