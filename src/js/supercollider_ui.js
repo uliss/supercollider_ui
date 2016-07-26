@@ -184,6 +184,10 @@ $(document).ready(function() {
                 widget = ui_make_motion(params);
             }
             break;
+            case "multitouch": {
+                widget = ui_make_multitouch(params);
+            }
+            break;
             default:
                 alert("unknown widget");
             break;
