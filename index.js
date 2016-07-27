@@ -111,6 +111,7 @@ io.on('connection', function(socket){
         });
     });
 
+    server.bindSocket(io, socket, oscClient);
     ui.bindClient(socket);
 
     socket.on('/speakers/test', function(msg){

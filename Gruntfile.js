@@ -80,14 +80,17 @@ module.exports = function(grunt) {
             },
             libs: {
                 files: {
+                    '/css/open-sans/open-sans.css': 'open-sans-fontface/open-sans.css',
+                    '/css/bootstrap/css/bootstrap.min.css' : 'bootstrap-css/css/bootstrap.min.css',
+                    '/css/bootstrap-slider.min.css' : 'seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css',
+
                     '/js/lib/jquery.min.js': 'jquery/dist/jquery.min.js',
                     '/js/lib/jq-swipe.min.js': 'jq-swipe/dist/jq-swipe.min.js',
                     '/js/lib/bootstrap.min.js': 'bootstrap-css/js/bootstrap.min.js',
+                    '/js/lib/bootstrap-slider.min.js': 'seiyria-bootstrap-slider/dist/bootstrap-slider.min.js',
                     '/js/lib/jquery.js': 'jquery/dist/jquery.js',
-                    '/css/bootstrap/css/bootstrap.min.css' : 'bootstrap-css/css/bootstrap.min.css',
                     '/js/lib/jquery.fittext.js': 'FitText.js/jquery.fittext.js',
                     '/js/lib/jquery/dist/jquery.min.js': 'jquery/dist/jquery.min.js',
-                    '/css/open-sans/open-sans.css': 'open-sans-fontface/open-sans.css',
                     '/js/lib/state-machine.js': 'javascript-state-machine/state-machine.js',
                     '/js/lib/state-machine.min.js': 'javascript-state-machine/state-machine.min.js',
                 }

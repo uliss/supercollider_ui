@@ -75,7 +75,7 @@ table.info {
 }
 
 .table-vcenter td {
-   vertical-align: middle!important;
+    vertical-align: middle!important;
 }
 
 #info {
@@ -110,6 +110,50 @@ table.info {
     position: absolute;
 }
 
+.modal-header {
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    -webkit-border-top-left-radius: 6px;
+    -webkit-border-top-right-radius: 6px;
+    -moz-border-radius-topleft: 6px;
+    -moz-border-radius-topright: 6px;
+}
+
+$MENU_FONT_SIZE: 21px;
+
+.ui_main_dropdown {
+    margin-right: 10px;
+
+    button {
+        opacity: 0.2;
+        font-size: $MENU_FONT_SIZE;
+    }
+
+    .dropdown-menu {
+        font-size: $MENU_FONT_SIZE;
+        background-color: lighten($color-bg, 40%);
+
+        li {
+            .glyphicon {
+                font-size: $MENU_FONT_SIZE - 3px;
+                margin-right: 8px;
+
+            }
+
+            a:hover {
+                background-color: lighten($color-bg, 50%);
+                background-image: none;
+            }
+
+            .display {
+                text-align: right;
+                width: 70px;
+                display: inline-block;
+                margin-left: 10px;
+            }
+        }
+    }
+}
 
 // SPEAKER TESTS
 .speaker-space {
