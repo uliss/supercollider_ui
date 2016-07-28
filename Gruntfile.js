@@ -171,7 +171,7 @@ module.exports = function(grunt) {
                 },
                 pug: {
                     files: ['src/*.pug', 'src/pug/*.pug'],
-                    tasks: ['pug'],
+                    tasks: ['pug', 'bootlint'],
                     options: {
                         spawn: false,
                     }
@@ -189,7 +189,7 @@ module.exports = function(grunt) {
 
         grunt.loadNpmTasks('grunt-bootlint');
         // регистрация задач
-        grunt.registerTask('default', ['connect', 'watch', 'bootlint']);
+        grunt.registerTask('default', ['connect', 'watch']);
         grunt.registerTask('dev', ['newer:pug', 'sass',
         'concat', 'jshint', 'bowercopy', 'newer:uglify', 'bootlint']);
     };

@@ -6,11 +6,7 @@ $(document).ready(function() {
         this.run = function() {
             $("h1").addClass("connected_process");
 
-            var main_menu = menu_create_main_menu();
-            menu_create_sound_menu($("h1"));
-            main_menu.appendTo($("h1"));
-
-            jQuery("canvas").detach().appendTo('#sc_control_menu_volume');
+            nav_menu_init();
 
             interval = setInterval(function(){
                 socket.emit("/ping");

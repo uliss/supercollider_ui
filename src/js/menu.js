@@ -1,106 +1,111 @@
-function menu_create_sound_menu(parent) {
-    var drop_down = $('<div class="dropdown pull-right dropdown-menu-right text-primary ui_main_dropdown">')
-    .appendTo(parent);
+function nav_menu_init_mute() {
+    var el = $("#nav_ui_mute");
+    var el_icon = el.find(".glyphicon");
 
-    var button = $('<button id="sc_control_menu" class="btn btn-default dropdown-toggle glyphicon glyphicon-cog"><span class="caret"/></button>')
-    .attr("data-toggle", "dropdown")
-    .attr("aria-haspopup", "true")
-    .attr("aria-expanded", "false")
-    .appendTo(drop_down);
-
-    function toggle_sound_state(state) {
-        button.removeClass("glyphicon-cog");
-        if(state == 1) {
-            button.removeClass("glyphicon-volume-off");
-            button.addClass("glyphicon-volume-up");
-            socket.emit('/node/supercollider', ['boot']);
+    var set_state = function(on) {
+        if(on == 1) {
+            el.data("state", 1);
+            el_icon.removeClass("glyphicon-volume-up");
+            el_icon.addClass("glyphicon-volume-off");
+            el_icon.addClass("text-danger");
         }
         else {
-            button.removeClass("glyphicon-volume-up");
-            button.addClass("glyphicon-volume-off");
-            socket.emit('/node/supercollider', ['quit']);
+            el.data("state", 0);
+            el_icon.removeClass("text-danger");
+            el_icon.removeClass("glyphicon-volume-off");
+            el_icon.addClass("glyphicon-volume-up");
         }
-    }
-
-    var link1 = $('<li><a href="#" id="sc_control_menu_boot"><span class="glyphicon glyphicon-off"/><span class="text">On</span></a></li>')
-    .data("state", 0)
-    .click(function(e) {
-        if(link1.data("state") != 1) {
-            link1.data("state", 1);
-            link1.find(".text").text("Off");
-            toggle_sound_state(1);
-        }
-        else {
-            link1.data("state", 0);
-            link1.find(".text").text("On");
-            toggle_sound_state(0);
-        }
-    });
-
-    var link2 = $('<li><a href="#" id="sc_control_menu_record"><span class="glyphicon glyphicon-record"/><span class="text">Record<span></a></li>')
-    .data("state", 0)
-    .click(function(e){
-        if(link2.data("state") != 1) {
-            console.log("SuperCollider record");
-            link2.data("state", 1);
-            link2.find(".text").text("Stop recording");
-            socket.emit('/node/supercollider', 'record');
-        }
-        else {
-            console.log("SuperCollider stop record");
-            link2.data("state", 0);
-            link2.find(".text").text("Record");
-            socket.emit('/node/supercollider', 'recordStop');
-        }
-    });
-
-    var link3 = $('<li><a href="#" id="sc_control_menu_volume">Volume: </a></li>');
-
-    var menu_actions = $('<ul class="dropdown-menu"/>')
-    .append(link1)
-    .append(link2)
-    .append(link3)
-    .appendTo(drop_down);
-
-    var change_volume = function() {
-        var value = vol_slider.slider('getValue');
-        $("#sc_control_menu_volume").find(".display").text(value + " db");
-        socket.emit('/node/supercollider', ['setVolume', value]);
     };
 
-    var vol_slider = $('<input id="ex1" data-slider-id="ex1Slider" type="text" data-slider-min="-60" data-slider-max="0" data-slider-step="1" data-slider-value="0" data-slider-tooltip="always"/>')
-    .on('slide', change_volume)
-    .appendTo($("#sc_control_menu_volume"));
-
-    // $('<span class="display">0 db</span>').appendTo($("#sc_control_menu_volume"));
-
-    vol_slider.slider({
-        formatter: function(value) { return value + ' db'; }
+    el.data("state", 0)
+    .click(function(){
+        if(el.data("state") == 1) {
+            set_state(0);
+            socket.emit('/node/supercollider', ['mute', 0]);
+        }
+        else {
+            set_state(1);
+            socket.emit('/node/supercollider', ['mute', 1]);
+        }
     });
 }
 
-function menu_create_main_menu() {
-    var drop_down = $('<div class="dropdown pull-right dropdown-menu-right text-primary ui_main_dropdown">');
+function nav_menu_init_volume_slider() {
+    var el = $('#nav_ui_volume_slider_input');
 
-    var button = $('<button class="btn btn-default dropdown-toggle glyphicon glyphicon-menu-hamburger"><span class="caret"/></button>')
-    .attr("data-toggle", "dropdown")
-    .attr("aria-haspopup", "true")
-    .attr("aria-expanded", "false")
-    .appendTo(drop_down);
+    el.slider({
+        formatter: function(value) { return value + ' db'; }
+    })
+    .on('slide', function() {
+        var value = el.slider('getValue');
+        socket.emit('/node/supercollider', ['setVolume', value]);
+    });
+}
 
-    var link1 = $('<li><a href="/"><span class="glyphicon glyphicon-home"></span> Home</a></li>');
-    var link2 = $('<li><a href="/timer"><span class="glyphicon glyphicon-time"></span> Timer</a></li>');
-    var link3 = $('<li><a href="/vlabel"><span class="glyphicon glyphicon-tags"></span> Label</a></li>');
-    var link4 = $('<li><a href="/vmetro"><span class="glyphicon glyphicon-hourglass"></span> Metronome</a></li>');
-    var link5 = $('<li><a href="/ui"><span class="glyphicon glyphicon-th"></span> UI</a></li>');
+function nav_menu_init_record_button() {
+    var el = $("#nav_ui_record");
+    var el_title = $("#nav_ui_record .text");
+    var el_icon = $("#nav_ui_record .glyphicon");
 
-    var actions = $('<ul class="dropdown-menu"/>')
-    .append(link1)
-    .append(link2)
-    .append(link3)
-    .append(link4)
-    .append(link5)
-    .appendTo(drop_down);
+    var set_state = function(on) {
+        if(on == 1) {
+            el.data("state", 1);
+            el_title.text("Stop Recording");
+            el_icon.addClass("text-danger");
+        }
+        else {
+            el.data("state", 0);
+            el_title.text("Record");
+            el_icon.removeClass("text-danger");
+        }
+    };
 
-    return drop_down;
+    el.data("state", 0).click(function() {
+        if(el.data("state") == 1) {
+            set_state(0);
+            socket.emit('/node/supercollider', ['stopRecord']);
+        }
+        else {
+            set_state(1);
+            socket.emit('/node/supercollider', ['record']);
+        }
+    });
+}
+
+function nav_menu_init_boot_button() {
+    var el = $("#nav_ui_boot");
+    var el_title = $("#nav_ui_boot .text");
+    var el_icon = $("#nav_ui_boot .glyphicon");
+
+    var set_state = function(on) {
+        if(on == 1) {
+            el.data("state", 1);
+            el_title.text("Stop supercollider");
+            el_icon.addClass("text-success");
+        }
+        else {
+            el.data("state", 0);
+            el_title.text("Boot supercollider");
+            el_icon.removeClass("text-success");
+        }
+    };
+
+    el.data("state", 0)
+    .click(function() {
+        if(el.data("state") == 1) {
+            set_state(0);
+            socket.emit('/node/supercollider', ['quit']);
+        }
+        else {
+            set_state(1);
+            socket.emit('/node/supercollider', ['boot']);
+        }
+    });
+}
+
+function nav_menu_init() {
+    nav_menu_init_mute();
+    nav_menu_init_volume_slider();
+    nav_menu_init_record_button();
+    nav_menu_init_boot_button();
 }
