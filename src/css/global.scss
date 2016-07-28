@@ -23,13 +23,30 @@ $color-index: #83D6DE;
     }
 }
 
-html, body {
+html {
     background-color: $color-bg;
-    color: $color-text;
+    position: relative;
+    min-height: 100%;
+
+    body {
+        color: $color-text;
+        background-color: transparent;
+        margin-bottom: 20px;
+
+        .footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            color: lighten($color-text, 20%);
+            /* Set the fixed height of the footer here */
+            height: 20px;
+        }
+    }
 }
 
+
 h1 {
-    background-color: $color-bg;
+    // background-color: $color-bg;
     color: $color-text;
     margin-left: 1.3em;
 }
@@ -45,29 +62,6 @@ h1 .homelink {
 
 #title {
     margin-left: 1em;
-}
-
-@mixin bullet {
-    position: absolute;
-    content: "•";
-    font-size: 2em;
-    top: 0;
-    left: 20px;
-}
-
-.connected:before {
-    @include bullet;
-    color: $color-ok;
-}
-
-.disconnected:before {
-    @include bullet;
-    color: $color-error;
-}
-
-.connected_process:before {
-    @include bullet;
-    color: gray;
 }
 
 table.info {
@@ -119,40 +113,7 @@ table.info {
     -moz-border-radius-topright: 6px;
 }
 
-.navbar {
-    background-color: transparent;
-    background: transparent;
-    border-color: transparent;
-    font-size: 20px;
-    a{ color: #333;   background-color: transparent;
-    background: transparent; }
-
-    .icon-bar {
-        background-color: #333
-    }
-    .navbar-toggle {
-        border-color: #333;
-    }
-    .navbar-header button:hover { background: rgba(white, 0.1) }
-    a:hover, li > a:hover { background: rgba(white, 0.1) }
-    .dropdown-menu { background: rgba(white, 0.25) }
-    .divider { background-color: #777 }
-}
-
-#nav_ui_volume_slider {
-    margin: 10px 20px;
-    padding-bottom: 5px;
-    .slider {
-        width: 200px;
-        .slider-selection {
-            background: #BABABA;
-        }
-        .slider-handle {
-            background: #3A3A3A;
-        }
-    }
-}
-
+@import "nav";
 
 $MENU_FONT_SIZE: 21px;
 

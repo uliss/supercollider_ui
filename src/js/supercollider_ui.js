@@ -4,9 +4,7 @@ $(document).ready(function() {
         this.answered = false;
 
         this.run = function() {
-            $("h1").addClass("connected_process");
-
-            nav_menu_init();
+            var el = $("#nav_ui_connection_indicator");
 
             interval = setInterval(function(){
                 socket.emit("/ping");
@@ -14,22 +12,22 @@ $(document).ready(function() {
 
                 setTimeout(function(){
                     if(!answered) {
-                        $("h1").removeClass("connected_process");
-                        $("h1").removeClass("connected");
-                        $("h1").addClass("class", "disconnected");
+                        el.removeClass("nav_ui_indicator_connected");
+                        el.addClass("nav_ui_indicator_disconnected");
                     }
 
                 }, 1000);
-            }, 4000);
+            }, 2000);
 
             socket.on('/pong', function(msg){
-                $("h1").removeClass("connected_process");
-                $("h1").removeClass("disconnected");
-                $("h1").addClass("connected");
+                el.removeClass("nav_ui_indicator_disconnected");
+                el.addClass("nav_ui_indicator_connected");
                 answered = true;
             });
         };
     }
+
+    nav_menu_init();
 
     var ping_server = new PingServer();
     ping_server.run();

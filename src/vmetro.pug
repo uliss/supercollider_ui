@@ -9,8 +9,7 @@ html(lang="en-us")
     body
         include pug/header.pug
         .container-fluid.vmetro
-            h1 Visual Metronome
-                span#title
+            span#title
 
             .vmetro-area
 
@@ -20,36 +19,38 @@ html(lang="en-us")
 
                 #beats
 
-                script(type='text/javascript').
-                    $(document).ready(
-                        function(){
-                            socket.on('/vmetro/bar', function(msg){
-                                $("#bar-number").html(msg);
-                            });
+        include pug/footer.pug
 
-                            socket.on('/vmetro/numBeats', function(msg){
-                                $("#beats").empty();
-                                for(i = 0; i < msg; i++) {
-                                    $("#beats").append('<div id="beat_' + (i+1) + '">' + (i+1) + '</div> ');
-                                }
+        script(type='text/javascript').
+            $(document).ready(
+                function(){
+                    socket.on('/vmetro/bar', function(msg){
+                        $("#bar-number").html(msg);
+                    });
 
-                                $("#beats").append('<span class="stretch"></span>');
-                            });
-
-                            socket.on('/vmetro/beat', function(msg){
-                                $("#beats div").removeClass("active");
-                                $("#beat_" + msg[0]).addClass("active");
-                                if(msg[1] > 0) {
-                                    $("#beat_" + msg[0]).effect("highlight", {}, msg[1]);
-                                }
-                            });
-
-                            socket.on('/vmetro/mark', function(msg){
-                                $("#mark").html(msg);
-                            });
-
-                            socket.on('/vmetro/css', function(msg){
-                                $(".vmetro").css(msg[0], msg[1]);
-                            });
+                    socket.on('/vmetro/numBeats', function(msg){
+                        $("#beats").empty();
+                        for(i = 0; i < msg; i++) {
+                            $("#beats").append('<div id="beat_' + (i+1) + '">' + (i+1) + '</div> ');
                         }
-                    );
+
+                        $("#beats").append('<span class="stretch"></span>');
+                    });
+
+                    socket.on('/vmetro/beat', function(msg){
+                        $("#beats div").removeClass("active");
+                        $("#beat_" + msg[0]).addClass("active");
+                        if(msg[1] > 0) {
+                            $("#beat_" + msg[0]).effect("highlight", {}, msg[1]);
+                        }
+                    });
+
+                    socket.on('/vmetro/mark', function(msg){
+                        $("#mark").html(msg);
+                    });
+
+                    socket.on('/vmetro/css', function(msg){
+                        $(".vmetro").css(msg[0], msg[1]);
+                    });
+                }
+            );

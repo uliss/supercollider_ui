@@ -11,18 +11,20 @@ html(lang="en-us")
         .container-fluid.vlabel
             #label DEFAULT
 
-            script(type='text/javascript').
-                $(document).ready(
-                    function(){
-                        socket.on('/vlabel/set', function(msg){
-                            $("#label").html(msg);
-                            $("#label").fitText(0.5);
-                        });
+        include pug/footer.pug
 
-                        socket.on('/vlabel/css', function(msg){
-                            $("#label").css(msg[0], msg[1]);
-                        });
-                        // init
+        script(type='text/javascript').
+            $(document).ready(
+                function(){
+                    socket.on('/vlabel/set', function(msg){
+                        $("#label").html(msg);
                         $("#label").fitText(0.5);
-                    }
-                );
+                    });
+
+                    socket.on('/vlabel/css', function(msg){
+                        $("#label").css(msg[0], msg[1]);
+                    });
+                    // init
+                    $("#label").fitText(0.5);
+                }
+            );

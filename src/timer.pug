@@ -13,12 +13,14 @@ html(lang="en-us")
 
             #timerControl
 
-            script(type='text/javascript').
-                $(document).ready(
-                    function(){
-                        var timer = new ServerTimer($("#timer1"));
-                        var control = new TimerControl($("#timerControl"), timer);
+        include pug/footer.pug
 
-                        $("#timer1").fitText(0.5);
-                    }
-                );
+        script(type='text/javascript').
+            $(document).ready(
+                function(){
+                    var timer = new ServerTimer($("#timer1"));
+                    var control = new TimerControl($("#timerControl"), timer);
+
+                    $("#timer1").fitText(0.5);
+                }
+            );
