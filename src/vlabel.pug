@@ -1,5 +1,7 @@
 doctype html
 // htmllint indent-width=2 line-end-style=false class-style=dash
+- var HEADER = "Visual Label"
+- var TITLE = "SuperCollider Visual Label"
 html(lang="en-us")
     head
         include pug/meta.pug
@@ -7,8 +9,6 @@ html(lang="en-us")
     body
         include pug/header.pug
         .container-fluid.vlabel
-            h1 Visual Label
-
             #label DEFAULT
 
             script(type='text/javascript').
