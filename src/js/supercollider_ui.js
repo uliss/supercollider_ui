@@ -29,13 +29,10 @@ $(document).ready(function() {
     }
 
     nav_menu_init();
+    nav_menu_handle();
 
     var ping_server = new PingServer();
     ping_server.run();
-
-    socket.on('/cli/supercollider', function(msg) {
-        console.log(msg);
-    });
 
     // handle css
     socket.on('/cli/css', function(msg){
@@ -199,7 +196,7 @@ $(document).ready(function() {
             }
             break;
             default:
-                alert("unknown widget");
+            alert("unknown widget");
             break;
         }
 
