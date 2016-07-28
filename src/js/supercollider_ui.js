@@ -5,6 +5,7 @@ $(document).ready(function() {
 
         this.run = function() {
             var el = $("#nav_ui_connection_indicator");
+            socket.emit("/ping");
 
             interval = setInterval(function(){
                 socket.emit("/ping");
@@ -17,7 +18,7 @@ $(document).ready(function() {
                     }
 
                 }, 1000);
-            }, 2000);
+            }, 4000);
 
             socket.on('/pong', function(msg){
                 el.removeClass("nav_ui_indicator_disconnected");
