@@ -116,7 +116,6 @@ module.exports = function(grunt) {
                 files: {
                     "build/index.html": ["src/index.pug"],
                     "build/info.html":  ["src/info.pug"],
-                    "build/knobs.html":  ["src/knobs.pug"],
                     "build/timer.html":  ["src/timer.pug"],
                     "build/speakers.html" : ["src/speakers.pug"],
                     "build/concert.html" : ["src/concert.pug"],
@@ -148,40 +147,49 @@ module.exports = function(grunt) {
                         flatten: true,
                         dest: 'build/js/lib',
                         filter: 'isFile'},
-                ],
-            },
-        },
-
-        watch: {
-            options: {
-                livereload: true
-            },
-            js: {
-                files: ['src/js/*.js'],
-                tasks: ['concat', 'jshint', 'uglify'],
-                options: {
-                    spawn: false,
+                    ],
                 },
             },
-            css: {
-                files: ['src/css/*.scss'],
-                tasks: ['sass'],
+
+            watch: {
                 options: {
-                    spawn: false,
+                    livereload: true
+                },
+                js: {
+                    files: ['src/js/*.js'],
+                    tasks: ['concat', 'jshint', 'uglify'],
+                    options: {
+                        spawn: false,
+                    },
+                },
+                css: {
+                    files: ['src/css/*.scss'],
+                    tasks: ['sass'],
+                    options: {
+                        spawn: false,
+                    }
+                },
+                pug: {
+                    files: ['src/*.pug', 'src/pug/*.pug'],
+                    tasks: ['pug'],
+                    options: {
+                        spawn: false,
+                    }
                 }
             },
-            pug: {
-                files: ['src/*.pug', 'src/pug/*.pug'],
-                tasks: ['pug'],
-                options: {
-                    spawn: false,
-                }
-            }
-        }
-    });
 
-    // регистрация задач
-    grunt.registerTask('default', ['connect', 'watch']);
-    grunt.registerTask('dev', ['newer:pug', 'sass',
-    'concat', 'jshint', 'bowercopy', 'newer:uglify']);
-};
+            bootlint: {
+                options: {
+                    stoponerror: false,
+                    relaxerror: []
+                },
+                files: ['build/*.html']
+            }
+        });
+
+        grunt.loadNpmTasks('grunt-bootlint');
+        // регистрация задач
+        grunt.registerTask('default', ['connect', 'watch', 'bootlint']);
+        grunt.registerTask('dev', ['newer:pug', 'sass',
+        'concat', 'jshint', 'bowercopy', 'newer:uglify', 'bootlint']);
+    };
