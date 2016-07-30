@@ -29,8 +29,10 @@ html(lang="en-us")
             .row
                 .col-md-offset-2.col-md-4.module.ui-ref
                     a(href="/ui") UI
-                .col-md-6
+                .col-md-4.module
+                    a(href="/tone") Tone generation
+                .col-md-2
 
         include pug/footer.pug
-        
+
         script var socket = io();

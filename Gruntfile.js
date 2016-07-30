@@ -117,6 +117,7 @@ module.exports = function(grunt) {
                     "build/index.html": ["src/index.pug"],
                     "build/info.html":  ["src/info.pug"],
                     "build/timer.html":  ["src/timer.pug"],
+                    "build/tone.html":  ["src/tone.pug"],
                     "build/speakers.html" : ["src/speakers.pug"],
                     "build/concert.html" : ["src/concert.pug"],
                     "build/vlabel.html" : ["src/vlabel.pug"],

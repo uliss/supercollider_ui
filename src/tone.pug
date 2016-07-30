@@ -1,0 +1,103 @@
+doctype html
+// htmllint indent-width=2 line-end-style=false class-style=dash
+- var HEADER = "Tone generator"
+- var TITLE = "Tone generator"
+html(lang="en-us")
+    head
+        include pug/meta.pug
+    body
+        include pug/header.pug
+        .container-fluid
+            .row
+                .col-md-offset-2.col-md-4
+                    label Frequency (hz)
+            .row
+                .col-md-offset-2.col-md-5
+                    .btn-group.btn-group-lg.center-block(role="group" aria-label="..." data-toggle="buttons")
+                            label.btn.btn-default 415
+                                input(type="radio" name="tone_freqs" id="frequency_1" value="415" autocomplete="off")
+                            label.btn.btn-default 430
+                                input(type="radio" name="tone_freqs" id="frequency_2" value="430" autocomplete="off")
+                            label.btn.btn-default 440
+                                input(type="radio" name="tone_freqs" id="frequency_3" value="440" autocomplete="off")
+                            label.btn.btn-default.active 442
+                                input(type="radio" name="tone_freqs" id="frequency_4" value="442" autocomplete="off" checked)
+                            label.btn.btn-default 443
+                                input(type="radio" name="tone_freqs" id="frequency_5" value="443" autocomplete="off")
+                .col-md-3
+                    button#playLocal.btn.btn-lg.btn-default(type="button")
+                        span.glyphicon.glyphicon-play-circle
+                        | &nbsp;
+                        span Local
+                    button#playServer.btn.btn-lg.btn-default(type="button")
+                        span.glyphicon.glyphicon-play-circle
+                        | &nbsp;
+                        span Server
+            .row
+                | &nbsp;
+            .row
+                .col-md-offset-2.col-md-2
+                    button#getLatency.btn.btn-lg.btn-warning(type="button")
+                        span.glyphicon.glyphicon-play-time
+                        | &nbsp;
+                        span get latency
+                .col-md-1
+                    label#latencyLabel
+
+        script(type='text/javascript').
+            $(document).ready(function() {
+                var osc = new AudioToneGenerator();
+                var global_freq = 442;
+
+                $(document).on('change', 'input:radio[id^="frequency_"]', function (event) {
+                    global_freq = parseFloat($(this).prop('value'));
+                    osc.setFreq(global_freq);
+                    socket.emit("/forward", ["/sc/utils/osc", "set", "freq", global_freq]);
+                });
+
+                $("#playLocal").click(function() {
+                    var $this = $(this);
+                    $this.toggleClass('btn-default');
+                    if(osc.isPlaying()) {
+                        osc.stop();
+                        $this.removeClass("btn-success");
+                    }
+                    else {
+                        osc.play();
+                        $this.addClass("btn-success");
+                    }
+                });
+
+                $("#playServer").click(function() {
+                    var $this = $(this);
+                    $this.toggleClass('btn-primary');
+                    if($this.hasClass('btn-primary')) {
+                        socket.emit("/forward", ["/sc/utils/osc", "play", global_freq]);
+                    }
+                    else {
+                        socket.emit("/forward", ["/sc/utils/osc", "stop"]);
+                    }
+                });
+
+                var latency_info = {};
+
+                $("#getLatency").click(function() {
+                    function getRandomInt(min, max) {
+                        return Math.floor(Math.random() * (max - min)) + min;
+                    }
+
+                    latency_info.id = getRandomInt(0, 1000);
+                    latency_info.time = Date.now();
+                    socket.emit("/forward", ["/sc/utils/latency", latency_info.id]);
+                });
+
+                socket.on('/cli/utils/latency', function(msg){
+                    if(latency_info.id == msg[0]) {
+                        var ms = Date.now() - latency_info.time;
+                        $("#latencyLabel").text(ms + ' ms');
+                    }
+                });
+
+            })
+
+        include pug/footer.pug
