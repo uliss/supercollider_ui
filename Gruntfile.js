@@ -28,10 +28,6 @@ module.exports = function(grunt) {
             dist: {
                 src: ['src/js/*.js'],
                 dest: 'build/js/<%= pkg.name %>.js'
-            },
-            ui: {
-                src: ['bower_components/jquery-ui/ui/*.js'],
-                dest: 'build/js/lib/jquery-ui.js'
             }
         },
 
@@ -43,15 +39,16 @@ module.exports = function(grunt) {
                 src: 'build/js/<%= pkg.name %>.js',
                 dest: 'build/js/<%= pkg.name %>.min.js'
             },
-            nexus: {
-                src: 'src/js/nexus/nexusUI.js',
-                dest: 'build/js/lib/nexusUI.min.js'
-            },
             libs: {
                 src: 'build/js/lib/jquery.fittext.js',
                 dest: 'build/js/lib/jquery.fittext.min.js'
+            },
+            bundle: {
+                src: 'build/js/bundle.js',
+                dest: 'build/js/bundle.min.js'
             }
         },
+
         jshint: {
             options: {
                 reporter: require('jshint-stylish')
@@ -144,53 +141,64 @@ module.exports = function(grunt) {
                     // includes files within path
                     {
                         expand: true,
-                        src: ['node_modules/nexusui/dist/nexusUI.js'],
+                        src: ['../nexus/nexusUI/dist/nexusUI*.js'],
                         flatten: true,
                         dest: 'build/js/lib',
-                        filter: 'isFile'},
-                    ],
+                        filter: 'isFile'
+                    },
+                ],
+            },
+        },
+
+        watch: {
+            options: {
+                livereload: true
+            },
+            js: {
+                files: ['src/js/*.js'],
+                tasks: ['concat', 'jshint', 'uglify'],
+                options: {
+                    spawn: false,
                 },
             },
-
-            watch: {
+            css: {
+                files: ['src/css/*.scss'],
+                tasks: ['sass'],
                 options: {
-                    livereload: true
-                },
-                js: {
-                    files: ['src/js/*.js'],
-                    tasks: ['concat', 'jshint', 'uglify'],
-                    options: {
-                        spawn: false,
-                    },
-                },
-                css: {
-                    files: ['src/css/*.scss'],
-                    tasks: ['sass'],
-                    options: {
-                        spawn: false,
-                    }
-                },
-                pug: {
-                    files: ['src/*.pug', 'src/pug/*.pug'],
-                    tasks: ['pug', 'bootlint'],
-                    options: {
-                        spawn: false,
-                    }
+                    spawn: false,
                 }
             },
-
-            bootlint: {
+            pug: {
+                files: ['src/*.pug', 'src/pug/*.pug'],
+                tasks: ['pug', 'bootlint'],
                 options: {
-                    stoponerror: false,
-                    relaxerror: []
-                },
-                files: ['build/*.html']
+                    spawn: false,
+                }
             }
-        });
+        },
 
-        grunt.loadNpmTasks('grunt-bootlint');
-        // регистрация задач
-        grunt.registerTask('default', ['connect', 'watch']);
-        grunt.registerTask('dev', ['newer:pug', 'sass',
-        'concat', 'jshint', 'bowercopy', 'newer:uglify', 'bootlint']);
-    };
+
+        bootlint: {
+            options: {
+                stoponerror: false,
+                relaxerror: []
+            },
+            files: ['build/*.html']
+        },
+
+        browserify: {
+            main: {
+                src: 'src/js/main.js',
+                dest: 'build/js/bundle.js'
+            }
+        },
+    });
+
+
+    grunt.loadNpmTasks('grunt-browserify');
+    grunt.loadNpmTasks('grunt-bootlint');
+    // регистрация задач
+    grunt.registerTask('default', ['connect', 'watch']);
+    grunt.registerTask('dev', ['browserify', 'newer:pug', 'sass',
+    'concat', 'jshint', 'bowercopy', 'newer:uglify', 'bootlint', 'copy']);
+};
