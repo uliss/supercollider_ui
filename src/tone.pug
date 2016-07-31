@@ -45,59 +45,6 @@ html(lang="en-US")
                     label#latencyLabel(for="getLatency")
 
         script(type='text/javascript').
-            $(document).ready(function() {
-                var osc = new AudioToneGenerator();
-                var global_freq = 442;
-
-                $(document).on('change', 'input:radio[id^="frequency_"]', function (event) {
-                    global_freq = parseFloat($(this).prop('value'));
-                    osc.setFreq(global_freq);
-                    socket.emit("/forward", ["/sc/utils/osc", "set", "freq", global_freq]);
-                });
-
-                $("#playLocal").click(function() {
-                    var $this = $(this);
-                    $this.toggleClass('btn-default');
-                    if(osc.isPlaying()) {
-                        osc.stop();
-                        $this.removeClass("btn-success");
-                    }
-                    else {
-                        osc.play();
-                        $this.addClass("btn-success");
-                    }
-                });
-
-                $("#playServer").click(function() {
-                    var $this = $(this);
-                    $this.toggleClass('btn-primary');
-                    if($this.hasClass('btn-primary')) {
-                        socket.emit("/forward", ["/sc/utils/osc", "play", global_freq]);
-                    }
-                    else {
-                        socket.emit("/forward", ["/sc/utils/osc", "stop"]);
-                    }
-                });
-
-                var latency_info = {};
-
-                $("#getLatency").click(function() {
-                    function getRandomInt(min, max) {
-                        return Math.floor(Math.random() * (max - min)) + min;
-                    }
-
-                    latency_info.id = getRandomInt(0, 1000);
-                    latency_info.time = Date.now();
-                    socket.emit("/forward", ["/sc/utils/latency", latency_info.id]);
-                });
-
-                socket.on('/cli/utils/latency', function(msg){
-                    if(latency_info.id == msg[0]) {
-                        var ms = Date.now() - latency_info.time;
-                        $("#latencyLabel").text(ms + ' ms');
-                    }
-                });
-
-            })
+            app_tone_run();
 
         include pug/footer.pug

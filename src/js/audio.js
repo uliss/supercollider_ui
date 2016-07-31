@@ -36,3 +36,5 @@ AudioToneGenerator.prototype.setFreq = function(f) {
 AudioToneGenerator.prototype.isPlaying = function() {
     return this.osc !== null;
 };
+
+module.exports.AudioToneGenerator = AudioToneGenerator;
