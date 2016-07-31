@@ -8,6 +8,9 @@ var uglify = require('gulp-uglify');
 var pump = require('pump');
 var rename = require('gulp-rename');
 var pug = require('gulp-pug');
+var bootlint  = require('gulp-bootlint');
+var htmllint = require('gulp-htmllint')
+var gutil = require('gulp-util');
 
 module.exports.add = function() {
     gulp.task('jshint', function(cb) {
@@ -63,15 +66,43 @@ module.exports.add = function() {
 
     gulp.task('pug', function (cb) {
         pump([
-            gulp.src('./src/*.pug'),
-            pug({
-                pretty: true
-            }),
+            gulp.src(['./src/*.pug', './src/*/*.pug']),
+            pug({ pretty: true }),
             gulp.dest('./build')
         ], cb);
     });
 
     gulp.task('pug:watch', function() {
-        gulp.watch('./src/*/*.pug', ['pug']);
+        gulp.watch(['./src/*.pug', './src/*/*.pug'], ['pug']);
     });
+
+    gulp.task('bootlint', function() {
+        return gulp.src('./build/*.html')
+        .pipe(bootlint({
+            loglevel: 'warning',
+        }));
+    });
+
+    gulp.task('bootlint:watch', function() {
+        gulp.watch('./build/*.html', ['bootlint']);
+    });
+
+    gulp.task('htmllint', function() {
+        return gulp.src('./build/*.html')
+        .pipe(htmllint({}, htmllintReporter));
+    });
+
+    gulp.task('htmllint:watch', function() {
+        gulp.watch('./build/*.html', ['htmllint']);
+    });
+
+    function htmllintReporter(filepath, issues) {
+        if (issues.length > 0) {
+            issues.forEach(function (issue) {
+                gutil.log(gutil.colors.cyan('[gulp-htmllint] ') + gutil.colors.white(filepath + ' [' + issue.line + ',' + issue.column + ']: ') + gutil.colors.red('(' + issue.code + ') ' + issue.msg));
+            });
+
+            process.exitCode = 1;
+        }
+    }
 };

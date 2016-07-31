@@ -3,6 +3,8 @@ var tasks = require('./gulp');
 
 tasks.add();
 
-gulp.task('build', ['jshint', 'browserify', 'compressjs', 'sass', 'pug']);
+gulp.task('build', ['jshint', 'browserify', 'compressjs', 'pug', 'sass', 'bootlint', 'htmllint']);
 gulp.task('default', ['build', 'watch']);
-gulp.task('watch', ['jshint:watch', 'sass:watch', 'browserify:watch', 'compressjs:watch', 'pug:watch']);
+gulp.task('watch', [
+    'jshint:watch', 'sass:watch', 'browserify:watch',
+    'compressjs:watch', 'pug:watch', 'bootlint:watch', 'htmllint:watch']);
