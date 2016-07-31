@@ -1,3 +1,11 @@
+var fittext = require('fittext.js');
+
+var socket;
+
+function timer_init(io_socket) {
+    socket = io_socket;
+}
+
 Number.prototype.toHHMMSS = function () {
     var seconds = Math.floor(this),
     hours = Math.floor(seconds / 3600);
@@ -146,3 +154,20 @@ function ClientTimer(element) {
 
     this.update();
 }
+
+function timer_run() {
+    $(document).ready(
+        function() {
+            var timer = new ServerTimer($("#timer1"));
+            var control = new TimerControl($("#timerControl"), timer);
+
+            $("#timer1").fitText(0.5);
+        }
+    );
+}
+
+module.exports.init = timer_init;
+module.exports.run = timer_run;
+module.exports.ClientTimer = ClientTimer;
+module.exports.ServerTimer = ServerTimer;
+module.exports.TimerControl = TimerControl;
