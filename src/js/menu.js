@@ -1,3 +1,10 @@
+var io = require('socket.io-client');
+var socket = io();
+
+function nav_menu_log(msg) {
+    console.log('[menu.js] ' + msg);
+}
+
 function nav_menu_init_mute() {
     var el = $("#nav_ui_mute");
     var el_icon = el.find(".glyphicon");
@@ -120,6 +127,7 @@ function nav_menu_init() {
     nav_menu_init_volume_slider();
     nav_menu_init_record_button();
     nav_menu_init_boot_button();
+    nav_menu_handle();
 }
 
 function nav_menu_handle() {
@@ -150,6 +158,8 @@ function nav_menu_handle() {
                 console.log('[/cli/supercollider] unknown message: ' + msg);
             }
         }
-        console.log(msg);
+        nav_menu_log(msg);
     });
 }
+
+module.exports.init = nav_menu_init;
