@@ -11,6 +11,7 @@ var pug = require('gulp-pug');
 var bootlint  = require('gulp-bootlint');
 var htmllint = require('gulp-htmllint')
 var gutil = require('gulp-util');
+var merge = require('merge-stream');
 
 module.exports.add = function() {
     gulp.task('jshint', function(cb) {
@@ -111,7 +112,7 @@ module.exports.add = function() {
         }
     }
 
-    gulp.task('copy', ['copy_nexus', 'copy_bower', 'copy_opensans']);
+    gulp.task('copy', ['copy_nexus', 'copy_bower', 'copy_opensans', 'copy_bootstrap', 'copy_bootstrap_slider']);
 
     gulp.task('copy_nexus', function (cb) {
         pump([
@@ -123,8 +124,6 @@ module.exports.add = function() {
     gulp.task('copy_bower', function (cb) {
         pump([
             gulp.src([
-                './bower_components/bootstrap-css/js/bootstrap*.js',
-                './bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider*.js',
                 './bower_components/jquery/dist/jquery*.js',
                 './bower_components/javascript-state-machine/state-machine*.js',
                 './bower_components/jq-swipe/dist/jq-swipe*.js',
@@ -133,44 +132,28 @@ module.exports.add = function() {
         ], cb);
     });
 
-    gulp.task('copy_opensans', ['copy_opensans_css', 'copy_opensans_fonts', 'copy_boostrap_slider', 'copy_boostrap']);
+    gulp.task('copy_opensans', function() {
+        var css = gulp.src(['./bower_components/open-sans-fontface/open-sans.css'])
+        .pipe(gulp.dest('./build/css/open-sans'));
 
-    gulp.task('copy_opensans_css', function (cb) {
-        pump([
-            gulp.src(['./bower_components/open-sans-fontface/open-sans.css']),
-            gulp.dest('./build/css/open-sans'),
+        var fonts = gulp.src(['./bower_components/open-sans-fontface/fonts/*/*.{ttf,woff,eof,svg,woff2}'])
+        .pipe(gulp.dest('./build/css/open-sans/fonts'));
 
-        ], cb);
+        return merge(css, fonts);
     });
 
-    gulp.task('copy_opensans_fonts', function (cb) {
-        pump([
-            gulp.src(['./bower_components/open-sans-fontface/fonts/*/*.{ttf,woff,eof,svg,woff2}']),
-            gulp.dest('./build/css/open-sans/fonts')
-        ], cb);
+    gulp.task('copy_bootstrap', function () {
+        var fonts = gulp.src(['./bower_components/bootstrap-css/**/*.{js,css,map,ttf,eot,svg,woff,woff2}'])
+        .pipe(gulp.dest('./build/css/bootstrap'));
     });
 
-    gulp.task('copy_boostrap_slider', function (cb) {
-        pump([
-            gulp.src(['./bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider*.css']),
-            gulp.dest('./build/css'),
+    gulp.task('copy_bootstrap_slider', function (cb) {
+        var js = gulp.src('./bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider*.js')
+        .pipe(gulp.dest('./build/js/lib'));
 
-        ], cb);
+        var css = gulp.src(['./bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider*.css']).
+        pipe(gulp.dest('./build/css'));
+
+        return merge([js, css]);
     });
-
-    gulp.task('copy_boostrap', function (cb) {
-        pump([
-            gulp.src(['./bower_components/bootstrap-css/**/*.{js,css,map,ttf,eot,svg,woff,woff2}']),
-            gulp.dest('./build/css/bootstrap'),
-
-        ], cb);
-    });
-
-
-    // }
-    // },
-    // folders: {
-    // files: {
-    //     '/css/bootstrap/fonts': 'bootstrap-css/fonts',
-    //     '/css/open-sans/fonts': 'open-sans-fontface/fonts'
 };
