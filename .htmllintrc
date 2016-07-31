@@ -1,0 +1,14 @@
+{
+    "id-class-style": false,
+    "class-style": false,
+    "indent-style": "spaces",
+    "attr-name-style": false,
+    "attr-quote-style": "double",
+    "doctype-html5": true,
+    "doctype-first": true,
+    "html-req-lang": true,
+    "id-no-dup": true,
+    "attr-req-value": false,
+    "attr-no-dup": true,
+    "label-req-for": false
+}
