@@ -1,12 +1,11 @@
 var audio = require('./audio.js');
 var api = require('./api.js');
+var latency = require('./latency.js');
 
 var oscil = new audio.AudioToneGenerator();
 var global_freq = 442;
 var socket = null;
 var OSCIL_PATH = "/utils/osc";
-var LATENCY_PATH = "/utils/latency";
-var latency_info = {};
 
 function tone_run_oscil() {
     $(document).on('change', 'input:radio[id^="frequency_"]', function (event) {
@@ -45,20 +44,9 @@ function tone_run_oscil() {
 function tone_run_latency() {
     // button
     $("#getLatency").click(function() {
-        function getRandomInt(min, max) {
-            return Math.floor(Math.random() * (max - min)) + min;
-        }
-
-        latency_info.id = getRandomInt(0, 1000);
-        latency_info.time = Date.now();
-        api.send_to_sc(socket, LATENCY_PATH, latency_info.id);
-    });
-
-    api.from_sc(socket, LATENCY_PATH, function(msg) {
-        if(latency_info.id == msg[0]) {
-            var ms = Date.now() - latency_info.time;
+        latency.measureLatencyAvg(socket, function(ms) {
             $("#latencyLabel").text(ms + ' ms');
-        }
+        }, 5);
     });
 }
 
