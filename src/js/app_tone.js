@@ -1,26 +1,30 @@
 var audio = require('./audio.js');
-var osc = new audio.AudioToneGenerator();
+var api = require('./api.js');
+
+var oscil = new audio.AudioToneGenerator();
 var global_freq = 442;
 var socket = null;
-var api = require('./api.js');
+var OSCIL_PATH = "/utils/osc";
+var LATENCY_PATH = "/utils/latency";
+var latency_info = {};
 
 function tone_run_oscil() {
     $(document).on('change', 'input:radio[id^="frequency_"]', function (event) {
         global_freq = parseFloat($(this).prop('value'));
-        osc.setFreq(global_freq);
-        api.forward(socket, "/sc/utils/osc", "set", "freq", global_freq);
+        oscil.setFreq(global_freq);
+        api.send_to_sc(socket, OSCIL_PATH, "set", "freq", global_freq);
     });
 
     // button play local
     $("#playLocal").click(function() {
         var $this = $(this);
         $this.toggleClass('btn-default');
-        if(osc.isPlaying()) {
-            osc.stop();
+        if(oscil.isPlaying()) {
+            oscil.stop();
             $this.removeClass("btn-success");
         }
         else {
-            osc.play();
+            oscil.play();
             $this.addClass("btn-success");
         }
     });
@@ -30,38 +34,38 @@ function tone_run_oscil() {
         var $this = $(this);
         $this.toggleClass('btn-primary');
         if($this.hasClass('btn-primary')) {
-            socket.emit("/forward", ["/sc/utils/osc", "play", global_freq]);
+            api.send_to_sc(socket, OSCIL_PATH, "play", global_freq);
         }
         else {
-            socket.emit("/forward", ["/sc/utils/osc", "stop"]);
+            api.send_to_sc(socket, OSCIL_PATH, "stop");
         }
     });
 }
 
 function tone_run_latency() {
-    //- var latency_info = {};
-    //-
-    //- $("#getLatency").click(function() {
-    //-     function getRandomInt(min, max) {
-    //-         return Math.floor(Math.random() * (max - min)) + min;
-    //-     }
-    //-
-    //-     latency_info.id = getRandomInt(0, 1000);
-    //-     latency_info.time = Date.now();
-    //-     socket.emit("/forward", ["/sc/utils/latency", latency_info.id]);
-    //- });
-    //-
-    //- socket.on('/cli/utils/latency', function(msg){
-    //-     if(latency_info.id == msg[0]) {
-    //-         var ms = Date.now() - latency_info.time;
-    //-         $("#latencyLabel").text(ms + ' ms');
-    //-     }
-    //- });
+    // button
+    $("#getLatency").click(function() {
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min)) + min;
+        }
+
+        latency_info.id = getRandomInt(0, 1000);
+        latency_info.time = Date.now();
+        api.send_to_sc(socket, LATENCY_PATH, latency_info.id);
+    });
+
+    api.from_sc(socket, LATENCY_PATH, function(msg) {
+        if(latency_info.id == msg[0]) {
+            var ms = Date.now() - latency_info.time;
+            $("#latencyLabel").text(ms + ' ms');
+        }
+    });
 }
 
 function tone_run() {
     $(document).ready(function() {
         tone_run_oscil();
+        tone_run_latency();
     });
 }
 
