@@ -1,13 +1,11 @@
-// var jQuery = require('jquery');
-// var audio = require('./audio.js');
-// var sc = require('./supercollider_ui.js');
-// var fittext = require('fittext.js');
+var io = require('socket.io-client');
 var menu = require('./menu.js');
 var alerts = require('./alerts.js');
+var ping = require('./ping.js');
 
 $(document).ready(function() {
-    // var mySlider = $("input.slider").bootstrapSlider();
-    // $('h1').css('color', 'red');
-    menu.init();
-    alerts.init();
+    var socket = io();
+    menu.init(socket);
+    alerts.init(socket);
+    ping.start(socket, 4000);
 });

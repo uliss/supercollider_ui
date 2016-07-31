@@ -1,7 +1,4 @@
-var io = require('socket.io-client');
-var socket = io();
-
-function alerts_handle() {
+function alerts_handle(socket) {
     socket.on('/cli/alert', function(msg){
         var show_error = function(msg) {
             $('#ui_modal_error_title').text(msg.title);

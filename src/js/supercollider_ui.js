@@ -1,44 +1,8 @@
 $(document).ready(function() {
-    function PingServer() {
-        this.interval = null;
-        this.answered = false;
-
-        this.run = function() {
-            var el = $("#nav_ui_connection_indicator");
-            socket.emit("/ping");
-
-            interval = setInterval(function(){
-                socket.emit("/ping");
-                answered = false;
-
-                setTimeout(function(){
-                    if(!answered) {
-                        el.removeClass("nav_ui_indicator_connected");
-                        el.addClass("nav_ui_indicator_disconnected");
-                    }
-
-                }, 1000);
-            }, 4000);
-
-            socket.on('/pong', function(msg){
-                el.removeClass("nav_ui_indicator_disconnected");
-                el.addClass("nav_ui_indicator_connected");
-                answered = true;
-            });
-        };
-    }
-
-    nav_menu_init();
-    nav_menu_handle();
-
-    var ping_server = new PingServer();
-    ping_server.run();
-
     // handle css
     socket.on('/cli/css', function(msg){
         $(msg[0]).css(msg[1], msg[2]);
     });
-
 
     // handle redirect
     socket.on('/cli/redirect', function(msg){

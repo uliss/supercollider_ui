@@ -1,5 +1,4 @@
-var io = require('socket.io-client');
-var socket = io();
+var socket = null;
 
 function nav_menu_log(msg) {
     console.log('[menu.js] ' + msg);
@@ -122,7 +121,8 @@ function nav_menu_init_boot_button() {
     });
 }
 
-function nav_menu_init() {
+function nav_menu_init(io_socket) {
+    socket = io_socket;
     nav_menu_init_mute();
     nav_menu_init_volume_slider();
     nav_menu_init_record_button();
