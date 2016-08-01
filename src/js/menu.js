@@ -30,19 +30,21 @@ function nav_menu_init_volume_slider() {
     var el = $('#nav_ui_volume_slider_input');
     var ignore_events = false;
 
-    el.data("onchange", function(value) {
+    function set_volume(v) {
         if(ignore_events) return;
-        el.slider('setValue', value, false, false);
-    });
+        el.slider('setValue', v, false, false);
+        // el.slider('setValue', v, false, false);
+    }
 
     el.slider({
         formatter: function(value) { return value + ' db'; }
     })
     .on('slideStart', function() {ignore_events = true;})
     .on('slideStop', function() {ignore_events = false;})
-    .on('slide', function(event) {
-        socket.emit('/node/supercollider', ['setVolume', event.value]);
-    });
+    .on('slide', function(event) { api.sc_volume(event.value);});
+
+    api.sc_volume_request(set_volume);
+    api.bind("onvolume", set_volume);
 }
 
 function nav_menu_init_record_button() {
@@ -113,23 +115,9 @@ function nav_menu_handle() {
     // socket.on('/cli/supercollider', function(msg) {
     //     var func;
     //     switch(msg[0]) {
-    //         case 'boot': {
-    //             func = $("#nav_ui_boot").data("onboot");
-    //             func();
-    //         }
-    //         break;
-    //         case 'quit': {
-    //             func = $("#nav_ui_boot").data("onquit");
-    //             func();
-    //         }
     //         break;
     //         case 'volume': {
     //             func = $("#nav_ui_volume_slider_input").data("onchange");
-    //             func(msg[1]);
-    //         }
-    //         break;
-    //         case 'mute': {
-    //             func = $("#nav_ui_mute").data("onchange");
     //             func(msg[1]);
     //         }
     //         break;

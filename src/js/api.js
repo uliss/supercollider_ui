@@ -8,6 +8,7 @@ function sc_path(path) { return "/sc" + path; }
 var debug = false;
 var server_state = 0;
 var mute_state = 0;
+var server_volume = 0;
 
 function api_send_to_sc(socket, path) {
     var args = [sc_path(path)].concat(Array.prototype.slice.call(arguments, 2));
@@ -17,6 +18,31 @@ function api_send_to_sc(socket, path) {
 
 function api_from_sc(socket, path, func) {
     socket.on(cli_path(path), func);
+}
+
+function promise_api_get_supercollider_volume() {
+    return new Promise(function(resolve, reject) {
+        socket.emit('/node/supercollider', ['volume?']);
+        socket.on('/cli/supercollider', function(msg) {
+            if(msg[0] == "volume") { resolve(msg[1]); }
+        });
+
+        setTimeout(function() { reject(new Error("get volume timeout!")); }, 1000);
+    });
+}
+
+function api_get_supercollider_volume(func) {
+    promise_api_get_supercollider_volume()
+    .then(
+        function(volume){
+            server_volume = volume;
+            if(func) func(volume);
+        },
+        function(error){
+            server_volume = 0;
+            console.log(error.message);
+        }
+    );
 }
 
 // returns boot state
@@ -74,6 +100,9 @@ function api_mute_toggle_supercollider(func) {
     api_mute_supercollider(1, func);
 }
 
+function api_set_supercollider_volume(volume) {
+    socket.emit('/node/supercollider', ['setVolume', volume]);
+}
 
 function promise_api_boot_supercollider() {
     return new Promise(function(resolve, reject) {
@@ -190,6 +219,8 @@ module.exports.sc_mute = api_mute_supercollider;
 module.exports.sc_mute_toggle = api_mute_toggle_supercollider;
 module.exports.sc_toggle = api_toggle_supercollider;
 module.exports.sc_state_request = api_get_supercollider_state;
+module.exports.sc_volume_request = api_get_supercollider_volume;
+module.exports.sc_volume = api_set_supercollider_volume;
 
 // bind actions
 module.exports.bind = api_bind_action;
