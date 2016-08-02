@@ -1,72 +1,18 @@
-var api = require('./api.js');
-var socket = null;
+var supercollider = require('./supercollider.js');
 
-function nav_menu_log(msg) {
-    console.log('[menu.js] ' + msg);
+function log(msg) {
+    var args = Array.prototype.slice.call(arguments, 0);
+    console.log('[menu.js]:' + args.join(' '));
 }
 
-function nav_update(state) {
-    nav_update_boot(state);
-    nav_update_record(state);
-    nav_update_mute(state);
-    nav_update_volume(state);
+function update(state) {
+    update_boot(state);
+    update_record(state);
+    update_mute(state);
+    update_volume(state);
 }
 
-function nav_update_mute(state) {
-    var el_icon = $("#nav_ui_mute .glyphicon");
-
-    if(state.mute) {
-        el_icon.removeClass("glyphicon-volume-up");
-        el_icon.addClass("glyphicon-volume-off");
-        el_icon.addClass("text-danger");
-    }
-    else {
-        el_icon.removeClass("text-danger");
-        el_icon.removeClass("glyphicon-volume-off");
-        el_icon.addClass("glyphicon-volume-up");
-    }
-}
-
-function nav_menu_init_mute() {
-    $("#nav_ui_mute").click(function(){ api.sc_mute_toggle(nav_update_mute); });
-}
-
-function nav_update_volume(state) {
-    var el = $('#nav_ui_volume_slider_input');
-    if(el.data("ignore")) return;
-
-    el.slider('setValue', state.volume, false, false);
-}
-
-function nav_menu_init_volume_slider() {
-    var el = $('#nav_ui_volume_slider_input');
-
-    el.data('ignore', false)
-    .slider({ formatter: function(value) { return value + ' db'; }})
-    .on('slideStart', function() { el.data("ignore", true); })
-    .on('slideStop', function() { el.data("ignore", false); })
-    .on('slide', function(event) { api.sc_volume(event.value); });
-}
-
-function nav_update_record(state) {
-    var el_title = $("#nav_ui_record .text");
-    var el_icon = $("#nav_ui_record .glyphicon");
-
-    if(state.record) {
-        el_title.text("Stop Recording");
-        el_icon.addClass("text-danger");
-    }
-    else {
-        el_title.text("Record");
-        el_icon.removeClass("text-danger");
-    }
-}
-
-function nav_menu_init_record_button() {
-    $("#nav_ui_record").click(function() { api.sc_record_toggle(nav_update_record); });
-}
-
-function nav_update_boot(state) {
+function update_boot(state) {
     var el_title = $("#nav_ui_boot .text");
     var el_icon = $("#nav_ui_boot .glyphicon");
 
@@ -82,19 +28,74 @@ function nav_update_boot(state) {
     }
 }
 
-function nav_menu_init_boot_button() {
-    $("#nav_ui_boot").click(function() { api.sc_boot_toggle(nav_update_boot); });
+function update_mute(state) {
+    var el_icon = $("#nav_ui_mute .glyphicon");
+
+    if(state.mute) {
+        el_icon.removeClass("glyphicon-volume-up");
+        el_icon.addClass("glyphicon-volume-off");
+        el_icon.addClass("text-danger");
+    }
+    else {
+        el_icon.removeClass("text-danger");
+        el_icon.removeClass("glyphicon-volume-off");
+        el_icon.addClass("glyphicon-volume-up");
+    }
 }
 
-function nav_menu_init(io_socket) {
-    socket = io_socket;
-    api.subscribe(nav_update);
-    nav_menu_init_mute();
-    nav_menu_init_volume_slider();
-    nav_menu_init_record_button();
-    nav_menu_init_boot_button();
+function update_volume(state) {
+    var el = $('#nav_ui_volume_slider_input');
+    if(el.data("ignore")) return;
 
-    api.sc_state_request();
+    el.slider('setValue', state.volume, false, false);
 }
 
-module.exports.init = nav_menu_init;
+function update_record(state) {
+    var el_title = $("#nav_ui_record .text");
+    var el_icon = $("#nav_ui_record .glyphicon");
+
+    if(state.record) {
+        el_title.text("Stop Recording");
+        el_icon.addClass("text-danger");
+    }
+    else {
+        el_title.text("Record");
+        el_icon.removeClass("text-danger");
+    }
+}
+
+function init_mute() {
+    $("#nav_ui_mute").click(function(){ supercollider.mute_toggle(update_mute); });
+}
+
+function init_volume() {
+    var el = $('#nav_ui_volume_slider_input');
+
+    el.data('ignore', false)
+    .slider({ formatter: function(value) { return value + ' db'; }})
+    .on('slideStart', function() { el.data("ignore", true); })
+    .on('slideStop', function() { el.data("ignore", false); })
+    .on('slide', function(event) { supercollider.volume(event.value); });
+}
+
+function init_record() {
+    $("#nav_ui_record").click(function() { supercollider.record_toggle(update_record); });
+}
+
+function init_boot() {
+    $("#nav_ui_boot").click(function() { supercollider.boot_toggle(update_boot); });
+}
+
+function init_all() {
+    supercollider.state_subscribe(update);
+
+    init_mute();
+    init_volume();
+    init_record();
+    init_boot();
+
+    // state request
+    supercollider.state();
+}
+
+module.exports.init = init_all;
