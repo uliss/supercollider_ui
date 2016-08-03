@@ -1,7 +1,7 @@
 var server = require('./server.js');
 
-function alerts_handle(socket) {
-    server.socket.on('/cli/alert', function(msg){
+function alerts_handle() {
+    server.on('/cli/alert', function(msg){
         var show_error = function(msg) {
             $('#ui_modal_error_title').text(msg.title);
             $('#ui_modal_error_text').text(msg.text);
@@ -26,6 +26,12 @@ function alerts_handle(socket) {
             case 'info':  show_info(msg); break;
             default: { console.log('unknown alert type: ' + msg.type); }
         }
+    });
+}
+
+function init() {
+    $(document).ready(function(){
+        alerts_handle();
     });
 }
 
