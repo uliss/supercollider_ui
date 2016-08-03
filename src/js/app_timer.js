@@ -1,10 +1,5 @@
 var fittext = require('fittext.js');
-
-var socket;
-
-function timer_init(io_socket) {
-    socket = io_socket;
-}
+var server = require('./server.js');
 
 Number.prototype.toHHMMSS = function () {
     var seconds = Math.floor(this),
@@ -78,9 +73,9 @@ function ServerTimer(element) {
     var self = this;
 
     element.text(n.toHHMMSS());
-    socket.emit(this.socketPath, 'get');
+    server.send(this.socketPath, 'get');
 
-    socket.on(this.socketPath, function(msg){
+    server.on(this.socketPath, function(msg){
         console.log(msg);
         switch(msg) {
             case 'start':
@@ -92,20 +87,20 @@ function ServerTimer(element) {
         }
     });
 
-    socket.on('/server/timer', function(msg) {
+    server.on('/server/timer', function(msg) {
         element.text(msg .toHHMMSS());
     });
 
     this.reset = function() {
-        socket.emit(this.socketPath, 'reset');
+        server.send(this.socketPath, 'reset');
     };
 
     this.start = function() {
-        socket.emit(this.socketPath, 'start');
+        server.send(this.socketPath, 'start');
     };
 
     this.stop = function() {
-        socket.emit(this.socketPath, 'stop');
+        server.send(this.socketPath, 'stop');
     };
 }
 
@@ -114,10 +109,10 @@ function ClientTimer(element) {
     this.timerId = null;
     this.element = element;
     this.socketPath = '/timer/client/control';
-    socket.emit(this.socketPath, 'debug');
+    server.send(this.socketPath, 'debug');
 
     var self = this;
-    socket.on('/client/timer', function(msg) {
+    server.on('/client/timer', function(msg) {
         self.currentTime = msg;
         self.update();
     });
@@ -129,18 +124,18 @@ function ClientTimer(element) {
             self.next();
         }, 1000);
 
-        socket.emit(this.socketPath, 'start');
+        server.send(this.socketPath, 'start');
     };
 
     this.stop = function() {
         clearInterval(this.timerId);
-        socket.emit(this.socketPath, 'stop');
+        server.send(this.socketPath, 'stop');
     };
 
     this.reset = function() {
         this.currentTime = 0;
         this.update();
-        socket.emit(this.socketPath, 'reset');
+        server.send(this.socketPath, 'reset');
     };
 
     this.update = function() {
@@ -155,7 +150,7 @@ function ClientTimer(element) {
     this.update();
 }
 
-function timer_run() {
+function main() {
     $(document).ready(
         function() {
             var timer = new ServerTimer($("#timer1"));
@@ -166,8 +161,7 @@ function timer_run() {
     );
 }
 
-module.exports.init = timer_init;
-module.exports.run = timer_run;
+module.exports.main = main;
 module.exports.ClientTimer = ClientTimer;
 module.exports.ServerTimer = ServerTimer;
 module.exports.TimerControl = TimerControl;

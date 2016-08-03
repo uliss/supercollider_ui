@@ -49,11 +49,11 @@ function tone_run_latency() {
     });
 }
 
-function init() {
+function main() {
     $(document).ready(function() {
         tone_run_oscil();
         tone_run_latency();
     });
 }
 
-module.exports.init = init;
+module.exports.main = main;

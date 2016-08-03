@@ -1,7 +1,7 @@
 var fittext = require('fittext.js');
 var server = require('./server.js');
 
-function init() {
+function main() {
     $(document).ready(
         function(){
             server.on('/vlabel/set', function(msg){
@@ -18,4 +18,4 @@ function init() {
     );
 }
 
-module.exports.init = init;
+module.exports.main = main;
