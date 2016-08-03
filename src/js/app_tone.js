@@ -35,7 +35,7 @@ function tone_run_oscil() {
             server.send_to_sc(OSCIL_PATH, "play", global_freq);
         }
         else {
-            alerts_handle.send_to_sc(OSCIL_PATH, "stop");
+            server.send_to_sc(OSCIL_PATH, "stop");
         }
     });
 }

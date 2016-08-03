@@ -27,7 +27,7 @@ function promise_measure_latency() {
             }
         });
 
-        setTimeout(function() { reject(new Error(error_msg)); }, 1000);
+        setTimeout(function() { reject(new Error("latency timeout!")); }, 1000);
     });
 }
 
