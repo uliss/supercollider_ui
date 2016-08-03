@@ -1,6 +1,5 @@
 var server = require('./server.js');
 var audio = require('./audio.js');
-var latency = require('./latency.js');
 
 var oscil = new audio.AudioToneGenerator();
 var global_freq = 442;
@@ -40,19 +39,9 @@ function tone_run_oscil() {
     });
 }
 
-function tone_run_latency() {
-    // button
-    $("#getLatency").click(function() {
-        latency.measure_latency_avg(function(ms) {
-            $("#latencyLabel").text(ms + ' ms');
-        }, 5);
-    });
-}
-
 function main() {
     $(document).ready(function() {
         tone_run_oscil();
-        tone_run_latency();
     });
 }
 
