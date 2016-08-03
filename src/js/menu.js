@@ -87,15 +87,18 @@ function init_boot() {
 }
 
 function init_all() {
-    supercollider.state_subscribe(update);
+    $(document).ready(function(){
+        supercollider.state_subscribe(update);
 
-    init_mute();
-    init_volume();
-    init_record();
-    init_boot();
+        init_mute();
+        init_volume();
+        init_record();
+        init_boot();
 
-    // state request
-    supercollider.state();
+        // state request
+        supercollider.state();
+    });
 }
+
 
 module.exports.init = init_all;

@@ -1,40 +1,55 @@
-var api = require('./api.js');
+var utils = require('./utils.js');
+var server = require('./server.js');
+
 var LATENCY_PATH = "/utils/latency";
 
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;
+function Latency() {
+    this.id = utils.random_int(0, 10000);
+    this.time0 = Date.now();
+    this.time1 = this.time0;
+    this.latency = 0;
 }
 
-function measureLatencyPromise(socket) {
+Latency.prototype.measure = function() {
+    this.time1 = Date.now();
+    this.latency = this.time1 = time.time0;
+};
+
+function promise_measure_latency() {
     return new Promise(function(resolve, reject) {
-        var latency_info = {};
-        latency_info.id = getRandomInt(0, 10000);
-        latency_info.time = Date.now();
+        var latency_info = new Latency();
 
-        api.send_to_sc(socket, LATENCY_PATH, latency_info.id);
-
-        api.from_sc(socket, LATENCY_PATH, function(msg) {
+        server.send_to_sc(LATENCY_PATH, latency_info.id);
+        server.from_sc(LATENCY_PATH, function(msg) {
             if(latency_info.id == msg[0]) {
-                var ms = Date.now() - latency_info.time;
-                resolve(ms);
+                latency_info.measure();
+                resolve(latency_info);
             }
         });
+
+        setTimeout(function() { reject(new Error(error_msg)); }, 1000);
     });
 }
 
-function measureLatency(socket, func) {
-    measureLatencyPromise(socket).then(function(response) {
-        func(response);
-    });
+function measure_latency(callback) {
+    promise_measure_latency()
+    .then(
+        function(latency_info) {
+            callback(latency_info.latency);
+        },
+        function(error) {
+            console.log("[latency.js]" + error.message);
+        }
+    );
 }
 
-function measureLatencyAvg(socket, func, num) {
+function measure_latency_avg(func, num) {
     if(!num) num = 5;
     var sum = 0;
     var times = [];
     var k = 0;
     for(var i = 0; i < num; i++) {
-        times.push(measureLatencyPromise(socket));
+        times.push(promise_measure_latency());
     }
 
     var chain = times.reduce(function (previous, item) {
@@ -49,5 +64,5 @@ function measureLatencyAvg(socket, func, num) {
     });
 }
 
-module.exports.measureLatency = measureLatency;
-module.exports.measureLatencyAvg = measureLatencyAvg;
+module.exports.measure_latency = measure_latency;
+module.exports.measure_latency_avg = measure_latency_avg;

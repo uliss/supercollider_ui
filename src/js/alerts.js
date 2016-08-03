@@ -1,5 +1,7 @@
+var server = require('./server.js');
+
 function alerts_handle(socket) {
-    socket.on('/cli/alert', function(msg){
+    server.socket.on('/cli/alert', function(msg){
         var show_error = function(msg) {
             $('#ui_modal_error_title').text(msg.title);
             $('#ui_modal_error_text').text(msg.text);

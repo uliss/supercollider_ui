@@ -1,5 +1,4 @@
 var audio = require('./audio.js');
-var api = require('./api.js');
 var latency = require('./latency.js');
 
 var oscil = new audio.AudioToneGenerator();
@@ -50,16 +49,11 @@ function tone_run_latency() {
     });
 }
 
-function tone_run() {
+function init() {
     $(document).ready(function() {
         tone_run_oscil();
         tone_run_latency();
     });
 }
 
-function tone_init(io_socket) {
-    socket = io_socket;
-}
-
-module.exports.init = tone_init;
-module.exports.run = tone_run;
+module.exports.init = init;

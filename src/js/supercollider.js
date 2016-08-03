@@ -33,7 +33,7 @@ function init_socket_io() {
     });
 }
 
-function check_for_promise(resolve, reject, msg, time) {
+function check_for_promise(resolve, reject, error_msg, time) {
     if(!time) time = 2000;
 
     socket.on('/cli/supercollider', function(msg) {
@@ -47,7 +47,7 @@ function check_for_promise(resolve, reject, msg, time) {
         }
     });
 
-    setTimeout(function() { reject(new Error(msg)); }, time);
+    setTimeout(function() { reject(new Error(error_msg)); }, time);
 }
 
 // returns promise to get server state
