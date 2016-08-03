@@ -5,14 +5,12 @@ var LATENCY_PATH = "/utils/latency";
 
 function Latency() {
     this.id = utils.random_int(0, 10000);
-    this.time0 = Date.now();
-    this.time1 = this.time0;
+    this.init_time = Date.now();
     this.latency = 0;
 }
 
 Latency.prototype.measure = function() {
-    this.time1 = Date.now();
-    this.latency = this.time1 = time.time0;
+    this.latency = Date.now() - this.init_time;
 };
 
 function promise_measure_latency() {
@@ -45,22 +43,22 @@ function measure_latency(callback) {
 
 function measure_latency_avg(func, num) {
     if(!num) num = 5;
-    var sum = 0;
     var times = [];
     var k = 0;
     for(var i = 0; i < num; i++) {
         times.push(promise_measure_latency());
     }
 
+    var measure_list = [];
     var chain = times.reduce(function (previous, item) {
-        return previous.then(function (t) {
-            sum += t;
+        return previous.then(function (latency_info) {
+            measure_list.push(latency_info.latency);
             return item;
         });
     });
 
     chain.then(function (t) {
-        func(sum / num);
+        func(utils.average(measure_list));
     });
 }
 
