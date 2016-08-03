@@ -13,11 +13,9 @@ ping.start(4000);
 
 $(document).ready(function() {
     app_timer.init(g_socket);
-    app_vlabel.init(g_socket);
 });
-
 
 
 window.app_tone_run = app_tone.init;
 window.app_timer_run = app_timer.run;
-window.app_vlabel_run = app_vlabel.run;
+window.app_vlabel_run = app_vlabel.init;
