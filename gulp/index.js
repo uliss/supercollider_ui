@@ -113,12 +113,23 @@ module.exports.add = function() {
         }
     }
 
-    gulp.task('copy', ['copy_nexus', 'copy_bower', 'copy_opensans', 'copy_bootstrap', 'copy_bootstrap_slider']);
+    gulp.task('copy', ['copy_nexus', 'copy_tests', 'copy_bower', 'copy_opensans', 'copy_bootstrap', 'copy_bootstrap_slider']);
 
     gulp.task('copy_nexus', function (cb) {
         pump([
             gulp.src(['../nexus/nexusUI/dist/*.js']),
             gulp.dest('./build/js/lib')
+        ], cb);
+    });
+
+    gulp.task('copy_tests:watch', function() {
+        gulp.watch('./src/js/mocha_*.js', ['copy_tests']);
+    });
+
+    gulp.task('copy_tests', function (cb) {
+        pump([
+            gulp.src(['./src/js/mocha_*.js']),
+            gulp.dest('./build/js/tests')
         ], cb);
     });
 
