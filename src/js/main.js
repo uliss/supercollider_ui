@@ -1,4 +1,3 @@
-var io = require('socket.io-client');
 var menu = require('./menu.js');
 var alerts = require('./alerts.js');
 var ping = require('./ping.js');
