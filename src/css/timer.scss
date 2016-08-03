@@ -1,4 +1,3 @@
-
 $timer-color: #1DABB8;
 
 .timer-ref {
@@ -9,10 +8,10 @@ $timer-color: #1DABB8;
     color: $timer-color;
 }
 
-#timer1 {
-    // font-size: 14em;
+#timer_text {
+    font-size: 10em;
     text-align: center;
-    width:100vw;
+    width:95vw;
 }
 
 button.timer-button {

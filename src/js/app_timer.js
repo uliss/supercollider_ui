@@ -32,17 +32,8 @@ function timerControlSetStopped() {
     .attr("value", 0);
 }
 
-function TimerControl(element, timer) {
-    this.element = element;
-
-    this.start = $("<button>")
-    .attr("id", "timerStart")
-    .attr("value", 0)
-    .text("Start")
-    .addClass("btn")
-    .addClass("btn-lg")
-    .addClass("btn-info")
-    .addClass("timer-button")
+function TimerControl(timer) {
+    this.start = $("#timerStart")
     .click(function(){
         if($(this).attr("value") == 1) {
             timerControlSetStopped();
@@ -52,19 +43,11 @@ function TimerControl(element, timer) {
             timerControlSetStarted();
             timer.start();
         }
-    })
-    .appendTo(this.element);
+    });
 
-    $("<button>")
-    .attr("id", "timerReset")
-    .attr("value", 0)
-    .text("Reset")
-    .addClass("btn")
-    .addClass("btn-lg")
-    .addClass("btn-warning")
-    .addClass("timer-button")
-    .click(function(){ timer.reset(); })
-    .appendTo(this.element);
+    $("#timerReset").click(function() {
+        timer.reset();
+    });
 }
 
 function ServerTimer(element) {
@@ -153,10 +136,10 @@ function ClientTimer(element) {
 function main() {
     $(document).ready(
         function() {
-            var timer = new ServerTimer($("#timer1"));
-            var control = new TimerControl($("#timerControl"), timer);
+            var timer = new ServerTimer($("#timer_text"));
+            var control = new TimerControl(timer);
 
-            $("#timer1").fitText(0.5);
+            $("#timer_text").fitText(0.5);
         }
     );
 }

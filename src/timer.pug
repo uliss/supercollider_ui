@@ -8,9 +8,11 @@ html(lang="en-US")
     body
         include pug/header.pug
         .container-fluid
-            #timer1 --:--:--
+            #timer_text --:--:--
 
             #timerControl
+                button#timerStart.btn.btn-lg.btn-info.timer-button(type="button", value="0") Start
+                button#timerReset.btn.btn-lg.btn-warning.timer-button(type="button", value="0") Reset
 
         include pug/footer.pug
 
