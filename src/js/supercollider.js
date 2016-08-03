@@ -1,5 +1,4 @@
 var server = require('./server.js');
-var socket = server.socket;
 
 var DEFAULT_STATE = {'boot': false, 'record': false, 'mute': true, 'volume': 0 };
 var server_state = DEFAULT_STATE;
@@ -15,7 +14,7 @@ function subscribe_update(func) {
 }
 
 function init_socket_io() {
-    socket.on('/cli/supercollider', function(msg) {
+    server.on('/cli/supercollider', function(msg) {
         if(msg[0] == "state") {
             var json = JSON.parse(msg[1]);
             if(!json) {
@@ -36,7 +35,7 @@ function init_socket_io() {
 function check_for_promise(resolve, reject, error_msg, time) {
     if(!time) time = 2000;
 
-    socket.on('/cli/supercollider', function(msg) {
+    server.on('/cli/supercollider', function(msg) {
         if(msg[0] == "state") {
             var state = JSON.parse(msg[1]);
             if(!state) {
@@ -53,7 +52,7 @@ function check_for_promise(resolve, reject, error_msg, time) {
 // returns promise to get server state
 function promise_state() {
     return new Promise(function(resolve, reject) {
-        socket.emit('/node/supercollider', ['state?']);
+        server.send('/node/supercollider', ['state?']);
         check_for_promise(resolve, reject, "get state timeout!");
     });
 }
@@ -61,7 +60,7 @@ function promise_state() {
 // returns promise to mute server
 function promise_mute(mute_value) {
     return new Promise(function(resolve, reject) {
-        socket.emit('/node/supercollider', ['mute', mute_value]);
+        server.send('/node/supercollider', ['mute', mute_value]);
         check_for_promise(resolve, reject, "mute timeout!", 1000);
     });
 }
@@ -69,7 +68,7 @@ function promise_mute(mute_value) {
 // promise to boot server
 function promise_boot() {
     return new Promise(function(resolve, reject) {
-        socket.emit('/node/supercollider', ['boot', 1]);
+        server.send('/node/supercollider', ['boot', 1]);
         check_for_promise(resolve, reject, "boot timeout!", 3000);
     });
 }
@@ -89,7 +88,7 @@ function promise_get_booted() {
 // promise to quit server
 function promise_quit() {
     return new Promise(function(resolve, reject) {
-        socket.emit('/node/supercollider', ['boot', 0]);
+        server.send('/node/supercollider', ['boot', 0]);
         check_for_promise(resolve, reject, "quit timeout!", 3000);
     });
 }
@@ -97,7 +96,7 @@ function promise_quit() {
 // promise to start/stop record
 function promise_record(value) {
     return new Promise(function(resolve, reject) {
-        socket.emit('/node/supercollider', ['record', value]);
+        server.send('/node/supercollider', ['record', value]);
         check_for_promise(resolve, reject, "record timeout!", 2000);
     });
 }
@@ -211,7 +210,7 @@ function record_toggle(callback) {
 }
 
 function volume(v) {
-    socket.emit('/node/supercollider', ['volume', v]);
+    server.send('/node/supercollider', ['volume', v]);
 }
 
 // on loads binds to socket "state" message

@@ -1,22 +1,22 @@
 var io = require('socket.io-client');
+var utils = require('./utils.js');
 var socket = io();
 
 var debug = false;
 
 function send_to_sc(path) {
-    var args = [sc_path(path)].concat(Array.prototype.slice.call(arguments, 2));
+    var args = [utils.sc_path(path)].concat(Array.prototype.slice.call(arguments, 2));
     if(debug) console.log(args);
     socket.emit("/forward", args);
 }
 
 function from_sc(path, func) {
-    socket.on(cli_path(path), func);
+    socket.on(utils.cli_path(path), func);
 }
 
-function send(path) {
-    var args = Array.prototype.slice.call(arguments, 0);
-    if(args.length === 0)
-        socket.emit("path");
+function send(path, args) {
+    if(args === undefined)
+        socket.emit(path);
     else
         socket.emit(path, args);
 }
