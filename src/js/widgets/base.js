@@ -56,6 +56,7 @@ BaseWidget.prototype.parentId = function() { return this.params.parent; };
 BaseWidget.prototype.oscPath = function() { return this.params.oscPath; };
 BaseWidget.prototype.destroy = function() { log("method 'destroy' should be redefined in parent classes!"); };
 BaseWidget.prototype.show = function() { log("method 'show' should be redefined in parent classes!"); };
+BaseWidget.prototype.command = function() { log("method 'command' should be redefined in parent classes!"); };
 
 
 module.exports.BaseWidget = BaseWidget;

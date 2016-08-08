@@ -4,15 +4,12 @@ var jqw = require('./jqwidget.js');
 function Image(params) {
     jqw.JQueryWidget.call(this, "div", params);
     this.element.addClass("image");
+    this.img = $("<img/>").attr("src", params.url);
 
-    var img = $("<img/>")
-    .attr("src", params.url)
-    .attr("id", params.idx);
+    if(params.width) this.img.attr("width", params.width);
+    if(params.height) this.img.attr("height", params.height);
 
-    if(params.width) img.attr("width", params.width);
-    if(params.height) img.attr("height", params.height);
-
-    img.appendTo(this.element);
+    this.img.appendTo(this.element);
 }
 
 inherits(Image, jqw.JQueryWidget);
@@ -20,6 +17,10 @@ inherits(Image, jqw.JQueryWidget);
 function create(params) {
     return new Image(params);
 }
+
+Image.prototype.command = function(cmd) {
+    if(cmd.url) this.img.attr('src', cmd.url);
+};
 
 module.exports.Image = Image;
 module.exports.create = create;

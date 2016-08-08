@@ -45,7 +45,7 @@ function create(id, type, params) {
 function remove(id) {
     if(!id) {
         log("invalid widget id given");
-        return null;
+        return;
     }
 
     if(all_widgets[id]) {
@@ -57,6 +57,22 @@ function remove(id) {
     log("unknown widget with id:", id);
 }
 
+function command(id, params) {
+    if(!id) {
+        log("invalid widget id given");
+        return;
+    }
+
+    if(all_widgets[id]) {
+        log("command to widget:", id);
+        all_widgets[id].command(params);
+        return;
+    }
+
+    log("unknown widget with id:", id);
+}
+
 
 module.exports.create = create;
 module.exports.remove = remove;
+module.exports.command = command;
