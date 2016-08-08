@@ -16,14 +16,14 @@ var merge = require('merge-stream');
 module.exports.add = function() {
     gulp.task('jshint', function(cb) {
         pump([
-            gulp.src('./src/js/*.js'),
+            gulp.src(['./src/js/*.js', './src/js/widgets/*.js']),
             jshint(),
             jshint.reporter('jshint-stylish')
         ], cb);
     });
 
     gulp.task('jshint:watch', function(){
-        gulp.watch('./src/js/*.js', ['jshint']);
+        gulp.watch(['./src/js/*.js', './src/js/widgets/*.js'], ['jshint']);
     });
 
     gulp.task('sass', function (cb) {
@@ -50,7 +50,7 @@ module.exports.add = function() {
     });
 
     gulp.task('browserify:watch', function() {
-        gulp.watch('./src/js/*.js', ['browserify']);
+        gulp.watch(['./src/js/*.js', './src/js/widgets/*.js'], ['browserify']);
     });
 
     gulp.task('compressjs', function (cb) {

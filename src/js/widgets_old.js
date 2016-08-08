@@ -1,3 +1,136 @@
+// var nexus = require('nexus-ui');
+
+var widgets = {};
+
+function remove(id) {
+    widgets[id].destroy();
+    delete widgets[id];
+    $("#" + id).remove();
+}
+
+function command(msg) {
+    if(!msg.idx) {
+        console.log("ERROR: no widget id!");
+        return;
+    }
+
+    var el = $("#" + msg.idx);
+    if(!el.length) {
+        console.log("[command] element not found: " + msg.idx);
+        return;
+    }
+
+    var cmd = el.data("oncommand");
+    if(cmd) {
+        cmd("#" + msg.idx, msg);
+    }
+    else {
+        console.log("no function");
+    }
+}
+
+function create(msg) {
+    var params = msg;
+    // console.log(params);
+
+    if(!params.idx) console.log("ERROR: no widget id!");
+    if(widgets[params.idx]) {
+        console.log(widgets[params.idx]);
+        console.log("ERROR: widget already on UI:" + params.idx);
+        return;
+    }
+
+    var widget = null;
+
+    switch(params.type) {
+        case "button": {
+            widget = ui_make_button(params);
+        }
+        break;
+        case "crossfade": {
+            widget = ui_make_crossfade(params);
+        }
+        break;
+        case "knob": {
+            widget = ui_make_knob(params);
+        }
+        break;
+        case "pan": {
+            widget = ui_make_pan(params);
+        }
+        break;
+        case "slider": {
+            widget = ui_make_slider(params);
+        }
+        break;
+        case "newline": {
+            $("#ui-elements").append("<div/>");
+        }
+        break;
+        case "playcontrol": {
+            ui_make_playcontrol(params);
+        }
+        break;
+        case "matrix": {
+            widget = ui_make_matrix(params);
+        }
+        break;
+        case "toggle": {
+            widget = ui_make_toggle(params);
+        }
+        break;
+        case "pianoroll": {
+            widget = ui_make_pianoroll(params);
+        }
+        break;
+        case "life": {
+            widget = ui_make_life(params);
+        }
+        break;
+        case "image": {
+            ui_make_image(params);
+        }
+        break;
+        case "slideshow": {
+            ui_make_slideshow(params);
+        }
+        break;
+        case "position": {
+            widget = ui_make_position(params);
+        }
+        break;
+        case "tilt": {
+            widget = ui_make_tilt(params);
+        }
+        break;
+        case "motion": {
+            widget = ui_make_motion(params);
+        }
+        break;
+        case "multitouch": {
+            widget = ui_make_multitouch(params);
+        }
+        break;
+        case "number": {
+            widget = ui_make_number(params);
+        }
+        break;
+        case "sc_button": {
+            ui_make_sc_button(params);
+        }
+        break;
+        default:
+        alert("unknown widget");
+        break;
+    }
+
+    if(widget) {
+        console.log(widget);
+        widget.draw();
+        widgets[params.idx] = widget;
+    }
+}
+
 function sendUI2Node(path, msg) {
     socket.emit("/node" + path, msg);
 }
@@ -79,9 +212,9 @@ function ui_make_crossfade(params) {
 
 function ui_make_position(params) {
     if(!params.size)
-        params.w = 200;
+    params.w = 200;
     else
-        params.w = params.size;
+    params.w = params.size;
 
     params.h = params.w;
 
@@ -97,9 +230,9 @@ function ui_make_position(params) {
 
 function ui_make_tilt(params) {
     if(!params.size)
-        params.w = 150;
+    params.w = 150;
     else
-        params.w = params.size;
+    params.w = params.size;
 
     params.h = params.w;
 
@@ -115,9 +248,9 @@ function ui_make_tilt(params) {
 
 function ui_make_motion(params) {
     if(!params.size)
-        params.w = 150;
+    params.w = 150;
     else
-        params.w = params.size;
+    params.w = params.size;
 
     params.h = params.w;
 
@@ -133,9 +266,9 @@ function ui_make_motion(params) {
 
 function ui_make_multitouch(params) {
     if(!params.size)
-        params.w = 300;
+    params.w = 300;
     else
-        params.w = params.size;
+    params.w = params.size;
 
     params.h = params.w;
 
@@ -710,3 +843,8 @@ function ui_make_sc_button(params) {
 
     w.appendTo($('#' + params.parent));
 }
+
+module.exports.command = command;
+module.exports.remove = remove;
+module.exports.create = create;
+module.exports.make_widget = ui_make_widget;
