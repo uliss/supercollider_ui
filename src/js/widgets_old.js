@@ -43,14 +43,6 @@ function create(msg) {
     var widget = null;
 
     switch(params.type) {
-        case "button": {
-            widget = ui_make_button(params);
-        }
-        break;
-        case "crossfade": {
-            widget = ui_make_crossfade(params);
-        }
-        break;
         case "knob": {
             widget = ui_make_knob(params);
         }
@@ -175,57 +167,6 @@ function ui_bind_to_value(widget) {
     widget.on('value', function(data){
         sendUI2Node(widget.oscPath, [widget.canvasID, data]);
     });
-}
-
-function ui_make_button(params) {
-    // default values
-    if(!params.size)
-    params.w = params.h = 100;
-    else
-    params.w = params.h = params.size;
-
-    var widget = ui_make_widget("button", params);
-
-    widget.mode = "single";
-    widget.on('press', function(data) {
-        sendUI2Node(params.oscPath, [widget.canvasID, data]);
-    });
-
-    return widget;
-}
-
-function ui_make_crossfade(params) {
-    if(!params.size)
-    params.w = 200;
-    else
-    params.w = params.size;
-
-    params.h = params.w * 0.15;
-
-    var widget = ui_make_widget("crossfade", params);
-    widget.setFont(10);
-    widget.on('*', function(data) {
-        sendUI2Node(params.oscPath, [widget.canvasID, data.value]);
-    });
-    return widget;
-}
-
-function ui_make_position(params) {
-    if(!params.size)
-    params.w = 200;
-    else
-    params.w = params.size;
-
-    params.h = params.w;
-
-    if(params.width) params.w = params.width;
-    if(params.height) params.w = params.height;
-
-    var widget = ui_make_widget("position", params);
-    widget.on('*', function(data) {
-        sendUI2Node(params.oscPath, [widget.canvasID, data.x, data.y, data.state]);
-    });
-    return widget;
 }
 
 function ui_make_tilt(params) {

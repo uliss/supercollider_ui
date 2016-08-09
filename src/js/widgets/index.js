@@ -2,6 +2,7 @@ var crossfade = require('./crossfade.js');
 var nl = require('./nl.js');
 var image = require('./image.js');
 var button = require('./button.js');
+var position = require('./position.js');
 
 
 var create_functions = {};
@@ -14,6 +15,7 @@ function init() {
     create_functions.nl = nl;
     create_functions.image = image;
     create_functions.button = button;
+    create_functions.position = position;
 }
 
 function log(msg) {
