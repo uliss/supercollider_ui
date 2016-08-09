@@ -1,19 +1,35 @@
-var base = require('./base.js');
+var inherits = require('inherits');
+var nxw = require('./nexuswidget.js');
 
-function create(params) {
-    if(!params.size)
-    params.w = 200;
-    else
-    params.w = params.size;
+function prepareParams(params) {
+    if(!params.size) {
+        params.w = 200;
+    }
+    else {
+        params.w = params.size;
+    }
 
     params.h = params.w * 0.15;
 
-    var widget = ui_make_widget("crossfade", params);
-    widget.setFont(10);
-    widget.on('*', function(data) {
-        sendUI2Node(params.oscPath, [widget.canvasID, data.value]);
+    return params;
+}
+
+function Crossfade(params) {
+    nxw.NexusWidget.call(this, 'crossfade', prepareParams(params));
+    if(params.value) this.nx_widget.val.value = params.value;
+    this.nx_widget.draw();
+}
+
+inherits(Crossfade, nxw.NexusWidget);
+
+function create(params) {
+    var w = new Crossfade(params);
+    w.bind('*', function(data) {
+        // OSC: /node/ui [xfadeId, value]
+        w.send([w.id(), data.value]);
     });
-    return widget;
+
+    return w;
 }
 
 module.exports.create = create;
