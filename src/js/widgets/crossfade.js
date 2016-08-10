@@ -16,8 +16,6 @@ function prepareParams(params) {
 
 function Crossfade(params) {
     nxw.NexusWidget.call(this, 'crossfade', prepareParams(params));
-    if(params.value) this.nx_widget.val.value = params.value;
-    this.nx_widget.draw();
 }
 
 inherits(Crossfade, nxw.NexusWidget);

@@ -229,22 +229,6 @@ function ui_make_multitouch(params) {
     return widget;
 }
 
-function ui_make_number(params) {
-    if(!params.size)
-    params.w = 120;
-    else
-    params.w = params.size;
-
-    params.h = params.w * 0.5;
-
-    var widget = ui_make_widget("number", params);
-    if(params.rate) widget.rate = params.rate;
-    if(params.step) widget.step = params.step;
-    if(params.digits) widget.decimalPlaces = params.digits;
-    ui_bind_to_value(widget);
-    return widget;
-}
-
 
 function ui_make_matrix(params) {
     if(!params.size)

@@ -3,6 +3,7 @@ var nl = require('./nl.js');
 var image = require('./image.js');
 var button = require('./button.js');
 var position = require('./position.js');
+var number = require('./number.js');
 
 
 var create_functions = {};
@@ -16,6 +17,7 @@ function init() {
     create_functions.image = image;
     create_functions.button = button;
     create_functions.position = position;
+    create_functions.number = number;
 }
 
 function log(msg) {

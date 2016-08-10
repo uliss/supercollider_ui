@@ -19,7 +19,7 @@ function NexusWidget(type, params) {
 
 inherits(NexusWidget, base.BaseWidget);
 
-NexusWidget.prototype.show = function() {};
+NexusWidget.prototype.show = function() { this.nx_widget.draw(); };
 
 NexusWidget.prototype.bind = function(action, callback) {
     this.nx_widget.on(action, callback);

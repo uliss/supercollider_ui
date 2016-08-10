@@ -23,6 +23,7 @@ inherits(Position, nxw.NexusWidget);
 function create(params) {
     var w = new Position(params);
     w.bind('*', function(data) {
+        // OSC: /node/ui [ID, xPos, yPos, (move|click|release)]
         w.send([w.id(), data.x, data.y, data.state]);
     });
 
