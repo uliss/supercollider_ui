@@ -13,6 +13,7 @@ create_functions.pianoroll = require('./pianoroll.js');
 create_functions.matrix = require('./matrix.js');
 create_functions.slider = require('./slider.js');
 create_functions.tilt = require('./tilt.js');
+create_functions.motion = require('./motion.js');
 
 function log(msg) {
     var args = Array.prototype.slice.call(arguments, 0);
