@@ -254,19 +254,6 @@ function ui_make_matrix(params) {
     return widget;
 }
 
-function ui_make_knob(params) {
-    if(!params.size)
-    params.w = 100;
-    else
-    params.w = params.size;
-
-    params.h = params.w * 1.7;
-
-    var widget = ui_make_widget("dial", params);
-    ui_bind_to_value(widget);
-    return widget;
-}
-
 function ui_make_pan(params) {
     if(!params.size) params.w = 60;
 

@@ -4,6 +4,7 @@ var image = require('./image.js');
 var button = require('./button.js');
 var position = require('./position.js');
 var number = require('./number.js');
+var knob = require('./knob.js');
 
 
 var create_functions = {};
@@ -18,6 +19,7 @@ function init() {
     create_functions.button = button;
     create_functions.position = position;
     create_functions.number = number;
+    create_functions.knob = knob;
 }
 
 function log(msg) {
@@ -41,11 +43,16 @@ function create(id, type, params) {
         return null;
     }
 
-    // console.log(params);
-    var widget = create_functions[type].create(params);
-    all_widgets[id] = widget;
-    // console.log(widget);
-    widget.show();
+    try {
+        // console.log(params);
+        var widget = create_functions[type].create(params);
+        all_widgets[id] = widget;
+        // console.log(widget);
+        widget.show();
+    }
+    catch(e) {
+        log("error while creating widget:", e.name, e.message);
+    }
 }
 
 function remove(id) {

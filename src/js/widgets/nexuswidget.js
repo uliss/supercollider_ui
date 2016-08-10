@@ -25,4 +25,11 @@ NexusWidget.prototype.bind = function(action, callback) {
     this.nx_widget.on(action, callback);
 };
 
+NexusWidget.prototype.bindToValue = function() {
+    var $this = this;
+    this.nx_widget.on('value', function(data){
+        $this.send([$this.id(), data.value]);
+    });
+};
+
 module.exports.NexusWidget = NexusWidget;
