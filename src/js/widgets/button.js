@@ -23,3 +23,4 @@ function create(params) {
 }
 
 module.exports.create = create;
+module.exports.Button = Button;

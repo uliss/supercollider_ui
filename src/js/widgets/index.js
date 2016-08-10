@@ -5,6 +5,7 @@ create_functions.crossfade = require('./crossfade.js');
 create_functions.nl = require('./nl.js');
 create_functions.image = require('./image.js');
 create_functions.button = require('./button.js');
+create_functions.touchbutton = require('./touchbutton.js');
 create_functions.position = require('./position.js');
 create_functions.number = require('./number.js');
 create_functions.knob = require('./knob.js');
@@ -14,6 +15,7 @@ create_functions.matrix = require('./matrix.js');
 create_functions.slider = require('./slider.js');
 create_functions.tilt = require('./tilt.js');
 create_functions.motion = require('./motion.js');
+
 
 function log(msg) {
     var args = Array.prototype.slice.call(arguments, 0);
