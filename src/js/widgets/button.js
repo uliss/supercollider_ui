@@ -3,12 +3,13 @@ var nxw = require('./nexuswidget.js');
 
 function prepareParams(params) {
     params = nxw.makeSquared(params, 100);
-    params.mode = "single";
     return params;
 }
 
 function Button(params) {
     nxw.NexusWidget.call(this, 'button', prepareParams(params));
+    this.nx_widget.mode = "single";
+    this.nx_widget.init();
 }
 
 inherits(Button, nxw.NexusWidget);
