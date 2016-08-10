@@ -32,6 +32,17 @@ NexusWidget.prototype.bindToValue = function() {
     });
 };
 
+NexusWidget.prototype.update = function(params) {
+    $.extend(this.nx_widget, this.nx_widget, params);
+
+    if(params.value !== null) {
+        this.nx_widget.val.value = params.value;
+        this.nx_widget.value = params.value;
+    }
+
+    this.nx_widget.draw();
+};
+
 function makeSquared(params, defaultSize) {
     if(defaultSize === undefined)
         defaultSize = 100;

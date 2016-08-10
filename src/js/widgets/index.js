@@ -10,6 +10,7 @@ create_functions.number = require('./number.js');
 create_functions.knob = require('./knob.js');
 create_functions.toggle = require('./toggle.js');
 create_functions.pianoroll = require('./pianoroll.js');
+create_functions.matrix = require('./matrix.js');
 
 
 function log(msg) {
@@ -75,7 +76,22 @@ function command(id, params) {
     log("unknown widget with id:", id);
 }
 
+function update(id, params) {
+    if(!id) {
+        log("invalid widget id given");
+        return;
+    }
+
+    if(all_widgets[id]) {
+        // log("updating widget", id);
+        all_widgets[id].update(params);
+        return;
+    }
+
+    log("unknown widget with id:", id);
+}
 
 module.exports.create = create;
 module.exports.remove = remove;
 module.exports.command = command;
+module.exports.update = update;

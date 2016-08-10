@@ -19,19 +19,4 @@ $(document).ready(function() {
     socket.on('/cli/title', function(msg){
         $("h1 #title").html(msg);
     });
-
-    var widgets = {};
-
-    // handle widget update
-    socket.on('/cli/widget/update', function(msg){
-        console.log(msg);
-        if(!msg.idx) {
-            console.log("ERROR: no widget id!");
-            return;
-        }
-
-        if(msg.value) widgets[msg.idx].val.value = msg.value;
-        if(msg.label) widgets[msg.idx].label = msg.label;
-        widgets[msg.idx].draw();
-    });
 });

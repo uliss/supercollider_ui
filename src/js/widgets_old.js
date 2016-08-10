@@ -230,30 +230,6 @@ function ui_make_multitouch(params) {
 }
 
 
-function ui_make_matrix(params) {
-    if(!params.size)
-    params.w = 200;
-    else
-    params.w = params.size;
-
-    if(!params.row) params.row = 4;
-    if(!params.col) params.col = 4;
-
-    params.h = params.w;
-
-    var widget = ui_make_widget("matrix", params);
-    widget.row = params.row;
-    widget.col = params.col;
-    widget.init();
-    widget.on('*', function(data) {
-        if(data.row) {
-            sendUI2Node(params.oscPath, [widget.canvasID, data.row, data.col, data.level]);
-            // console.log(data.grid);
-        }
-    });
-    return widget;
-}
-
 function ui_make_pan(params) {
     if(!params.size) params.w = 60;
 
