@@ -13,7 +13,12 @@ function create(params) {
     var w = new TouchButton(params);
     w.bindAny(function(data) {
         if(data.press !== undefined) {
-            w.send("press", data.press);
+            if(data.x !== undefined) {
+                w.send("press", data.press, data.x, data.y);
+            }
+            else {
+                w.send("press", data.press);
+            }
         }
 
         if(data.x !== undefined) {

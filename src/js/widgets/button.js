@@ -8,7 +8,7 @@ function prepareParams(params) {
 
 function Button(params) {
     nxw.NexusWidget.call(this, 'button', prepareParams(params));
-    this.nx_widget.mode = "single";
+    this.nx_widget.mode = "toggle";
     this.nx_widget.init();
 }
 
