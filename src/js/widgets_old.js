@@ -363,31 +363,6 @@ function ui_make_slideshow(params) {
     cont.appendTo($("#" + params.parent));
 }
 
-function ui_make_slider(params) {
-    if(!params.size) {
-        params.w = 40;
-        params.h = 200;
-    }
-    else {
-        params.w = 40;
-        params.h = params.size;
-    }
-
-    if(params.horizontal) {
-        tmp = params.w;
-        params.w = params.h;
-        params.h = tmp;
-    }
-
-    var widget = ui_make_widget("slider", params);
-
-    if(!params.relative) widget.mode = "absolute";
-    if(params.horizontal) widget.hslider = true;
-
-    ui_bind_to_value(widget);
-    return widget;
-}
-
 function _widget_make_btn(text, icon) {
     var btn = $("<button>")
     .attr("value", 0)
