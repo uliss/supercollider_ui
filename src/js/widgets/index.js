@@ -5,6 +5,7 @@ var button = require('./button.js');
 var position = require('./position.js');
 var number = require('./number.js');
 var knob = require('./knob.js');
+var toggle = require('./toggle.js');
 
 
 var create_functions = {};
@@ -20,6 +21,7 @@ function init() {
     create_functions.position = position;
     create_functions.number = number;
     create_functions.knob = knob;
+    create_functions.toggle = toggle;
 }
 
 function log(msg) {

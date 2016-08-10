@@ -268,17 +268,6 @@ function ui_make_pan(params) {
     return widget;
 }
 
-function ui_make_toggle(params) {
-    if(!params.size)
-    params.w = params.h = 100;
-    else
-    params.w = params.h = params.size;
-
-    var widget = ui_make_widget("toggle", params);
-    ui_bind_to_value(widget);
-    return widget;
-}
-
 function ui_make_pianoroll(params) {
     if(!params.size) params.w = 600;
     params.w = params.size;

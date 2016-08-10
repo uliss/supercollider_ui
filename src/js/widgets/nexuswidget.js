@@ -27,9 +27,24 @@ NexusWidget.prototype.bind = function(action, callback) {
 
 NexusWidget.prototype.bindToValue = function() {
     var $this = this;
-    this.nx_widget.on('value', function(data){
-        $this.send([$this.id(), data.value]);
+    this.nx_widget.on('value', function(data) {
+        $this.send([$this.id(), data]);
     });
 };
 
+function makeSquared(params, defaultSize) {
+    if(defaultSize === undefined)
+        defaultSize = 100;
+
+    if(params.size !== undefined) {
+        params.w = params.h = params.size;
+    }
+    else {
+        params.w = params.h = defaultSize;
+    }
+
+    return params;
+}
+
 module.exports.NexusWidget = NexusWidget;
+module.exports.makeSquared = makeSquared;

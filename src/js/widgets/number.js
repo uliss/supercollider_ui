@@ -24,11 +24,7 @@ inherits(NumberWidget, nxw.NexusWidget);
 
 function create(params) {
     var w = new NumberWidget(params);
-    w.bind('value', function(data) {
-        // OSC: /node/ui [ID, value]
-        w.send([w.id(), data.value]);
-    });
-
+    w.bindToValue();
     return w;
 }
 
