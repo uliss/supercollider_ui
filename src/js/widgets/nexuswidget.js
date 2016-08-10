@@ -32,6 +32,10 @@ NexusWidget.prototype.bindToValue = function() {
     });
 };
 
+NexusWidget.prototype.bindAny = function(callback) {
+    this.nx_widget.on('*', callback);
+};
+
 NexusWidget.prototype.update = function(params) {
     $.extend(this.nx_widget, this.nx_widget, params);
 
