@@ -268,30 +268,6 @@ function ui_make_pan(params) {
     return widget;
 }
 
-function ui_make_pianoroll(params) {
-    if(!params.size) params.w = 600;
-    params.w = params.size;
-    params.h = params.w / 4.0;
-
-    var widget = ui_make_widget("keyboard", params);
-    if(!params.octaves) params.octaves = 3;
-    if(!params.mode) params.mode = "button";
-    if(!params.midibase) params.midibase = 48;
-
-    widget.octaves = params.octaves;
-    widget.mode = params.mode;
-    widget.midibase = params.midibase;
-
-    widget.init();
-
-    widget.on('midi', function(data) {
-        var v = data.split(' ');
-        send2Node(params.oscPath, [widget.canvasID, parseInt(v[0]), parseInt(v[1])]);
-    });
-
-    return widget;
-}
-
 function ui_make_life(params) {
     params.row = 10;
     params.col = 10;

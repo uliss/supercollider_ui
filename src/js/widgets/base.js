@@ -59,10 +59,12 @@ BaseWidget.prototype.oscPath = function() { return this.params.oscPath; };
 BaseWidget.prototype.destroy = function() { log("method 'destroy' should be redefined in parent classes!"); };
 BaseWidget.prototype.show = function() { log("method 'show' should be redefined in parent classes!"); };
 BaseWidget.prototype.command = function() { log("method 'command' should be redefined in parent classes!"); };
-BaseWidget.prototype.send = function(msg) {
+BaseWidget.prototype.send = function() {
+    var args = Array.prototype.slice.call(arguments);
+    args.unshift(this.id());
     var full_path = "/node" + this.oscPath();
     // log("socket send:", full_path, JSON.stringify(msg));
-    server.socket.emit(full_path, msg);
+    server.socket.emit(full_path, args);
 };
 
 

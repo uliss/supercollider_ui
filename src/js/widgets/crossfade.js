@@ -23,8 +23,7 @@ inherits(Crossfade, nxw.NexusWidget);
 function create(params) {
     var w = new Crossfade(params);
     w.bind('*', function(data) {
-        // OSC: /node/ui [xfadeId, value]
-        w.send([w.id(), data.value]);
+        w.send(data.value);
     });
 
     return w;

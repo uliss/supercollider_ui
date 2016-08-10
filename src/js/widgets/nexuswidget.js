@@ -28,7 +28,7 @@ NexusWidget.prototype.bind = function(action, callback) {
 NexusWidget.prototype.bindToValue = function() {
     var $this = this;
     this.nx_widget.on('value', function(data) {
-        $this.send([$this.id(), data]);
+        $this.send(data);
     });
 };
 

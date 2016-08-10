@@ -1,28 +1,16 @@
-var crossfade = require('./crossfade.js');
-var nl = require('./nl.js');
-var image = require('./image.js');
-var button = require('./button.js');
-var position = require('./position.js');
-var number = require('./number.js');
-var knob = require('./knob.js');
-var toggle = require('./toggle.js');
-
-
 var create_functions = {};
 var all_widgets = {};
 
-init();
+create_functions.crossfade = require('./crossfade.js');
+create_functions.nl = require('./nl.js');
+create_functions.image = require('./image.js');
+create_functions.button = require('./button.js');
+create_functions.position = require('./position.js');
+create_functions.number = require('./number.js');
+create_functions.knob = require('./knob.js');
+create_functions.toggle = require('./toggle.js');
+create_functions.pianoroll = require('./pianoroll.js');
 
-function init() {
-    create_functions.crossfade = crossfade;
-    create_functions.nl = nl;
-    create_functions.image = image;
-    create_functions.button = button;
-    create_functions.position = position;
-    create_functions.number = number;
-    create_functions.knob = knob;
-    create_functions.toggle = toggle;
-}
 
 function log(msg) {
     var args = Array.prototype.slice.call(arguments, 0);

@@ -15,12 +15,9 @@ inherits(Button, nxw.NexusWidget);
 
 function create(params) {
     var w = new Button(params);
-
     w.bind('press', function(data) {
-        // OSC: /node/ui [buttonId, (1|0)]
-        w.send([w.id(), data]);
+        w.send(data);
     });
-
     return w;
 }
 
