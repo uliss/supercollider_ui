@@ -30,6 +30,12 @@ function Slideshow(params) {
         if(Dx == 1) { widget.find(id).next(); }
         if(Dx == -1) { widget.find(id).prev(); }
     });
+
+    window.addEventListener('orientationchange', function() {
+        var win = $(window);
+        $bg.css("height", win.height() + "px");
+        $bg.css("width", win.width() + "px");
+    });
 }
 
 inherits(Slideshow, jqw.JQueryWidget);
