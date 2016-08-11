@@ -68,6 +68,5 @@ BaseWidget.prototype.send = function() {
     server.send(full_path, args);
 };
 
-
 module.exports.BaseWidget = BaseWidget;
 module.exports.ColorScheme = ColorScheme;

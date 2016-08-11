@@ -15,7 +15,7 @@ create_functions.matrix = require('./matrix.js');
 create_functions.slider = require('./slider.js');
 create_functions.tilt = require('./tilt.js');
 create_functions.motion = require('./motion.js');
-
+create_functions.life = require('./life.js');
 
 function log(msg) {
     var args = Array.prototype.slice.call(arguments, 0);
@@ -95,7 +95,12 @@ function update(id, params) {
     log("unknown widget with id:", id);
 }
 
+function find(id) {
+    return all_widgets[id];
+}
+
 module.exports.create = create;
 module.exports.remove = remove;
 module.exports.command = command;
 module.exports.update = update;
+module.exports.find = find;

@@ -43,7 +43,7 @@ module.exports.add = function() {
     gulp.task('browserify', function(cb) {
         pump([
             // { debug: true }
-            browserify('src/js/main.js').bundle(),
+            browserify('src/js/main.js').transform('brfs').bundle(),
             source('bundle.js'),
             gulp.dest('./build/js')
         ], cb);

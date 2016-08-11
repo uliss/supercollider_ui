@@ -13,6 +13,7 @@
   "author": "Serge Poltavski",
   "license": "GPL-3.0",
   "devDependencies": {
+    "brfs": "^1.4.3",
     "browserify": "^13.1.0",
     "grunt-bootlint": "^0.10.1",
     "grunt-bowercopy": "^1.2.3",

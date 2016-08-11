@@ -37,51 +37,6 @@ function ui_make_pan(params) {
     return widget;
 }
 
-function ui_make_life(params) {
-    params.row = 10;
-    params.col = 10;
-    if(!params.time) params.time = 1000;
-    var w = ui_make_matrix(params);
-    w.on('*', function(data) {
-        if(data.grid) {
-            console.log(data.grid);
-            sendUI2Node(params.oscPath, [w.canvasID, data.grid]);
-        }
-    });
-    for(var i = 0; i < 10; i++) { w.matrix[i].fill(0);}
-
-    var ctrl = $('<div class="ctrl"></div>');
-
-
-    var btn1 = $("<button>")
-    .attr("value", 0)
-    .text("Start")
-    .addClass("btn")
-    .addClass("btn-lg")
-    .addClass("btn-success")
-    .data("start", 1)
-    .click(
-        function() {
-            $(this).toggleClass("btn-success");
-            $(this).toggleClass("btn-danger");
-            if($(this).data("start") == 1) {
-                $(this).data("start", 0);
-                $(this).text("Stop");
-                $(this).data("intervalId", setInterval(w.life, params.time));
-            }
-            else {
-                $(this).data("start", 1);
-                $(this).text("Start");
-                clearInterval($(this).data("intervalId"));
-            }
-        }
-    )
-    .appendTo(ctrl);
-
-    $("#" + w.canvasID).after(ctrl);
-    return w;
-}
-
 function ui_make_slideshow(params) {
     // control ID
     var ctrl_sel = "#" + params.idx;
