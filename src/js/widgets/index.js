@@ -16,6 +16,7 @@ create_functions.slider = require('./slider.js');
 create_functions.tilt = require('./tilt.js');
 create_functions.motion = require('./motion.js');
 create_functions.life = require('./life.js');
+create_functions.slideshow = require('./slideshow.js');
 
 function log(msg) {
     var args = Array.prototype.slice.call(arguments, 0);
