@@ -59,6 +59,7 @@ function remove(id) {
     if(all_widgets[id]) {
         log("removing widget:", id);
         all_widgets[id].destroy();
+        delete all_widgets[id];
         return;
     }
 

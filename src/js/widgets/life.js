@@ -68,6 +68,12 @@ Life.prototype.toggle = function() {
     else this.start();
 };
 
+Life.prototype.destroy = function() {
+    clearInterval(this.interval);
+    this.control.remove();
+    this.constructor.super_.prototype.destroy.apply(this);
+};
+
 function create(params) {
     var w = new Life(prepareParams(params));
     w.bindAny(function(data) {

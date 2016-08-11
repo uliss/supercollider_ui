@@ -47,6 +47,10 @@ NexusWidget.prototype.update = function(params) {
     this.nx_widget.draw();
 };
 
+NexusWidget.prototype.destroy = function() {
+    this.nx_widget.destroy();
+};
+
 function makeSquared(params, defaultSize) {
     if(defaultSize === undefined)
         defaultSize = 100;
