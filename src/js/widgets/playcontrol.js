@@ -16,6 +16,7 @@ function PlayControl(params) {
     jqw.JQueryWidget.call(this, "div", params);
     this.control = $(tmpl);
 
+    this.display = this.control.find(".display");
     this.display_time = this.control.find(".display .time");
     this.display_part = this.control.find(".display .part");
     this.button_begin = this.control.find(".begin");
@@ -120,6 +121,20 @@ function PlayControl(params) {
     this.button_prev.click(function() { widget.find(id).send("prev"); });
     this.button_next.click(function() { widget.find(id).send("next"); });
     this.button_end.click(function() { widget.find(id).send("last"); });
+
+    if(!params.back) {
+        this.button_begin.remove();
+        this.button_prev.remove();
+    }
+
+    if(!params.forward) {
+        this.button_next.remove();
+        this.button_end.remove();
+    }
+
+    if(!params.display) {
+        this.display.remove();
+    }
 
     this.fsm.init();
 }
