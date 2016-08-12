@@ -26,6 +26,7 @@ function PlayControl(params) {
     this.button_stop = this.control.find(".stop");
     this.button_next = this.control.find(".next");
     this.button_end = this.control.find(".end");
+    this.position = "relative";
 
     this.control.appendTo(this.element);
 
@@ -136,10 +137,27 @@ function PlayControl(params) {
         this.display.remove();
     }
 
+    window.addEventListener('orientationchange', function() { widget.find(id).updatePosition(); });
+    $(window).resize(function() { widget.find(id).updatePosition(); });
+
     this.fsm.init();
 }
 
 inherits(PlayControl, jqw.JQueryWidget);
+
+PlayControl.prototype.updatePosition = function() {
+    if(this.position == "absBottom") {
+        this.control.css("position", "absolute");
+        var x_off = ($(window).width() - this.control.width()) / 2;
+        var y_off = $(window).height() - this.control.height();
+        this.control.css("left", x_off);
+        this.control.css("top", y_off);
+    }
+
+    if(this.position == "static") {
+        this.control.css("position", "static");
+    }
+};
 
 PlayControl.prototype.play = function() { this.fsm.play(); };
 PlayControl.prototype.pause = function() { this.fsm.pause(); };
@@ -160,6 +178,11 @@ PlayControl.prototype.command = function(cmd) {
             case "pause": this.pause(); break;
             default: log("unknown command:", cmd.state);
         }
+    }
+
+    if(cmd.position) {
+        this.position = cmd.position;
+        this.updatePosition();
     }
 };
 
