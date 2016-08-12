@@ -1,5 +1,5 @@
-var server = require('./server.js');
-var audio = require('./audio.js');
+var server = require('../server.js');
+var audio = require('../audio.js');
 
 var oscil = new audio.AudioToneGenerator();
 var global_freq = 442;

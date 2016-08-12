@@ -1,5 +1,5 @@
-var widgets = require('./widgets');
-var server = require('./server.js');
+var widgets = require('../widgets');
+var server = require('../server.js');
 
 function main() {
     server.on('/cli/widget/add', function(msg) {

@@ -1,4 +1,4 @@
-var latency = require('./latency.js');
+var latency = require('../latency.js');
 
 function run() {
     // button

@@ -1,5 +1,5 @@
 var fittext = require('fittext.js');
-var server = require('./server.js');
+var server = require('../server.js');
 
 function main() {
     $(document).ready(
