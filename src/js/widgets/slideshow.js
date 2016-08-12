@@ -3,6 +3,9 @@ var jqw = require('./jqwidget.js');
 var widget = require('./index.js');
 var tmpl = require('fs').readFileSync(__dirname + '/tmpl/slideshow.html', 'utf8');
 
+// user params:
+// noSwipe: - if defined, no swipe support
+// hideButtons: (true|false) - if true, hide turn button
 function Slideshow(params) {
     var id = params.idx;
     jqw.JQueryWidget.call(this, "div", params);
@@ -26,10 +29,17 @@ function Slideshow(params) {
         if(e.keyCode == 36) { widget.find(id).first(); }
     });
 
-    $('html').on('swipe', function(e, Dx, Dy) {
-        if(Dx == 1) { widget.find(id).next(); }
-        if(Dx == -1) { widget.find(id).prev(); }
-    });
+    if(params.noSwipe === undefined) {
+        $('html').on('swipe', function(e, Dx, Dy) {
+            if(Dx == 1) { widget.find(id).next(); }
+            if(Dx == -1) { widget.find(id).prev(); }
+        });
+    }
+
+    if(params.hideButtons) {
+        this.button_next.hide();
+        this.button_prev.hide();
+    }
 
     window.addEventListener('orientationchange', function() {
         var win = $(window);
