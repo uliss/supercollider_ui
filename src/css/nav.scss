@@ -2,9 +2,10 @@ $nav-bg-light: rgba(white, 0.1);
 $nav-txt-color: #333;
 
 .navbar {
-    background-color: transparent;
-    background: transparent;
-    border-color: transparent;
+    background-color: rgba(black, 0.1);
+    background: rgba(black, 0.1);
+    border-color: rgba(black, 0.1);
+    border: 0px;
     font-size: 20px;
 
     a {
