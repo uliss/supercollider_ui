@@ -50,7 +50,7 @@ module.exports.add = function() {
     });
 
     gulp.task('browserify:watch', function() {
-        gulp.watch(['./src/js/*.js', './src/js/widgets/*.js'], ['browserify']);
+        gulp.watch(['./src/js/*.js', './src/js/widgets/*.js', './src/js/widgets/tmpl/*.html'], ['browserify']);
     });
 
     gulp.task('compressjs', function (cb) {
@@ -137,7 +137,6 @@ module.exports.add = function() {
         pump([
             gulp.src([
                 './bower_components/jquery/dist/jquery*.js',
-                './bower_components/javascript-state-machine/state-machine*.js',
                 './bower_components/jq-swipe/dist/jq-swipe*.js',
             ]),
             gulp.dest('./build/js/lib')

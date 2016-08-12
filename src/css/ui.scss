@@ -27,34 +27,3 @@
     text-align: center;
     padding: auto auto;
 }
-
-.ui-playcontrol {
-    button {
-        margin: 0 5px;
-
-        span {
-            margin-right: 3px;
-        }
-    }
-
-    .label {
-        margin: 0 auto;
-        max-width: 600px;
-        text-align: center;
-        display: block;
-        font-size: 4em;
-        font-weight: normal;
-        font-family: Verdana;
-
-        .part {
-            display: inline-block;
-            width: 120px;
-            float: left;
-            border: 1px solid white;
-        }
-
-        .time {
-
-        }
-    }
-}

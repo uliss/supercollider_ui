@@ -12,11 +12,17 @@ function sum(list) { return list.reduce(add, 0);}
 
 function average(list) { return sum(list) / list.length; }
 
+function log(prefix, arg_list) {
+    var args = Array.prototype.slice.call(arg_list, 0);
+    console.log('[' + prefix + '] ' + args.join(' '));
+}
+
 // utils
 module.exports.cli_path = cli_path;
 module.exports.node_path = node_path;
 module.exports.sc_path = sc_path;
 module.exports.random_int = random_int;
+module.exports.log = log;
 
 
 // funcs

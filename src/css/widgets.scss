@@ -33,3 +33,40 @@
         float: right;
     }
 }
+
+.widget_playcontrol {
+    .buttons {
+        margin: 20px auto;
+
+        button {
+            margin: 0 5px;
+
+            span {
+                margin-right: 3px;
+            }
+        }
+
+        .begin, .prev, .next, .end {
+            background-color: transparent;
+        }
+    }
+
+    .display {
+        margin: 0 auto;
+        text-align: center;
+        display: block;
+        font-size: 4em;
+        font-weight: normal;
+        font-family: Verdana;
+
+        .part {
+            display: inline-block;
+            width: 120px;
+            border: 1px solid white;
+        }
+
+        .time {
+            display: inline-block;
+        }
+    }
+}

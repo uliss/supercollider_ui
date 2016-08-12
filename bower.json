@@ -21,7 +21,6 @@
     "jquery": "jquery#<3.0.0",
     "bootstrap-css": "~3.3.4",
     "open-sans-fontface": "^1.4.2",
-    "javascript-state-machine": "^2.3.5",
     "jq-swipe": "^1.1.0",
     "seiyria-bootstrap-slider": "^9.1.1"
   }
