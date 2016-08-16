@@ -30,7 +30,7 @@ function create(params) {
     if(params.cols) w.nx_widget.cols = params.cols;
     if(params.matrixLabels) w.nx_widget.matrixLabels = params.matrixLabels;
 
-    // w.nx_widget.init();
+    w.nx_widget.init();
     w.nx_widget.on('*', function(data) {
         w.send(JSON.stringify(data));
     });
