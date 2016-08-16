@@ -16,14 +16,22 @@ var merge = require('merge-stream');
 module.exports.add = function() {
     gulp.task('jshint', function(cb) {
         pump([
-            gulp.src(['./src/js/*.js', './src/js/widgets/*.js']),
+            gulp.src([
+                './src/js/*.js',
+                './src/js/app/*.js',
+                './src/js/modules/*.js',
+                './src/js/widgets/*.js']),
             jshint(),
             jshint.reporter('jshint-stylish')
         ], cb);
     });
 
     gulp.task('jshint:watch', function(){
-        gulp.watch(['./src/js/*.js', './src/js/widgets/*.js'], ['jshint']);
+        gulp.watch([
+            './src/js/*.js',
+            './src/js/app/*.js',
+            './src/js/modules/*.js',
+            './src/js/widgets/*.js'], ['jshint']);
     });
 
     gulp.task('sass', function (cb) {
@@ -50,7 +58,13 @@ module.exports.add = function() {
     });
 
     gulp.task('browserify:watch', function() {
-        gulp.watch(['./src/js/*.js', './src/js/widgets/*.js', './src/js/widgets/tmpl/*.html'], ['browserify']);
+        gulp.watch([
+            './src/js/*.js',
+            './src/js/app/*.js',
+            './src/js/modules/*.js',
+            './src/js/widgets/*.js',
+            './src/js/widgets/tmpl/*.html'
+        ], ['browserify']);
     });
 
     gulp.task('compressjs', function (cb) {
