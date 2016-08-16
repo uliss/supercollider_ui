@@ -8,6 +8,9 @@ var app_timer = require('./app/app_timer.js');
 var app_vlabel = require('./app/app_vlabel.js');
 var app_latency = require('./app/app_latency.js');
 
+var mod = {};
+mod.instr = require('./modules/instrument.js');
+
 page.init();
 menu.init();
 alerts.init();
@@ -18,3 +21,4 @@ window.app_timer_run = app_timer.main;
 window.app_vlabel_run = app_vlabel.main;
 window.app_latency_run = app_latency.main;
 window.app_ui_run = app_ui.main;
+window.app_module = function(name) { return mod[name]; };

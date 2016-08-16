@@ -8,9 +8,14 @@ html(lang="en-US")
     body
         include pug/header.pug
         .container-fluid
-            #ui-elements
+            .row
+                .col-md-offset-2.col-md-10
+                    div(data-module='instrument' data-name='utils.white-noise') White Noise
+                    div(data-module='instrument' data-name='utils.pink-noise') Pink Noise
+
 
         include pug/footer.pug
 
         script.
-            
+            app_module('instr')('utils.white-noise');
+            app_module('instr')('utils.pink-noise');
