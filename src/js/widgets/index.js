@@ -18,6 +18,7 @@ create_functions.motion = require('./motion.js');
 create_functions.life = require('./life.js');
 create_functions.slideshow = require('./slideshow.js');
 create_functions.playcontrol = require('./playcontrol.js');
+create_functions.multitouch = require('./multitouch.js');
 
 function log(msg) {
     var args = Array.prototype.slice.call(arguments, 0);
