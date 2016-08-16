@@ -21,7 +21,11 @@ inherits(Knob, nxw.NexusWidget);
 function create(params) {
     params = prepareParams(params);
     var w = new Knob(params);
+    if(params.gap) w.angleGap = params.gap;
     w.bindToValue();
+    w.nx_widget.angleGap = 0.0;
+    w.nx_widget.responsivity = 0.007;
+    w.nx_widget.draw();
     return w;
 }
 
