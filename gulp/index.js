@@ -136,6 +136,11 @@ module.exports.add = function() {
         ], cb);
     });
 
+    gulp.task('copy_nexus:watch', function() {
+        gulp.watch('../nexus/nexusUI/dist/*.js', ['copy_nexus']);
+    });
+
+
     gulp.task('copy_tests:watch', function() {
         gulp.watch('./src/js/mocha_*.js', ['copy_tests']);
     });
