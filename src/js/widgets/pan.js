@@ -7,7 +7,7 @@ function prepareParams(params) {
     else
     params.w = params.size;
 
-    params.h = params.w * 1.2;
+    params.h = params.w + 23;
 
     params.min = -1.0;
     params.max = 1.0;
@@ -30,6 +30,11 @@ function Pan(params) {
 
 inherits(Pan, knob.Knob);
 
+Pan.prototype.reset = function() {
+    this.nx_widget.set({'value': 0}, true);
+    this.nx_widget.init();
+};
+
 function create(params) {
     params = prepareParams(params);
     var w = new Pan(params);
@@ -37,7 +42,8 @@ function create(params) {
     w.nx_widget.angleGap = 0.25;
     w.nx_widget.responsivity = 0.009;
     // w.nx_widget.makeRoomForLabel();
-    w.nx_widget.canvas.ondblclick = function() { w.nx_widget.set({'value': 0}, true); w.nx_widget.init(); };
+    w.nx_widget.canvas.ondblclick = function() { w.reset(); };
+    $(w.nx_widget.canvas).on('doubleTap', function(){ w.reset(); });
     w.nx_widget.init();
     w.bindToValue();
     return w;

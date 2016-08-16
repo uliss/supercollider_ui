@@ -155,8 +155,7 @@ module.exports.add = function() {
     gulp.task('copy_bower', function (cb) {
         pump([
             gulp.src([
-                './bower_components/jquery/dist/jquery*.js',
-                './bower_components/jq-swipe/dist/jq-swipe*.js',
+                './bower_components/jquery/dist/jquery*.js'
             ]),
             gulp.dest('./build/js/lib')
         ], cb);

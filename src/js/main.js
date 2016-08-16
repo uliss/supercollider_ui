@@ -7,6 +7,7 @@ var app_tone = require('./app/app_tone.js');
 var app_timer = require('./app/app_timer.js');
 var app_vlabel = require('./app/app_vlabel.js');
 var app_latency = require('./app/app_latency.js');
+var touch = require('./touch.js');
 
 var mod = {};
 mod.instr = require('./modules/instrument.js');
