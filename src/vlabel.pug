@@ -5,7 +5,6 @@ doctype html
 html(lang="en-US")
     head
         include pug/meta.pug
-        script(src='/js/lib/jquery.fittext.min.js')
     body
         include pug/header.pug
         .container-fluid.vlabel
@@ -14,17 +13,4 @@ html(lang="en-US")
         include pug/footer.pug
 
         script(type='text/javascript').
-            $(document).ready(
-                function(){
-                    socket.on('/vlabel/set', function(msg){
-                        $("#label").html(msg);
-                        $("#label").fitText(0.5);
-                    });
-
-                    socket.on('/vlabel/css', function(msg){
-                        $("#label").css(msg[0], msg[1]);
-                    });
-                    // init
-                    $("#label").fitText(0.5);
-                }
-            );
+            app_vlabel_run();

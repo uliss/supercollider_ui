@@ -13,6 +13,7 @@
   "author": "Serge Poltavski",
   "license": "GPL-3.0",
   "devDependencies": {
+    "brfs": "^1.4.3",
     "browserify": "^13.1.0",
     "grunt-bootlint": "^0.10.1",
     "grunt-bowercopy": "^1.2.3",
@@ -37,6 +38,7 @@
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.5.4",
     "gulp-util": "^3.0.7",
+    "javascript-state-machine": "^2.3.5",
     "jshint-stylish": "^2.2.0",
     "load-grunt-tasks": "^3.3.0",
     "merge-stream": "^1.0.0",

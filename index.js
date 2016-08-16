@@ -7,6 +7,7 @@ var timer = require('./lib/timer');
 var server = require('./lib/server');
 var ui = require('./lib/ui');
 var utils = require('./lib/utils');
+var ping = require('./lib/ping');
 
 var NODE_PORT = 3000;
 var OSC_IN_PORT = 5000;
@@ -112,7 +113,10 @@ io.on('connection', function(socket){
     });
 
     server.bindSocket(io, socket, oscClient);
+    
     ui.bindClient(socket);
+
+    ping.bindSocket(io, socket);
 
     socket.on('/speakers/test', function(msg){
         // console.log("send " + msg);
@@ -138,9 +142,6 @@ io.on('connection', function(socket){
         postln(msg);
         oscClient.send('/concert/' + msg[0], msg[1]);
     });
-
-    // ping/pong NodeJS
-    socket.on('/ping', function(){ io.emit('/pong');});
 
     socket.on('disconnect', function(){
         postln('disconnected: ' + addr);

@@ -2,9 +2,10 @@ $nav-bg-light: rgba(white, 0.1);
 $nav-txt-color: #333;
 
 .navbar {
-    background-color: transparent;
-    background: transparent;
-    border-color: transparent;
+    background-color: rgba(black, 0.1);
+    background: rgba(black, 0.1);
+    border-color: rgba(black, 0.1);
+    border: 0px;
     font-size: 20px;
 
     a {
@@ -24,7 +25,7 @@ $nav-txt-color: #333;
         background: $nav-bg-light;
     }
 
-    .dropdown-menu { background: rgba(white, 0.25) }
+    .dropdown-menu { background: rgb(100, 100, 100) }
     .divider { background-color: #777 }
 }
 

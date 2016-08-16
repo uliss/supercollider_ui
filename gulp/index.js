@@ -16,14 +16,22 @@ var merge = require('merge-stream');
 module.exports.add = function() {
     gulp.task('jshint', function(cb) {
         pump([
-            gulp.src('./src/js/*.js'),
+            gulp.src([
+                './src/js/*.js',
+                './src/js/app/*.js',
+                './src/js/modules/*.js',
+                './src/js/widgets/*.js']),
             jshint(),
             jshint.reporter('jshint-stylish')
         ], cb);
     });
 
     gulp.task('jshint:watch', function(){
-        gulp.watch('./src/js/*.js', ['jshint']);
+        gulp.watch([
+            './src/js/*.js',
+            './src/js/app/*.js',
+            './src/js/modules/*.js',
+            './src/js/widgets/*.js'], ['jshint']);
     });
 
     gulp.task('sass', function (cb) {
@@ -43,14 +51,20 @@ module.exports.add = function() {
     gulp.task('browserify', function(cb) {
         pump([
             // { debug: true }
-            browserify('src/js/main.js').bundle(),
+            browserify('src/js/main.js').transform('brfs').bundle(),
             source('bundle.js'),
             gulp.dest('./build/js')
         ], cb);
     });
 
     gulp.task('browserify:watch', function() {
-        gulp.watch('./src/js/*.js', ['browserify']);
+        gulp.watch([
+            './src/js/*.js',
+            './src/js/app/*.js',
+            './src/js/modules/*.js',
+            './src/js/widgets/*.js',
+            './src/js/widgets/tmpl/*.html'
+        ], ['browserify']);
     });
 
     gulp.task('compressjs', function (cb) {
@@ -113,7 +127,7 @@ module.exports.add = function() {
         }
     }
 
-    gulp.task('copy', ['copy_nexus', 'copy_bower', 'copy_opensans', 'copy_bootstrap', 'copy_bootstrap_slider']);
+    gulp.task('copy', ['copy_nexus', 'copy_tests', 'copy_bower', 'copy_opensans', 'copy_bootstrap', 'copy_bootstrap_slider']);
 
     gulp.task('copy_nexus', function (cb) {
         pump([
@@ -122,11 +136,21 @@ module.exports.add = function() {
         ], cb);
     });
 
+    gulp.task('copy_tests:watch', function() {
+        gulp.watch('./src/js/mocha_*.js', ['copy_tests']);
+    });
+
+    gulp.task('copy_tests', function (cb) {
+        pump([
+            gulp.src(['./src/js/mocha_*.js']),
+            gulp.dest('./build/js/tests')
+        ], cb);
+    });
+
     gulp.task('copy_bower', function (cb) {
         pump([
             gulp.src([
                 './bower_components/jquery/dist/jquery*.js',
-                './bower_components/javascript-state-machine/state-machine*.js',
                 './bower_components/jq-swipe/dist/jq-swipe*.js',
             ]),
             gulp.dest('./build/js/lib')

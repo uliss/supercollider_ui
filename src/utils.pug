@@ -1,0 +1,21 @@
+doctype html
+// htmllint indent-width=2 line-end-style=false class-style=dash
+- var HEADER = "Utils"
+- var TITLE = "SuperCollider utilities"
+html(lang="en-US")
+    head
+        include pug/meta.pug
+    body
+        include pug/header.pug
+        .container-fluid
+            .row
+                .col-md-offset-2.col-md-10
+                    div(data-module='instrument' data-name='utils.white-noise') White Noise
+                    div(data-module='instrument' data-name='utils.pink-noise') Pink Noise
+
+
+        include pug/footer.pug
+
+        script.
+            app_module('instr')('utils.white-noise');
+            app_module('instr')('utils.pink-noise');

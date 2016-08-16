@@ -5,22 +5,16 @@ doctype html
 html(lang="en-US")
     head
         include pug/meta.pug
-        script(src='/js/lib/jquery.fittext.min.js')
     body
         include pug/header.pug
         .container-fluid
-            #timer1 --:--:--
+            #timer_text --:--:--
 
             #timerControl
+                button#timerStart.btn.btn-lg.btn-info.timer-button(type="button", value="0") Start
+                button#timerReset.btn.btn-lg.btn-warning.timer-button(type="button", value="0") Reset
 
         include pug/footer.pug
 
         script(type='text/javascript').
-            $(document).ready(
-                function(){
-                    var timer = new ServerTimer($("#timer1"));
-                    var control = new TimerControl($("#timerControl"), timer);
-
-                    $("#timer1").fitText(0.5);
-                }
-            );
+            app_timer_run();

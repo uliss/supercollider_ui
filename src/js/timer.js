@@ -1,3 +1,5 @@
+var server = require('./server.js');
+
 Number.prototype.toHHMMSS = function () {
     var seconds = Math.floor(this),
     hours = Math.floor(seconds / 3600);
@@ -11,93 +13,43 @@ Number.prototype.toHHMMSS = function () {
     return hours+':'+minutes+':'+seconds;
 };
 
-function timerControlSetStarted() {
-    $("#timerStart")
-    .removeClass("btn-info")
-    .addClass("active")
-    .addClass("btn-danger")
-    .text("Stop")
-    .attr("value", 1);
-}
-
-function timerControlSetStopped() {
-    $("#timerStart")
-    .addClass("btn-info")
-    .removeClass("active")
-    .removeClass("btn-danger")
-    .text("Start")
-    .attr("value", 0);
-}
-
-function TimerControl(element, timer) {
-    this.element = element;
-
-    this.start = $("<button>")
-    .attr("id", "timerStart")
-    .attr("value", 0)
-    .text("Start")
-    .addClass("btn")
-    .addClass("btn-lg")
-    .addClass("btn-info")
-    .addClass("timer-button")
-    .click(function(){
-        if($(this).attr("value") == 1) {
-            timerControlSetStopped();
-            timer.stop();
-        }
-        else {
-            timerControlSetStarted();
-            timer.start();
-        }
-    })
-    .appendTo(this.element);
-
-    $("<button>")
-    .attr("id", "timerReset")
-    .attr("value", 0)
-    .text("Reset")
-    .addClass("btn")
-    .addClass("btn-lg")
-    .addClass("btn-warning")
-    .addClass("timer-button")
-    .click(function(){ timer.reset(); })
-    .appendTo(this.element);
-}
-
 function ServerTimer(element) {
     this.socketPath = '/timer/server/control';
-    var n = 0;
+    this.currentTime = 0;
+    this.onStart = function(){};
+    this.onStop = function() {};
+
+    element.text(this.currentTime. toHHMMSS());
+    server.send(this.socketPath, 'get');
+
     var self = this;
 
-    element.text(n.toHHMMSS());
-    socket.emit(this.socketPath, 'get');
-
-    socket.on(this.socketPath, function(msg){
+    server.on(this.socketPath, function(msg){
         console.log(msg);
         switch(msg) {
             case 'start':
-            timerControlSetStarted();
+            self.onStart();
             break;
             case 'stop':
-            timerControlSetStopped();
+            self.onStop();
             break;
         }
     });
 
-    socket.on('/server/timer', function(msg) {
+    server.on('/server/timer', function(msg) {
         element.text(msg .toHHMMSS());
     });
 
     this.reset = function() {
-        socket.emit(this.socketPath, 'reset');
+        server.send(this.socketPath, 'reset');
     };
 
     this.start = function() {
-        socket.emit(this.socketPath, 'start');
+        server.send(this.socketPath, 'start');
     };
 
     this.stop = function() {
-        socket.emit(this.socketPath, 'stop');
+        server.send(this.socketPath, 'stop');
     };
 }
 
@@ -106,10 +58,10 @@ function ClientTimer(element) {
     this.timerId = null;
     this.element = element;
     this.socketPath = '/timer/client/control';
-    socket.emit(this.socketPath, 'debug');
+    server.send(this.socketPath, 'debug');
 
     var self = this;
-    socket.on('/client/timer', function(msg) {
+    server.on('/client/timer', function(msg) {
         self.currentTime = msg;
         self.update();
     });
@@ -121,18 +73,18 @@ function ClientTimer(element) {
             self.next();
         }, 1000);
 
-        socket.emit(this.socketPath, 'start');
+        server.send(this.socketPath, 'start');
     };
 
     this.stop = function() {
         clearInterval(this.timerId);
-        socket.emit(this.socketPath, 'stop');
+        server.send(this.socketPath, 'stop');
     };
 
     this.reset = function() {
         this.currentTime = 0;
         this.update();
-        socket.emit(this.socketPath, 'reset');
+        server.send(this.socketPath, 'reset');
     };
 
     this.update = function() {
@@ -146,3 +98,58 @@ function ClientTimer(element) {
 
     this.update();
 }
+
+function PlaycontrolTimer(element) {
+    this.currentTime = 0;
+    this.timerId = null;
+    this.element = element;
+    this.isRunning = false;
+
+    this.start = function() {
+        this.isRunning = true;
+        var self = this;
+        this.timerId = setInterval(function(){
+            self.next();
+        }, 1000);
+    };
+
+    this.pause = function() {
+        this.isRunning = false;
+        clearInterval(this.timerId);
+    };
+
+    this.stop = function() {
+        this.isRunning = false;
+        clearInterval(this.timerId);
+        this.reset();
+    };
+
+    this.reset = function() {
+        this.currentTime = 0;
+        this.update();
+    };
+
+    this.update = function() {
+        this.element.text(this.currentTime .toHHMMSS());
+    };
+
+    this.next = function() {
+        this.currentTime++;
+        this.update();
+    };
+
+    this.setTime = function(tm) {
+        this.currentTime = tm;
+        if(this.isRunning) {
+            this.pause();
+            this.start();
+        }
+        this.update();
+    };
+
+    this.update();
+}
+
+module.exports.ServerTimer = ServerTimer;
+module.exports.ClientTimer = ClientTimer;
+module.exports.PlayTimer = PlaycontrolTimer;
