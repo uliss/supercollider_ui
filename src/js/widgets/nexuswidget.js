@@ -25,6 +25,11 @@ NexusWidget.prototype.bind = function(action, callback) {
     this.nx_widget.on(action, callback);
 };
 
+NexusWidget.prototype.bindTo = function(name, callback) {
+    this.nx_widget.on(name, callback);
+};
+
+
 NexusWidget.prototype.bindToValue = function() {
     var $this = this;
     this.nx_widget.on('value', function(data) {
@@ -46,6 +51,16 @@ NexusWidget.prototype.update = function(params) {
 
     this.nx_widget.draw();
 };
+
+NexusWidget.prototype.setValue = function(value, transmit) {
+    this.nx_widget.set({'value': value}, transmit);
+};
+
+NexusWidget.prototype.transmitValue = function() {
+    this.nx_widget.transmit(this.nx_widget.val);
+};
+
+NexusWidget.prototype.value = function() { return this.nx_widget.val.value; };
 
 NexusWidget.prototype.destroy = function() {
     this.nx_widget.destroy();

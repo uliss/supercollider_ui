@@ -48,6 +48,7 @@ function create(id, type, params) {
         all_widgets[id] = widget;
         // console.log(widget);
         widget.show();
+        return widget;
     }
     catch(e) {
         log("error while creating widget:", e.name, e.message);
