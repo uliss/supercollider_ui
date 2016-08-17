@@ -16,22 +16,40 @@ function make_instrument_cont_id() {
 }
 
 /**
- * Parses elements parameters from attribute *data-param*
- * @param jquery element
+ * Parses parameters string
+ * @param string to parse
  * @return list of params: ["param1", 1.0, "param2", 0.2] for "param1=1.0,param2=0.2"
  */
-function parse_instrument_params(jq_el) {
+function parse_params(str) {
     var res = [];
-    var data = jq_el.attr('data-param');
-    if (!data) return res;
+    if (!str) return res;
 
-    _.each(data.split(','), function(i) {
+    _.each(str.split(','), function(i) {
         var pair = i.trim().split('=');
         res.push(pair[0].trim());
         res.push(parseFloat(pair[1].trim()));
     });
 
     return res;
+}
+
+/**
+ * Parses parameters from attribute *data-play-param*
+ * @see parse_params()
+ */
+function parse_play_params(jq_el) {
+    return parse_params(jq_el.attr('data-play-param'));
+}
+
+/**
+ * Parses parameters from attribute *data-play-param*
+ * @param jq_el - element
+ * @return release time
+ */
+function parse_release_params(jq_el) {
+    var t = jq_el.attr('data-release-param');
+    if(!t) return 0.1;
+    return parseFloat(t);
 }
 
 function Instrument(name) {
@@ -48,15 +66,11 @@ function Instrument(name) {
             btn.toggleClass('btn-primary');
             btn.toggleClass('btn-default');
             if (btn.hasClass('active')) {
-                var params = parse_instrument_params(el);
-                if (params.length > 0) {
-                    var args = [OSC_PATH, name, "init"].concat(params);
-                    server.send_to_sc.apply(this, args);
-                }
-
-                server.send_to_sc(OSC_PATH, name, "play", "amp", widget.value());
+                var params = parse_play_params(el);
+                server.send_to_sc.apply(this, [OSC_PATH, name, "play", "amp", widget.value(), "attackTime", 0.2].concat(params));
             } else {
-                server.send_to_sc(OSC_PATH, name, "release");
+                var tm = parse_release_params(el);
+                server.send_to_sc(OSC_PATH, name, "release", tm);
             }
         });
 
