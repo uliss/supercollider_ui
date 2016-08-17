@@ -6,7 +6,7 @@
 */
 
 ;(function($){
-	"use strict";
+	// "use strict";
 
 	var tapTimer,
 		moved     = false,   // flag to know if the finger had moved while touched the device
@@ -33,7 +33,7 @@
 	function setup(data, namespaces){
 	    var elm = $(this);
 
-		if( elm.data('tap_event') == true )
+		if( elm.data('tap_event') )
 			return;
 
 		elm.bind('touchend.tap', handler)

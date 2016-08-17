@@ -12,10 +12,13 @@ html(lang="en-US")
                 .col-md-offset-2.col-md-10
                     div.instrument(data-module='instrument' data-name='utils.white-noise')
                     div.instrument(data-module='instrument' data-name='utils.pink-noise')
-
+                    div.instrument(data-module='instrument' data-name='utils.sweep-tone')
+                    div.instrument(data-module='instrument' data-name='viola.test' data-param='pos=199,attackTime=2')
 
         include pug/footer.pug
 
         script.
             app_module('instr')('utils.white-noise');
             app_module('instr')('utils.pink-noise');
+            app_module('instr')('utils.sweep-tone');
+            app_module('instr')('viola.test');
