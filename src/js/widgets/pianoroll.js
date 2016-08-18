@@ -14,12 +14,13 @@ function prepareParams(params) {
 }
 
 function Pianoroll(params) {
-    nxw.NexusWidget.call(this, 'keyboard', prepareParams(params));
+    nxw.NexusWidget.call(this, 'keyboard', params);
 }
 
 inherits(Pianoroll, nxw.NexusWidget);
 
 function create(params) {
+    params = prepareParams(params);
     var w = new Pianoroll(params);
     w.nx_widget.octaves = params.octaves;
     w.nx_widget.mode = params.mode;

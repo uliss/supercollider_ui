@@ -11,12 +11,13 @@ function prepareParams(params) {
 }
 
 function Matrix(params) {
-    nxw.NexusWidget.call(this, 'matrix', prepareParams(params));
+    nxw.NexusWidget.call(this, 'matrix', params);
 }
 
 inherits(Matrix, nxw.NexusWidget);
 
 function create(params) {
+    params = prepareParams(params);
     var w = new Matrix(params);
     w.nx_widget.row = params.row;
     w.nx_widget.col = params.col;
