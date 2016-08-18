@@ -11,6 +11,7 @@ var touch = require('./touch.js');
 
 var mod = {};
 mod.instr = require('./modules/instrument.js');
+mod.piano = require('./modules/piano.js');
 
 page.init();
 menu.init();

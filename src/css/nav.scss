@@ -25,8 +25,14 @@ $nav-txt-color: #333;
         background: $nav-bg-light;
     }
 
-    .dropdown-menu { background: rgb(100, 100, 100) }
-    .divider { background-color: #777 }
+    .dropdown-menu {
+        background: $color-bg;
+        .text {
+            margin-left: 5px;
+        }
+    }
+
+    .divider { background-color: #555 }
 }
 
 .navbar-nav > li > a:focus {

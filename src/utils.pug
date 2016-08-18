@@ -16,6 +16,9 @@ html(lang="en-US")
                     div.instrument(data-module='instrument' data-name='viola.test'
                         data-play-param='pos=199,attackTime=3' data-release-param='2')
 
+            .row
+                .col-md-offset-2.col-md-10
+                    div(data-module='piano')
         include pug/footer.pug
 
         script.
@@ -23,3 +26,4 @@ html(lang="en-US")
             app_module('instr')('utils.pink-noise');
             app_module('instr')('utils.sweep-tone');
             app_module('instr')('viola.test');
+            app_module('piano')();

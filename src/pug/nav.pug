@@ -33,6 +33,9 @@ nav.navbar.transparent
                         span UI
             ul.nav.navbar-nav.navbar-right
                 li
+                    a.nav_ui_free_all(href="#" title="Free all synths")
+                        span.glyphicon.glyphicon-repeat
+                li
                     a#nav_ui_mute(href="#" title="Mute")
                         span.glyphicon.glyphicon-volume-up
                         | &nbsp;
@@ -44,16 +47,31 @@ nav.navbar.transparent
                     ul.dropdown-menu
                         li#nav_ui_volume_slider
                             label(for="nav_ui_volume_slider_input") Volume:
-                            input#nav_ui_volume_slider_input(type="text" name="somename" data-provide="slider" data-slider-min="-60" data-slider-max="0" data-slider-step="1" data-slider-value="0" data-slider-tooltip="always" data-slider-tooltip-position="top")
+                            input#nav_ui_volume_slider_input(type="text"
+                                name="somename"
+                                data-provide="slider"
+                                data-slider-min="-60"
+                                data-slider-max="0"
+                                data-slider-step="1"
+                                data-slider-value="0"
+                                data-slider-tooltip="always"
+                                data-slider-tooltip-position="top")
                         li.divider(role="separator")
                         li
                             a#nav_ui_record(href="#")
                                 span.glyphicon.glyphicon-record
-                                | &nbsp;
                                 span.text Record
-                        li.divider(role="separator")
+                        //- li.divider(role="separator")
                         li
                             a#nav_ui_boot(href="#")
                                 span.glyphicon.glyphicon-off
-                                | &nbsp;
                                 span.text Boot supercollider
+                        li.divider(role="separator")
+                        li
+                            a.nav_ui_free_all(href="#" title="Free all synths")
+                                span.glyphicon.glyphicon-repeat
+                                span.text Free all synths
+                        li
+                            a.nav_ui_stop_all(href="#" title="Stop all synths")
+                                span.glyphicon.glyphicon-stop
+                                span.text Stop all synths and functions

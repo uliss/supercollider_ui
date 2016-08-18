@@ -213,6 +213,14 @@ function volume(v) {
     server.send('/node/supercollider', ['volume', v]);
 }
 
+function stop_all() {
+    server.send('/node/supercollider', ['stop_all']);
+}
+
+function free_all() {
+    server.send('/node/supercollider', ['free_all']);
+}
+
 // on loads binds to socket "state" message
 init_socket_io();
 
@@ -229,3 +237,6 @@ module.exports.mute_toggle = mute_toggle;
 module.exports.volume = volume;
 
 module.exports.state_subscribe = subscribe_update;
+
+module.exports.stop_all = stop_all;
+module.exports.free_all = free_all;

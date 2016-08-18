@@ -68,6 +68,14 @@ function init_mute() {
     $("#nav_ui_mute").click(function(){ supercollider.mute_toggle(update_mute); });
 }
 
+function init_free_all() {
+    $(".nav_ui_free_all").click(function() { supercollider.free_all(); });
+}
+
+function init_stop_all() {
+    $(".nav_ui_stop_all").click(function() { supercollider.free_all(); });
+}
+
 function init_volume() {
     var el = $('#nav_ui_volume_slider_input');
 
@@ -90,6 +98,8 @@ function init_all() {
     $(document).ready(function(){
         supercollider.state_subscribe(update);
 
+        init_free_all();
+        init_stop_all();
         init_mute();
         init_volume();
         init_record();
