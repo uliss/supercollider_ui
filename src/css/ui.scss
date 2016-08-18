@@ -1,44 +1,50 @@
 .ui-ref {
-    background-color: #007b70 ! important;
+    background-color: #007b70 !important;
 }
-
 .ui {
     .widget-absolute {
-        position: absolute ! important;
+        position: absolute !important;
     }
-
     .knob-small {
         width: 120px;
         height: 120px;
     }
-
     .knob-medium {
         width: 250px;
         height: 250px;
     }
-
     .knob-large {
         width: 350px;
         height: 350px;
     }
 }
-
 #ui-elements {
     text-align: center;
-    padding: auto auto;
+    padding: auto;
 }
-
 .instrument {
-    padding: 5px 15px;
-
+    margin: 10px 0;
     button {
         width: 200px;
     }
-
     .slider {
         margin: 0 20px;
         display: inline-block;
         height: 40px;
+    }
+}
+#unit-simpleclick {
+    .nx {
+        vertical-align: middle;
+    }
 
+    canvas[nx=slider] {
+        margin-left: 20px;
+    }
+
+    input {
+        display: inline-block !important;
+        vertical-align: middle;
+        margin-left: 20px;
     }
 }

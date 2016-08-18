@@ -1,5 +1,6 @@
 var server = require('../server.js');
 var w = require('../widgets');
+var sl = require('../widgets/slider.js');
 var _ = require('underscore');
 var OSC_PATH = "/utils/instr";
 
@@ -80,22 +81,21 @@ function Instrument(name) {
     var amp_slider = $('<span>').attr('id', parent_id).addClass('slider');
     el.append(amp_slider);
 
-    var el_id = make_instrument_id();
-    var widget = w.create(el_id, 'slider', {
-        'oscPath': '/ui',
+    var widget = new sl.Slider({
         'size': 200,
-        'value': 0.0,
         'min': 0.0,
         'max': 1.0,
-        'id': el_id,
+        'id': make_instrument_id(),
         'parent': parent_id,
         'horizontal': true
     });
-    widget.nx_widget.removeAllListeners('value');
+    // widget.nx_widget.init();
+    // widget.nx_widget.removeAllListeners('value');
     widget.bindTo('value', function(amp) {
         server.send_to_sc(OSC_PATH, name, "set", "amp", amp);
     });
     widget.setValue(0.1);
+
 }
 
 function init(name) {

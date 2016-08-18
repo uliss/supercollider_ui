@@ -35,6 +35,12 @@ function BaseWidget(params) {
         return;
     }
 
+    this.params = this.prepareParams(params);
+    this.colorScheme = new ColorScheme(params.colors);
+    this.send_enable = true;
+}
+
+BaseWidget.prototype.prepareParams = function(params) {
     var defaults = {
         "x": 0,
         "y": 0,
@@ -49,9 +55,8 @@ function BaseWidget(params) {
         }
     };
 
-    this.params = $.extend({}, defaults, params);
-    this.colorScheme = new ColorScheme(params.colors);
-}
+    return $.extend({}, defaults, params);
+};
 
 BaseWidget.prototype.id = function() { return this.params.id; };
 BaseWidget.prototype.parentId = function() { return this.params.parent; };
@@ -61,11 +66,21 @@ BaseWidget.prototype.update = function() {  };
 BaseWidget.prototype.show = function() { log("method 'show' should be redefined in parent classes!"); };
 BaseWidget.prototype.command = function() { log("method 'command' should be redefined in parent classes!"); };
 BaseWidget.prototype.send = function() {
+    if(!this.send_enable) return;
+
     var args = Array.prototype.slice.call(arguments);
     args.unshift(this.id());
     var full_path = "/node" + this.oscPath();
     // log("socket send:", full_path, JSON.stringify(msg));
     server.send(full_path, args);
+};
+
+BaseWidget.prototype.sendEnable = function() {
+    this.send_enable = true;
+};
+
+BaseWidget.prototype.sendDisable = function() {
+    this.send_enable = false;
 };
 
 module.exports.BaseWidget = BaseWidget;

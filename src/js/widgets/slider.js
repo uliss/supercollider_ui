@@ -1,38 +1,51 @@
 var inherits = require('inherits');
 var nxw = require('./nexuswidget.js');
 
-function prepareParams(params) {
-    if(!params.size) {
+function Slider(params) {
+    nxw.NexusWidget.call(this, 'slider', params);
+
+    if (!this.params.relative)
+        this.nx_widget.mode = "absolute";
+    if (this.params.horizontal)
+        this.nx_widget.hslider = true;
+
+    this.nx_widget.draw();
+}
+
+inherits(Slider, nxw.NexusWidget);
+
+Slider.prototype.prepareParams = function(params) {
+    params = nxw.NexusWidget.prototype.prepareParams.call(this, params);
+
+    if (!params.size) {
         params.w = 40;
         params.h = 200;
-    }
-    else {
+    } else {
         params.w = 40;
         params.h = params.size;
     }
 
-    if(params.horizontal) {
+    if (params.horizontal) {
         tmp = params.w;
         params.w = params.h;
         params.h = tmp;
     }
 
-    return params;
-}
+    var defaults = {
+        'value': 0,
+        'min': 0,
+        'max': 1
+    };
 
-function Slider(params) {
-    nxw.NexusWidget.call(this, 'slider', prepareParams(params));
-}
-
-inherits(Slider, nxw.NexusWidget);
+    return $.extend({}, defaults, params);
+};
 
 function create(params) {
     var w = new Slider(params);
     w.bindToValue();
-    if(!params.relative) w.nx_widget.mode = "absolute";
-    if(params.horizontal) w.nx_widget.hslider = true;
     w.nx_widget.init();
     return w;
 }
 
 module.exports.create = create;
+module.exports.Slider = Slider;

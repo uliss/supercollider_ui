@@ -15,30 +15,48 @@ function NexusWidget(type, params) {
         this.nx_widget.val.value = this.params.value;
         this.nx_widget.value = this.params.value;
     }
+
+    this.bind_name = null;
 }
 
 inherits(NexusWidget, base.BaseWidget);
 
+NexusWidget.prototype.prepareParams = function(params) {
+    return base.BaseWidget.prototype.prepareParams.call(this, params);
+};
+
 NexusWidget.prototype.show = function() { this.nx_widget.draw(); };
 
 NexusWidget.prototype.bind = function(action, callback) {
-    this.nx_widget.on(action, callback);
+    console.log("ERROR: You should redefine 'bind' in child classes!");
+};
+
+NexusWidget.prototype.unbind = function() {
+    console.log("ERROR: You should redefine 'bind' in child classes!");
+    if(this.bind_name) {
+        this.unbindFrom(this.bind_name);
+    }
 };
 
 NexusWidget.prototype.bindTo = function(name, callback) {
+    bind_name = name;
     this.nx_widget.on(name, callback);
 };
 
+NexusWidget.prototype.unbindFrom = function(name) {
+    this.nx_widget.removeAllListeners(name);
+};
 
 NexusWidget.prototype.bindToValue = function() {
     var $this = this;
+    bind_name = 'value';
     this.nx_widget.on('value', function(data) {
         $this.send(data);
     });
 };
 
 NexusWidget.prototype.bindAny = function(callback) {
-    this.nx_widget.on('*', callback);
+    this.bindTo('*', callback);
 };
 
 NexusWidget.prototype.update = function(params) {
