@@ -7,6 +7,7 @@ var app_tone = require('./app/app_tone.js');
 var app_timer = require('./app/app_timer.js');
 var app_vlabel = require('./app/app_vlabel.js');
 var app_latency = require('./app/app_latency.js');
+var app_piece = require('./app/app_piece.js');
 var touch = require('./touch.js');
 
 var mod = {};
@@ -25,4 +26,5 @@ window.app_timer_run = app_timer.main;
 window.app_vlabel_run = app_vlabel.main;
 window.app_latency_run = app_latency.main;
 window.app_ui_run = app_ui.main;
+window.app_piece_run = app_piece.main;
 window.app_module = function(name) { return mod[name]; };

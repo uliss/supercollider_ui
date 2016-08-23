@@ -37,36 +37,56 @@
     .nx {
         vertical-align: middle;
     }
-
     canvas[nx=slider] {
         margin-left: 20px;
     }
-
     input {
         display: inline-block !important;
         vertical-align: middle;
         margin-left: 20px;
     }
 }
-
 button.btn-lg {
     .glyphicon {
         margin-right: 3px;
-        vertical-align: middle;
+        // vertical-align: middle;
     }
-
-    vertical-align: middle;
+    // vertical-align: middle;
 }
-
 #unit-recordplayer {
     max-width: 600px;
     background-color: lighten($color-bg, 10%);
-
     .aplayer-title {
         font-size: 16px;
     }
+    .aplayer-author,
+    .aplayer-time {
+        color: rgb(50, 50, 50);
+    }
+}
+#ui-piece-toolbar {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding-left: 20px;
+    /* Set the fixed height of the footer here */
+    height: 60px;
+    background-color: transparent;
+    // background-color: rgba(100, 10, 40, 50%);
+    text-align: left;
+    font-size: 14px;
 
-    .aplayer-author, .aplayer-time {
-        color: rgb(50, 50, 50)
+    .widget_playcontrol {
+        display: inline-block;
+    }
+
+    > div {
+        display: inline-block;
+    }
+}
+#ui-elements-modal {
+    .nx[nx="slider"] {
+        margin-left: 10px;
+        margin-right: 10px;
     }
 }

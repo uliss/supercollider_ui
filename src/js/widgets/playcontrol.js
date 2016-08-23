@@ -49,8 +49,7 @@ function PlayControl(params) {
         callbacks: {
             oninit: function(event, from, to, msg) {
             },
-            onplay:  function(event, from, to, msg) {
-                // log("play");
+            onplay:  function(event, from, to, send_flag) {
                 var w = widget.find(id);
                 var play = w.button_play;
                 var stop = w.button_stop;
@@ -69,10 +68,9 @@ function PlayControl(params) {
                 stop.removeClass('btn-default');
 
                 w.timer.start();
-                w.send("play");
+                if(send_flag === true) w.send("play");
             },
-            onstop:  function(event, from, to, msg) {
-                // log("stop");
+            onstop:  function(event, from, to, send_flag) {
                 var w = widget.find(id);
                 var play = w.button_play;
                 var stop = w.button_stop;
@@ -91,10 +89,9 @@ function PlayControl(params) {
                 stop.addClass('btn-default');
 
                 w.timer.stop();
-                w.send("stop");
+                if(send_flag === true) w.send("stop");
             },
-            onpause:  function(event, from, to, msg) {
-                // log("pause");
+            onpause:  function(event, from, to, send_flag) {
                 var w = widget.find(id);
                 var play = w.button_play;
                 var stop = w.button_stop;
@@ -109,14 +106,14 @@ function PlayControl(params) {
                 stop.addClass('btn-danger');
 
                 w.timer.pause();
-                w.send("pause");
+                if(send_flag === true) w.send("pause");
             },
         }
     });
 
-    this.button_play.click(function() { widget.find(id).play(); });
-    this.button_pause.click(function() { widget.find(id).pause(); });
-    this.button_stop.click(function() { widget.find(id).stop(); });
+    this.button_play.click(function() { widget.find(id).play(true); });
+    this.button_pause.click(function() { widget.find(id).pause(true); });
+    this.button_stop.click(function() { widget.find(id).stop(true); });
 
     this.button_begin.click(function() { widget.find(id).send("first"); });
     this.button_prev.click(function() { widget.find(id).send("prev"); });
@@ -159,9 +156,9 @@ PlayControl.prototype.updatePosition = function() {
     }
 };
 
-PlayControl.prototype.play = function() { this.fsm.play(); };
-PlayControl.prototype.pause = function() { this.fsm.pause(); };
-PlayControl.prototype.stop = function() { this.fsm.stop(); };
+PlayControl.prototype.play = function(opts) { this.fsm.play(opts); };
+PlayControl.prototype.pause = function(opts) { this.fsm.pause(opts); };
+PlayControl.prototype.stop = function(opts) { this.fsm.stop(opts); };
 
 PlayControl.prototype.command = function(cmd) {
     // log("command: " + JSON.stringify(cmd));
@@ -173,9 +170,9 @@ PlayControl.prototype.command = function(cmd) {
 
     if(cmd.state) {
         switch(cmd.state) {
-            case "play": this.play(); break;
-            case "stop": this.stop(); break;
-            case "pause": this.pause(); break;
+            case "play": this.play(false); break;
+            case "stop": this.stop(false); break;
+            case "pause": this.pause(false); break;
             default: log("unknown command:", cmd.state);
         }
     }

@@ -75,6 +75,10 @@ BaseWidget.prototype.send = function() {
     server.send(full_path, args);
 };
 
+BaseWidget.prototype.jQ = function() {
+    return $('#' + this.id());
+};
+
 BaseWidget.prototype.sendEnable = function() {
     this.send_enable = true;
 };

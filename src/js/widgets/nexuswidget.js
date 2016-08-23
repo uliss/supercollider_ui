@@ -22,6 +22,7 @@ function NexusWidget(type, params) {
 inherits(NexusWidget, base.BaseWidget);
 
 NexusWidget.prototype.prepareParams = function(params) {
+    if(params.id) params.name = params.id;
     return base.BaseWidget.prototype.prepareParams.call(this, params);
 };
 
