@@ -132,7 +132,10 @@ module.exports.add = function() {
         }
     }
 
-    gulp.task('copy', ['copy_nexus', 'copy_tests', 'copy_bower', 'copy_opensans', 'copy_bootstrap', 'copy_bootstrap_slider']);
+    gulp.task('copy', ['copy_nexus', 'copy_tests', 'copy_bower',
+        'copy_images', 'copy_opensans',
+        'copy_bootstrap', 'copy_bootstrap_slider'
+    ]);
 
     gulp.task('copy_nexus', function(cb) {
         pump([
@@ -163,6 +166,15 @@ module.exports.add = function() {
                 './bower_components/jquery/dist/jquery*.js'
             ]),
             gulp.dest('./build/js/lib')
+        ], cb);
+    });
+
+    gulp.task('copy_images', function(cb) {
+        pump([
+            gulp.src([
+                './src/css/cover-default.png'
+            ]),
+            gulp.dest('./build/css')
         ], cb);
     });
 

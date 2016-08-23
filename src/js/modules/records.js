@@ -33,13 +33,14 @@ function fill_records(callback) {
 
 function Records() {
     var id = 'unit-records';
-    var el = $('div[data-module^=records]').attr('id', id);
+    var parent = $('div[data-module^=records]').attr('id', id);
+    if (parent.length < 1) return;
+    parent.append($("<h2>Records</h2>"));
 
-    if (el.length < 1) return;
-
-    el.append($("<h2>Records</h2>"));
-    var cont = $('<div>').attr('id', 'unit-recordplayer').addClass('aplayer');
-    el.append(cont);
+    var cont = $('<div>')
+        .attr('id', 'unit-recordplayer')
+        .addClass('aplayer')
+        .appendTo(parent);
 
     var option = {
         element: document.getElementById('unit-recordplayer'), // Optional, player element
@@ -54,6 +55,18 @@ function Records() {
 
     fill_records(function(playlist) {
         option.music = playlist;
+        if (playlist.length === 0) {
+            console.log("no records");
+            cont.remove();
+            $("<div>")
+                .attr("role", "alert")
+                .addClass("alert")
+                .addClass("alert-info")
+                .text("No records...")
+                .appendTo(parent);
+            return;
+        }
+
         var ap = new aplayer.APlayer(option);
         ap.init();
     });
