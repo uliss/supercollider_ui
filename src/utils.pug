@@ -19,6 +19,10 @@ html(lang="en-US")
             .row
                 .col-md-offset-2.col-md-10
                     div(data-module='simpleclick')
+
+            .row
+                .col-md-offset-2.col-md-10
+                    div(data-module='records')
         include pug/footer.pug
 
         script.
@@ -27,3 +31,4 @@ html(lang="en-US")
             app_module('instr')('utils.sweep-tone');
             app_module('instr')('viola.test');
             app_module('simpleclick')();
+            app_module('records')();

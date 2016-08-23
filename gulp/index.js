@@ -8,7 +8,7 @@ var uglify = require('gulp-uglify');
 var pump = require('pump');
 var rename = require('gulp-rename');
 var pug = require('gulp-pug');
-var bootlint  = require('gulp-bootlint');
+var bootlint = require('gulp-bootlint');
 var htmllint = require('gulp-htmllint')
 var gutil = require('gulp-util');
 var merge = require('merge-stream');
@@ -20,31 +20,35 @@ module.exports.add = function() {
                 './src/js/*.js',
                 './src/js/app/*.js',
                 './src/js/modules/*.js',
-                './src/js/widgets/*.js']),
+                './src/js/widgets/*.js'
+            ]),
             jshint(),
             jshint.reporter('jshint-stylish')
         ], cb);
     });
 
-    gulp.task('jshint:watch', function(){
+    gulp.task('jshint:watch', function() {
         gulp.watch([
             './src/js/*.js',
             './src/js/app/*.js',
             './src/js/modules/*.js',
-            './src/js/widgets/*.js'], ['jshint']);
+            './src/js/widgets/*.js'
+        ], ['jshint']);
     });
 
-    gulp.task('sass', function (cb) {
+    gulp.task('sass', function(cb) {
         pump([
             gulp.src('./src/css/global.scss'),
             sourcemaps.init(),
-            sass({outputStyle: 'compact'}),
+            sass({
+                outputStyle: 'compact'
+            }),
             sourcemaps.write('.'),
             gulp.dest('./build/css')
         ], cb);
     });
 
-    gulp.task('sass:watch', function () {
+    gulp.task('sass:watch', function() {
         gulp.watch('./src/css/*.scss', ['sass']);
     });
 
@@ -67,11 +71,13 @@ module.exports.add = function() {
         ], ['browserify']);
     });
 
-    gulp.task('compressjs', function (cb) {
+    gulp.task('compressjs', function(cb) {
         pump([
             gulp.src('./build/js/bundle.js'),
             uglify(),
-            rename({ suffix: '.min' }),
+            rename({
+                suffix: '.min'
+            }),
             gulp.dest('./build/js')
         ], cb);
     });
@@ -80,10 +86,12 @@ module.exports.add = function() {
         gulp.watch('./build/js/bundle.js', ['compressjs']);
     });
 
-    gulp.task('pug', function (cb) {
+    gulp.task('pug', function(cb) {
         pump([
             gulp.src(['./src/*.pug']),
-            pug({ pretty: true }),
+            pug({
+                pretty: true
+            }),
             gulp.dest('./build')
         ], cb);
     });
@@ -94,9 +102,9 @@ module.exports.add = function() {
 
     gulp.task('bootlint', function() {
         return gulp.src('./build/*.html')
-        .pipe(bootlint({
-            loglevel: 'warning',
-        }));
+            .pipe(bootlint({
+                loglevel: 'warning',
+            }));
     });
 
     gulp.task('bootlint:watch', function() {
@@ -105,8 +113,7 @@ module.exports.add = function() {
 
     gulp.task('htmllint', function() {
         return gulp.src('./build/*.html')
-        .pipe(htmllint({
-        }, htmllintReporter));
+            .pipe(htmllint({}, htmllintReporter));
     });
 
     gulp.task('htmllint:watch', function() {
@@ -115,10 +122,8 @@ module.exports.add = function() {
 
     function htmllintReporter(filepath, issues) {
         if (issues.length > 0) {
-            issues.forEach(function (issue) {
-                if(issue.code == "E011") {
-                }
-                else {
+            issues.forEach(function(issue) {
+                if (issue.code == "E011") {} else {
                     gutil.log(gutil.colors.cyan('[gulp-htmllint] ') + gutil.colors.white(filepath + ' [' + issue.line + ',' + issue.column + ']: ') + gutil.colors.red('(' + issue.code + ') ' + issue.msg));
                 }
             });
@@ -129,7 +134,7 @@ module.exports.add = function() {
 
     gulp.task('copy', ['copy_nexus', 'copy_tests', 'copy_bower', 'copy_opensans', 'copy_bootstrap', 'copy_bootstrap_slider']);
 
-    gulp.task('copy_nexus', function (cb) {
+    gulp.task('copy_nexus', function(cb) {
         pump([
             gulp.src(['../nexus/nexusUI/dist/*.js']),
             gulp.dest('./build/js/lib')
@@ -145,14 +150,14 @@ module.exports.add = function() {
         gulp.watch('./src/js/mocha_*.js', ['copy_tests']);
     });
 
-    gulp.task('copy_tests', function (cb) {
+    gulp.task('copy_tests', function(cb) {
         pump([
             gulp.src(['./src/js/mocha_*.js']),
             gulp.dest('./build/js/tests')
         ], cb);
     });
 
-    gulp.task('copy_bower', function (cb) {
+    gulp.task('copy_bower', function(cb) {
         pump([
             gulp.src([
                 './bower_components/jquery/dist/jquery*.js'
@@ -163,22 +168,22 @@ module.exports.add = function() {
 
     gulp.task('copy_opensans', function() {
         var css = gulp.src(['./bower_components/open-sans-fontface/open-sans.css'])
-        .pipe(gulp.dest('./build/css/open-sans'));
+            .pipe(gulp.dest('./build/css/open-sans'));
 
         var fonts = gulp.src(['./bower_components/open-sans-fontface/fonts/*/*.{ttf,woff,eof,svg,woff2}'])
-        .pipe(gulp.dest('./build/css/open-sans/fonts'));
+            .pipe(gulp.dest('./build/css/open-sans/fonts'));
 
         return merge(css, fonts);
     });
 
-    gulp.task('copy_bootstrap', function () {
+    gulp.task('copy_bootstrap', function() {
         var fonts = gulp.src(['./bower_components/bootstrap-css/**/*.{js,css,map,ttf,eot,svg,woff,woff2}'])
-        .pipe(gulp.dest('./build/css/bootstrap'));
+            .pipe(gulp.dest('./build/css/bootstrap'));
     });
 
-    gulp.task('copy_bootstrap_slider', function (cb) {
+    gulp.task('copy_bootstrap_slider', function(cb) {
         var js = gulp.src('./bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider*.js')
-        .pipe(gulp.dest('./build/js/lib'));
+            .pipe(gulp.dest('./build/js/lib'));
 
         var css = gulp.src(['./bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider*.css']).
         pipe(gulp.dest('./build/css'));

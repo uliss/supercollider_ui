@@ -57,3 +57,16 @@ button.btn-lg {
 
     vertical-align: middle;
 }
+
+#unit-recordplayer {
+    max-width: 600px;
+    background-color: lighten($color-bg, 10%);
+
+    .aplayer-title {
+        font-size: 16px;
+    }
+
+    .aplayer-author, .aplayer-time {
+        color: rgb(50, 50, 50)
+    }
+}

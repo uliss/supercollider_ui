@@ -8,6 +8,7 @@ var server = require('./lib/server');
 var ui = require('./lib/ui');
 var utils = require('./lib/utils');
 var ping = require('./lib/ping');
+var sounds = require('./lib/sound.js');
 
 var NODE_PORT = 3000;
 var OSC_IN_PORT = 5000;
@@ -88,13 +89,14 @@ oscServer.on("/sc/concert/add", function(msg, rinfo) {
 
 server.init(app, oscServer, oscClient, io);
 ui.init(oscServer, oscClient, io);
+sounds.init();
 
 // init timer staff
 var serverTimer = new timer.ServerTimer(io, '/server/timer');
 
 io.on('connection', function(socket) {
     var addr = socket.request.connection.remoteAddress.substring(7);
-    if(!addr) addr = "127.0.0.1";
+    if (!addr) addr = "127.0.0.1";
 
     postln('connected:    ' + addr);
 
@@ -115,6 +117,8 @@ io.on('connection', function(socket) {
     ui.bindClient(socket);
 
     ping.bindSocket(io, socket);
+
+    sounds.bindSocket(io, socket);
 
     socket.on('/speakers/test', function(msg) {
         // console.log("send " + msg);

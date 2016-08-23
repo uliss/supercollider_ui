@@ -13,6 +13,7 @@ var mod = {};
 mod.instr = require('./modules/instrument.js');
 mod.piano = require('./modules/piano.js');
 mod.simpleclick = require('./modules/simpleclick.js');
+mod.records = require('./modules/records.js');
 
 page.init();
 menu.init();

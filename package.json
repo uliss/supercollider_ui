@@ -13,6 +13,7 @@
   "author": "Serge Poltavski",
   "license": "GPL-3.0",
   "devDependencies": {
+    "aplayer": "^1.5.0",
     "brfs": "^1.4.3",
     "browserify": "^13.1.0",
     "fittext.js": "^1.2.0",
