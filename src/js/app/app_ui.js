@@ -16,8 +16,11 @@ function bindOsc() {
 
         var w = widgets.create(msg.idx, msg.type, msg);
 
-        if(msg.collapse) {
-            w = w.jQ().detach().appendTo($('#ui-elements-modal'));
+        if (w.hidden) {
+            var target = $('#ui-elements-hidden');
+            if (target.length > 0) {
+                w = w.jQ().detach().appendTo(target);
+            }
         }
     });
 
