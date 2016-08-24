@@ -6,8 +6,14 @@ function Slider(params) {
 
     if (!this.params.relative)
         this.nx_widget.mode = "absolute";
-    if (this.params.horizontal)
+
+    if (this.params.horizontal) {
         this.nx_widget.hslider = true;
+    }
+    else { // offset for vertical slider
+        this.nx_widget.labelSize = 25;
+        this.nx_widget.labelOffsetY = 30 - this.params.h;
+    }
 
     this.nx_widget.draw();
 }
