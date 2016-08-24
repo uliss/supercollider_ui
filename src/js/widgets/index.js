@@ -1,3 +1,4 @@
+var _ = require('underscore');
 var create_functions = {};
 var all_widgets = {};
 
@@ -72,7 +73,7 @@ function remove(id) {
 }
 
 function removeAll() {
-    all_widgets.forEach(function(w) {
+    _.each(all_widgets, function(w, id) {
         w.destroy();
     });
 
