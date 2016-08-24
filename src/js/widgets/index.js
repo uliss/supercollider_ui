@@ -71,7 +71,7 @@ function remove(id) {
         return;
     }
 
-    log("unknown widget with id:", id);
+    log("[remove] unknown widget with id:", id);
 }
 
 function removeAll() {
@@ -89,12 +89,12 @@ function command(id, params) {
     }
 
     if(all_widgets[id]) {
-        log("command to widget:", id);
+        // log("command to widget:", id, p);
         all_widgets[id].command(params);
         return;
     }
 
-    log("unknown widget with id:", id);
+    log("[command] unknown widget with id:", id);
 }
 
 function update(id, params) {
@@ -109,7 +109,7 @@ function update(id, params) {
         return;
     }
 
-    log("unknown widget with id:", id);
+    log("[update] unknown widget with id:", id);
 }
 
 function find(id) {

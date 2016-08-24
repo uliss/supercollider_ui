@@ -41,11 +41,8 @@ function bindOsc() {
         // move to layout
         if(layoutId) {
             var layout = $('#' + w.realParent).find('#' + layoutId);
-            console.log(layout);
             if(layout.length > 0) {
                 w.jQ().detach().appendTo(layout);
-            } {
-                console.log("layout element not found: " + layoutId);
             }
         }
     });

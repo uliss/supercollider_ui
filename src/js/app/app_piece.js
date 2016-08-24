@@ -10,12 +10,16 @@ function create_ui() {
         var path = $("#ui-modal-load").data("osc_path");
         if (path)
             server.send_to_sc(path, "load");
+        else
+            console.log("[app_piece.js] no osc path set");
     });
 
     $("#ui-modal-save").click(function() {
         var path = $("#ui-modal-load").data("osc_path");
         if (path)
             server.send_to_sc(path, "save");
+        else
+            console.log("[app_piece.js] no osc path set");
     });
 
     server.on(cli_path('/app/piece/set_osc_path'), function(msg) {
