@@ -4,8 +4,8 @@ var nxw = require('./nexuswidget.js');
 function Slider(params) {
     nxw.NexusWidget.call(this, 'slider', params);
 
-    if (!this.params.relative)
-        this.nx_widget.mode = "absolute";
+    if (this.params.mode)
+        this.nx_widget.mode = this.params.mode;
 
     if (this.params.horizontal) {
         this.nx_widget.hslider = true;
