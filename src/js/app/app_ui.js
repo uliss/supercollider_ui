@@ -38,9 +38,8 @@ function bindOsc() {
         widgets.remove(id);
     });
 
-    server.on(PATH_REMOVE_ALL, function(id) {
-        if (!id) console.log("ERROR: no widget id!");
-        widgets.remove(id);
+    server.on(PATH_REMOVE_ALL, function() {
+        widgets.removeAll();
     });
 
     server.on(PATH_COMMAND, function(msg) {
