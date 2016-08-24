@@ -92,6 +92,8 @@ button.btn-lg {
     min-width: 30px;
     min-height: 30px;
     padding: 5px;
+    display: inline-block;
+    vertical-align: top;
     .title {
         text-align: left;
         font-style: italic;

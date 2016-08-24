@@ -3,7 +3,7 @@ var server = require('../server.js');
 var utils = require('../utils.js');
 var cli_path = utils.cli_path;
 
-var HIDDEN_TARGET = '#ui-elements-hidden';
+var HIDDEN_TARGET = 'ui-elements-hidden';
 var PATH_ADD = cli_path('/widget/add');
 var PATH_UPDATE = cli_path('/widget/update');
 var PATH_REMOVE = cli_path('/widget/remove');
@@ -30,20 +30,22 @@ function bindOsc() {
         w.realParent = w.parentId();
         if (w.hidden) { // trick to create hidden nexusUI widgets
             // first we create it on visible parent, then move to hidden
-            var target = $(HIDDEN_TARGET);
+            var target = $('#' + HIDDEN_TARGET);
             if (target.length > 0) {
-                w = w.jQ().detach().appendTo(target);
+                w.jQ().detach().appendTo(target);
                 w.realParent = HIDDEN_TARGET;
             }
         }
 
+        var layoutId = w.layout;
         // move to layout
-        if(w.layout) {
-            var layout = $('#' + w.realParent).find('#' + w.layout);
+        if(layoutId) {
+            var layout = $('#' + w.realParent).find('#' + layoutId);
+            console.log(layout);
             if(layout.length > 0) {
                 w.jQ().detach().appendTo(layout);
             } {
-                console.log("layout element not found: " + w.layout);
+                console.log("layout element not found: " + layoutId);
             }
         }
     });
