@@ -10,12 +10,8 @@ function Slider(params) {
     if (this.params.horizontal) {
         this.nx_widget.hslider = true;
     }
-    else { // offset for vertical slider
-        this.nx_widget.labelSize = 25;
-        this.nx_widget.labelOffsetY = 30 - this.params.h;
-    }
 
-    this.nx_widget.draw();
+    this.nx_widget.init();
 }
 
 inherits(Slider, nxw.NexusWidget);
@@ -24,10 +20,10 @@ Slider.prototype.prepareParams = function(params) {
     params = nxw.NexusWidget.prototype.prepareParams.call(this, params);
 
     if (!params.size) {
-        params.w = 40;
+        params.w = 36;
         params.h = 200;
     } else {
-        params.w = 40;
+        params.w = 36;
         params.h = params.size;
     }
 

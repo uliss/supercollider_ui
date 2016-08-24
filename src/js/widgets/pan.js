@@ -2,12 +2,10 @@ var inherits = require('inherits');
 var knob = require('./knob.js');
 
 function prepareParams(params) {
-    if(!params.size)
-    params.w = 60;
+    if (!params.size)
+        params.w = 60;
     else
-    params.w = params.size;
-
-    params.h = params.w + 23;
+        params.w = params.size;
 
     params.min = -1.0;
     params.max = 1.0;
@@ -19,32 +17,40 @@ function prepareParams(params) {
         borderhl: "#FFF"
     };
 
-    params.gap = 0.25;
-
     return params;
 }
 
 function Pan(params) {
     knob.Knob.call(this, params);
+    this.nx_widget.widgetStyle = 'handle';
+    this.nx_widget.angleGap = 0.25;
+    this.nx_widget.responsivity = 0.009;
+
+    var $this = this;
+
+    this.nx_widget.canvas.ondblclick = function(event) {
+        $this.reset();
+    };
+
+    $(this.nx_widget.canvas).on('doubleTap', function() {
+        $this.reset();
+    });
+
+    this.nx_widget.init();
 }
 
 inherits(Pan, knob.Knob);
 
 Pan.prototype.reset = function() {
-    this.nx_widget.set({'value': 0}, true);
+    this.nx_widget.set({
+        'value': 0
+    }, true);
     this.nx_widget.init();
 };
 
 function create(params) {
     params = prepareParams(params);
     var w = new Pan(params);
-    w.nx_widget.widgetStyle = 'handle';
-    w.nx_widget.angleGap = 0.25;
-    w.nx_widget.responsivity = 0.009;
-    // w.nx_widget.makeRoomForLabel();
-    w.nx_widget.canvas.ondblclick = function() { w.reset(); };
-    $(w.nx_widget.canvas).on('doubleTap', function(){ w.reset(); });
-    w.nx_widget.init();
     w.bindToValue();
     return w;
 }

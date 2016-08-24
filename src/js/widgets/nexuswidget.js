@@ -5,6 +5,9 @@ function NexusWidget(type, params) {
     base.BaseWidget.call(this, params);
     this.nx_widget = nx.add(type, this.params);
     this.nx_widget.label = this.params.label;
+    if(this.params.labelSize) this.nx_widget.labelSize = this.params.labelSize;
+    // resize after label change (!)
+    this.nx_widget.resize(this.params.w, this.params.h);
     this.nx_widget.oscPath = this.params.oscPath;
     this.nx_widget.colors = $.extend({}, this.nx_widget.colors, this.colorScheme);
 
