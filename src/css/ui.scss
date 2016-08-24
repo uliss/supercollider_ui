@@ -91,9 +91,10 @@ button.btn-lg {
 .ui-layout-box {
     min-width: 30px;
     min-height: 30px;
-    padding: 5px;
+    padding: 0 5px;
     display: inline-block;
     vertical-align: top;
+    margin: 0 10px;
     .title {
         text-align: left;
         font-style: italic;
@@ -103,12 +104,12 @@ button.btn-lg {
     }
 }
 .ui-layout-hbox {
-    canvas {
+    canvas, .ui-layout-vbox {
         display: inline-block;
     }
 }
 .ui-layout-vbox {
-    canvas {
+    canvas, .ui-layout-hbox {
         display: block;
     }
 }
