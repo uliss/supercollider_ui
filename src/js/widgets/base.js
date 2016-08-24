@@ -37,8 +37,6 @@ function ColorScheme(params) {
         this.border = params.borderColor;
         this.borderhl = utils.shadeColor(this.border, -0.3);
     }
-
-    console.log(this);
 }
 
 ColorScheme.prototype.create = function(params) {
