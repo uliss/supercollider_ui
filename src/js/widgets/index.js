@@ -71,6 +71,14 @@ function remove(id) {
     log("unknown widget with id:", id);
 }
 
+function removeAll() {
+    all_widgets.forEach(function(w) {
+        w.destroy();
+    });
+
+    all_widgets = {};
+}
+
 function command(id, params) {
     if(!id) {
         log("invalid widget id given");
@@ -107,6 +115,7 @@ function find(id) {
 
 module.exports.create = create;
 module.exports.remove = remove;
+module.exports.removeAll = removeAll;
 module.exports.command = command;
 module.exports.update = update;
 module.exports.find = find;
