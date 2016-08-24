@@ -1,4 +1,5 @@
 var server = require('../server.js');
+var utils = require('../utils.js');
 
 function log(msg) {
     var args = Array.prototype.slice.call(arguments, 0);
@@ -22,6 +23,22 @@ function ColorScheme(params) {
     if(params.labelColor) {
         this.black = params.labelColor;
     }
+
+    if(params.backgroundColor) {
+        this.fill = params.backgroundColor;
+    }
+
+    if(params.color) {
+        this.accent = params.color;
+        this.accenthl = utils.shadeColor(this.accent, 0.2);
+    }
+
+    if(params.borderColor) {
+        this.border = params.borderColor;
+        this.borderhl = utils.shadeColor(this.border, -0.3);
+    }
+
+    console.log(this);
 }
 
 ColorScheme.prototype.create = function(params) {
