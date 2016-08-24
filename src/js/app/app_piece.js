@@ -1,47 +1,36 @@
-var widgets = require('../widgets');
-var sl = require('../widgets/slider.js');
+var app_ui = require('./app_ui.js');
 var server = require('../server.js');
+var utils = require('../utils.js');
+var cli_path = utils.cli_path;
 
 var done = false;
-var slider;
 
 function create_ui() {
-    if (done) return;
-    done = true;
-
-    server.on('/cli/widget/add', function(msg) {
-        if(!msg.idx) { console.log("ERROR: no widget id!"); return; }
-        if(!msg.type) { console.log("ERROR: no widget type!"); return; }
-        msg.id = msg.idx;
-
-        var w = widgets.create(msg.idx, msg.type, msg);
-        if(msg.collapse) {
-            w.jQ().detach().appendTo($('#ui-elements-modal'));
-        }
+    $("#ui-modal-load").click(function() {
+        var path = $("#ui-modal-load").data("osc_path");
+        if (path)
+            server.send_to_sc(path, "load");
     });
 
-    server.on('/cli/widget/remove', function(id) {
-        if(!id) console.log("ERROR: no widget id!");
-        widgets.remove(id);
+    $("#ui-modal-save").click(function() {
+        var path = $("#ui-modal-load").data("osc_path");
+        if (path)
+            server.send_to_sc(path, "save");
     });
 
-    server.on('/cli/widget/command', function(msg) {
-        if(!msg.idx) { console.log("ERROR: no widget id!"); return; }
-        widgets.command(msg.idx, msg);
+    server.on(cli_path('/app/piece/set_osc_path'), function(msg) {
+        var path = msg[0].slice(3);
+        $("#ui-modal-load").data("osc_path", path);
+        $("#ui-modal-save").data("osc_path", path);
     });
 
-    // handle widget update
-    server.on('/cli/widget/update', function(msg) {
-        if(!msg.idx) { console.log("ERROR: no widget id!"); return; }
-        widgets.update(msg.idx, msg);
-    });
+    app_ui.bindOsc();
 }
 
 function main() {
     create_ui();
-    $(".modal").on("shown.bs.modal",function(event) {
+    $(".modal").on("shown.bs.modal", function(event) {
         event.stopPropagation();
-        console.log("stop");
     });
 }
 
