@@ -12,11 +12,16 @@ function ColorScheme(params) {
         "border": "#e3e3e3",
         "borderhl": "#727272",
         "fill": "#eeeeee",
-        "text": "#000000"
+        "text": "#000000",
+        "black": "#000000"
     };
 
-    var new_params = $.extend({}, defaults, params);
+    var new_params = $.extend({}, defaults, params.colors);
     this.create(new_params);
+
+    if(params.labelColor) {
+        this.black = params.labelColor;
+    }
 }
 
 ColorScheme.prototype.create = function(params) {
@@ -40,7 +45,7 @@ function BaseWidget(params) {
     }
 
     this.params = this.prepareParams(params);
-    this.colorScheme = new ColorScheme(params.colors);
+    this.colorScheme = new ColorScheme(this.params);
     this.send_enable = true;
 }
 
@@ -49,14 +54,7 @@ BaseWidget.prototype.prepareParams = function(params) {
         "x": 0,
         "y": 0,
         "parent": "ui-elements",
-        "oscPath": "/ui",
-        "colors": {
-            "accent": "#ff5500",
-            "accenthl": "#ff6f26",
-            "border": "#e3e3e3",
-            "borderhl": "#727272",
-            "fill": "#eeeeee",
-        }
+        "oscPath": "/ui"
     };
 
     return $.extend({}, defaults, params);
