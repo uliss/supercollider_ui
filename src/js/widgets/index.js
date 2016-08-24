@@ -21,6 +21,8 @@ create_functions.slideshow = require('./slideshow.js');
 create_functions.playcontrol = require('./playcontrol.js');
 create_functions.multitouch = require('./multitouch.js');
 create_functions.pan = require('./pan.js');
+create_functions.hbox = require('./hbox.js');
+create_functions.vbox = require('./vbox.js');
 
 function log(msg) {
     var args = Array.prototype.slice.call(arguments, 0);

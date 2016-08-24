@@ -59,6 +59,10 @@ function BaseWidget(params) {
         this.hidden = true;
     }
 
+    if(params.layout) {
+        this.layout = params.layout;
+    }
+
     this.params = this.prepareParams(params);
     this.colorScheme = new ColorScheme(this.params);
     this.send_enable = true;

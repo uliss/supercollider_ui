@@ -25,10 +25,25 @@ function bindOsc() {
 
         var w = widgets.create(msg.idx, msg.type, msg);
 
-        if (w && w.hidden) {
+        if (!w) return;
+
+        w.realParent = w.parentId();
+        if (w.hidden) { // trick to create hidden nexusUI widgets
+            // first we create it on visible parent, then move to hidden
             var target = $(HIDDEN_TARGET);
             if (target.length > 0) {
                 w = w.jQ().detach().appendTo(target);
+                w.realParent = HIDDEN_TARGET;
+            }
+        }
+
+        // move to layout
+        if(w.layout) {
+            var layout = $('#' + w.realParent).find('#' + w.layout);
+            if(layout.length > 0) {
+                w.jQ().detach().appendTo(layout);
+            } {
+                console.log("layout element not found: " + w.layout);
             }
         }
     });

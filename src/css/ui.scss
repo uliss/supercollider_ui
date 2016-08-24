@@ -75,11 +75,9 @@ button.btn-lg {
     // background-color: rgba(100, 10, 40, 50%);
     text-align: left;
     font-size: 14px;
-
     .widget_playcontrol {
         display: inline-block;
     }
-
     > div {
         display: inline-block;
     }
@@ -88,5 +86,27 @@ button.btn-lg {
     .nx[nx="slider"] {
         margin-left: 10px;
         margin-right: 10px;
+    }
+}
+.ui-layout-box {
+    min-width: 30px;
+    min-height: 30px;
+    padding: 5px;
+    .title {
+        text-align: left;
+        font-style: italic;
+        display: block;
+        font-size: 0.8em;
+        color: rgb(40, 40, 40);
+    }
+}
+.ui-layout-hbox {
+    canvas {
+        display: inline-block;
+    }
+}
+.ui-layout-vbox {
+    canvas {
+        display: block;
     }
 }
