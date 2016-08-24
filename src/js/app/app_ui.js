@@ -25,7 +25,7 @@ function bindOsc() {
 
         var w = widgets.create(msg.idx, msg.type, msg);
 
-        if (w.hidden) {
+        if (w && w.hidden) {
             var target = $(HIDDEN_TARGET);
             if (target.length > 0) {
                 w = w.jQ().detach().appendTo(target);
