@@ -45,6 +45,11 @@ function bindOsc() {
                 w.jQ().detach().appendTo(layout);
             }
         }
+
+        if(w.cssStyle) {
+            console.log("css style: " + JSON.stringify(w.cssStyle));
+            w.jQ().css(w.cssStyle);
+        }
     });
 
     server.on(PATH_REMOVE, function(id) {
