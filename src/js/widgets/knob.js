@@ -1,17 +1,6 @@
 var inherits = require('inherits');
 var nxw = require('./nexuswidget.js');
 
-function prepareParams(params) {
-    if (!params.size)
-        params.w = 100;
-    else
-        params.w = params.size;
-
-    params.h = params.w;
-
-    return params;
-}
-
 function Knob(params) {
     nxw.NexusWidget.call(this, 'dial', params);
     this.nx_widget.responsivity = 0.007;
@@ -27,8 +16,20 @@ function Knob(params) {
 
 inherits(Knob, nxw.NexusWidget);
 
+Knob.prototype.prepareParams = function(params) {
+    params = nxw.NexusWidget.prototype.prepareParams.call(this, params);
+
+    if (!params.size)
+        params.w = 100;
+    else
+        params.w = params.size;
+
+    params.h = params.w;
+
+    return params;
+};
+
 function create(params) {
-    params = prepareParams(params);
     var w = new Knob(params);
     w.bindToValue();
     return w;

@@ -1,25 +1,6 @@
 var inherits = require('inherits');
 var knob = require('./knob.js');
 
-function prepareParams(params) {
-    if (!params.size)
-        params.w = 60;
-    else
-        params.w = params.size;
-
-    params.min = -1.0;
-    params.max = 1.0;
-    params.colors = {
-        // accent: "#f1c40f",
-        // fill: "#e67e22",
-        accent: "#19B5FE",
-        // accent: "#e67e22",
-        borderhl: "#FFF"
-    };
-
-    return params;
-}
-
 function Pan(params) {
     knob.Knob.call(this, params);
     this.nx_widget.widgetStyle = 'handle';
@@ -48,8 +29,24 @@ Pan.prototype.reset = function() {
     this.nx_widget.init();
 };
 
+Pan.prototype.prepareParams = function(params) {
+    params = knob.Knob.prototype.prepareParams.call(this, params);
+
+    var defaults = {
+        'value': 0,
+        'min': -1.0,
+        'max': 1.0,
+        'colors': {
+            accent: "#19B5FE",
+            borderhl: "#C0C0CA"
+        }
+    };
+
+    return $.extend({}, defaults, params);
+};
+
 function create(params) {
-    params = prepareParams(params);
+    // params = prepareParams(params);
     var w = new Pan(params);
     w.bindToValue();
     return w;
