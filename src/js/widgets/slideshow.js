@@ -16,13 +16,19 @@ function Slideshow(params) {
     this.button_prev = this.control.find('.prev');
     this.button_next = this.control.find('.next');
 
-    this.button_prev.click(function(){
+    this.button_prev.click(function() {
         widget.find(id).prev();
     });
 
-    this.button_next.click(function(){
+    this.button_next.click(function() {
         widget.find(id).next();
     });
+
+    var swipeDir = 1;
+    // swipe backwards (for comfort sheet music swipe)
+    if (params.swipeDir == -1) {
+        swipeDir = -1;
+    }
 
     $(document).keydown(function(e) {
         if(e.keyCode == 32 || e.keyCode == 39) { widget.find(id).next(); }
@@ -33,8 +39,8 @@ function Slideshow(params) {
 
     if(params.noSwipe === undefined) {
         $('html').on('swipe', function(e, Dx, Dy) {
-            if(Dx == 1) { widget.find(id).next(); }
-            if(Dx == -1) { widget.find(id).prev(); }
+            if((Dx * swipeDir) == 1) { widget.find(id).next(); }
+            if((Dx * swipeDir) == -1) { widget.find(id).prev(); }
         });
     }
 
