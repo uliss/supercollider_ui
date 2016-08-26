@@ -90,7 +90,6 @@ Slideshow.prototype.command = function(cmd) {
     }
 
     if(cmd.preload) {
-        console.log("preload" + cmd.preload);
         preload_images.shift();
         var img = new Image();
         img.src = cmd.preload;
