@@ -34,6 +34,13 @@ Box.prototype.processParams = function(params) {
             $("<div>").addClass("title").text(params.title).prependTo(this.element);
         }
     }
+
+    if (params.titleIcon) {
+        var title = this.element.find(".title");
+        if (title.length > 0) {
+            title.prepend($('<span class="glyphicon">').addClass('glyphicon-' + params.titleIcon));
+        }
+    }
 };
 
 Box.prototype.update = function(params) {

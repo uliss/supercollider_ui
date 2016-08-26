@@ -101,6 +101,12 @@ button.btn-lg {
         display: block;
         font-size: 0.8em;
         color: rgb(40, 40, 40);
+        margin-top: 1px;
+        margin-bottom: 3px;
+        .glyphicon {
+            margin-right: 3px;
+            color: rgb(40, 40, 40);
+        }
     }
 }
 .ui-layout-hbox {
