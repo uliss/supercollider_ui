@@ -3,6 +3,8 @@ var jqw = require('./jqwidget.js');
 var widget = require('./index.js');
 var tmpl = require('fs').readFileSync(__dirname + '/tmpl/slideshow.html', 'utf8');
 
+var preload_images = [];
+
 // user params:
 // noSwipe: - if defined, no swipe support
 // hideButtons: (true|false) - if true, hide turn button
@@ -79,6 +81,14 @@ Slideshow.prototype.command = function(cmd) {
         $bg.css("height", win_h + "px");
         $bg.css("width", win_w + "px");
         $bg.css("background-size", "contain");
+    }
+
+    if(cmd.preload) {
+        console.log("preload" + cmd.preload);
+        preload_images.shift();
+        var img = new Image();
+        img.src = cmd.preload;
+        preload_images.push(new Image());
     }
 };
 
