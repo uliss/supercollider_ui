@@ -31,16 +31,20 @@ function create_ui() {
     app_ui.bindOsc();
 }
 
-function main() {
-    create_ui();
-    $(".modal").on("shown.bs.modal", function(event) {
-        event.stopPropagation();
-    });
-
-
-    $("#ui-piece-modal").on("touchmove", function(event){
+function disableUnwantedTurns(el) {
+    el.on("touchmove", function(event) {
         event.preventDefault();
     });
+    el.bind('touchstart touchend swipe', function(event) {
+        event.stopPropagation();
+    });
+}
+
+function main() {
+    create_ui();
+
+    disableUnwantedTurns($("#ui-piece-modal"));
+    disableUnwantedTurns($("#ui-piece-toolbar"));
 }
 
 module.exports.main = main;
