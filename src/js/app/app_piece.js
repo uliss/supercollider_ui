@@ -36,6 +36,11 @@ function main() {
     $(".modal").on("shown.bs.modal", function(event) {
         event.stopPropagation();
     });
+
+
+    $("#ui-piece-modal").on("touchmove", function(event){
+        event.preventDefault();
+    });
 }
 
 module.exports.main = main;
