@@ -35,7 +35,7 @@ function disableUnwantedTurns(el) {
     el.on("touchmove", function(event) {
         event.preventDefault();
     });
-    el.bind('touchstart touchend swipe', function(event) {
+    el.bind('swipe touchmove', function(event) {
         event.stopPropagation();
     });
 }
@@ -45,6 +45,10 @@ function main() {
 
     disableUnwantedTurns($("#ui-piece-modal"));
     disableUnwantedTurns($("#ui-piece-toolbar"));
+
+    // activate swipe on button == click
+    $(".modal-footer button").on("touchstart", function(event) { event.target.click(); });
+    $("#ui-piece-toolbar button").on("touchstart", function(event) { event.target.click(); });
 }
 
 module.exports.main = main;
