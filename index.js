@@ -46,12 +46,7 @@ try {
 
     io.on('connection', function(socket) {
         mod_server.bindSocket(APP_GLOBAL, socket);
-
-        //
-        // // socket.on(serverTimer.controlPath, function(msg) {
-        // //     timer.control(socket, serverTimer, msg);
-        // // });
-        //
+        serverTimer.bindSocket(APP_GLOBAL, socket);
 
         // ui.bindClient(socket);
         // ping.bindSocket(io, socket);
