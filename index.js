@@ -4,146 +4,58 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var osc = require('node-osc');
 var timer = require('./lib/timer');
-var server = require('./lib/server');
+var mod_server = require('./lib/server');
 var ui = require('./lib/ui');
 var utils = require('./lib/utils');
 var ping = require('./lib/ping');
 var sounds = require('./lib/sound.js');
+var npid = require('npid');
 
 var NODE_PORT = 3000;
 var OSC_IN_PORT = 5000;
 var OSC_OUT_PORT = OSC_IN_PORT + 1;
+var PID_FILE = "/usr/local/var/run/supercollider-ui.pid";
 
 var postmsg = utils.postmsg;
 var postln = utils.postln;
 
-Number.prototype.toHHMMSS = function() {
-    var seconds = Math.floor(this),
-        hours = Math.floor(seconds / 3600);
-    seconds -= hours * 3600;
-    var minutes = Math.floor(seconds / 60);
-    seconds -= minutes * 60;
-
-    if (hours < 10) {
-        hours = "0" + hours;
-    }
-    if (minutes < 10) {
-        minutes = "0" + minutes;
-    }
-    if (seconds < 10) {
-        seconds = "0" + seconds;
-    }
-    return hours + ':' + minutes + ':' + seconds;
-};
+var server_globals = {};
+server_globals.http = http;
+server_globals.app = app;
+server_globals.io = io;
 
 try {
+    var pid = npid.create(PID_FILE);
+    pid.removeOnExit();
+
     var oscServer = new osc.Server(OSC_IN_PORT, '0.0.0.0');
     var oscClient = new osc.Client('127.0.0.1', OSC_OUT_PORT);
-} catch (e) {
-    throw new Error("Can't start OSC server");
-};
+    var serverTimer = new timer.ServerTimer(io, '/server/timer');
 
-// OSC
-oscServer.on("/sc/stat", function(msg, rinfo) {
-    var json = JSON.parse(msg[1]);
-    // console.log(json);
-    // send to browsers
-    io.emit("/info/sc/stat/update", json);
-});
+    server_globals.osc = {};
+    server_globals.osc.server = oscServer;
+    server_globals.osc.client = oscClient;
 
-oscServer.on("/sc/concert/info", function(msg, rinfo) {
-    var json = JSON.parse(msg[1]);
-    io.emit("/concert/info", json);
-});
-
-// visual Metronome
-oscServer.on("/sc/vmetro/bar", function(msg, rinfo) {
-    postln('bar = "' + msg[1] + '"');
-    io.emit("/vmetro/bar", msg[1]);
-});
-
-oscServer.on("/sc/vmetro/numBeats", function(msg, rinfo) {
-    postln('num beats: ' + msg[1]);
-    io.emit("/vmetro/numBeats", msg[1]);
-});
-
-oscServer.on("/sc/vmetro/beat", function(msg, rinfo) {
-    postln('beats: ' + [msg[1], msg[2]]);
-    io.emit("/vmetro/beat", [msg[1], msg[2]]);
-});
-
-oscServer.on("/sc/vmetro/mark", function(msg, rinfo) {
-    postln('mark: ' + msg[1]);
-    io.emit("/vmetro/mark", msg[1]);
-});
-
-oscServer.on("/sc/vmetro/css", function(msg, rinfo) {
-    postln('metro css: {' + msg[1] + ':' + msg[2] + '}');
-    io.emit("/vmetro/css", [msg[1], msg[2]]);
-});
-
-oscServer.on("/sc/concert/add", function(msg, rinfo) {
-    var json = JSON.parse(msg[1]);
-    io.emit("/concert/add", json);
-});
-
-server.init(app, oscServer, oscClient, io);
-ui.init(oscServer, oscClient, io);
-sounds.init();
-
-// init timer staff
-var serverTimer = new timer.ServerTimer(io, '/server/timer');
+    mod_server.init(app, oscServer, oscClient, io);
+    ui.init(oscServer, oscClient, io);
+    sounds.init();
+} catch (err) {
+    console.log(err.what);
+    process.exit(1);
+}
 
 io.on('connection', function(socket) {
-    var addr = socket.request.connection.remoteAddress.substring(7);
-    if (!addr) addr = "127.0.0.1";
+    mod_server.notify_SC_OnClientConnect(socket);
 
-    postln('connected:    ' + addr);
+    // socket.on(serverTimer.controlPath, function(msg) {
+    //     timer.control(socket, serverTimer, msg);
+    // });
 
-    socket.on(serverTimer.controlPath, function(msg) {
-        timer.control(socket, serverTimer, msg);
-    });
-
-    socket.on('/nodejs/info', function() {
-        // send to dedicated client
-        io.to(socket.id).emit("/nodejs/info/update", {
-            clientsCount: io.engine.clientsCount,
-            remoteAddress: addr
-        });
-    });
-
-    server.bindSocket(io, socket, oscClient);
-
+    mod_server.bindSocket(io, socket, oscClient);
     ui.bindClient(socket);
-
     ping.bindSocket(io, socket);
-
     sounds.bindSocket(io, socket);
 
-    socket.on('/speakers/test', function(msg) {
-        // console.log("send " + msg);
-        // send to other devices
-        socket.broadcast.emit("/speakers/test/update", msg);
-        oscClient.send('/nodejs/speaker/control', msg[0], msg[1]);
-    });
-
-    socket.on('/info/poll', function(msg) {
-        // send to other clients
-        socket.broadcast.emit("/info/poll/update", msg);
-        // send to supercollider
-        // console.log(msg);
-        oscClient.send('/nodejs/stat/control', msg);
-    });
-
-    socket.on("/concert/info/get", function(msg) {
-        postln("get info requiest");
-        oscClient.send('/concert/info/get', msg);
-    });
-
-    socket.on("/concert/control", function(msg) {
-        postln(msg);
-        oscClient.send('/concert/' + msg[0], msg[1]);
-    });
 
     socket.on('disconnect', function() {
         postln('disconnected: ' + addr);
@@ -154,4 +66,5 @@ http.listen(NODE_PORT, function() {
     postln('listening HTTP on *:' + NODE_PORT);
     postln('listening OSC on *:' + OSC_IN_PORT);
     postln('sending OSC to localhost:' + OSC_OUT_PORT);
+    mod_server.notify_SC_OnBoot();
 });
