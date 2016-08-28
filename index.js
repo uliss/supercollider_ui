@@ -11,20 +11,24 @@ var ping = require('./lib/ping');
 var sounds = require('./lib/sound.js');
 var npid = require('npid');
 
-var NODE_PORT = 3000;
-var OSC_IN_PORT = 5000;
-var OSC_OUT_PORT = OSC_IN_PORT + 1;
-var PID_FILE = "/usr/local/var/run/supercollider-ui.pid";
+const NODE_PORT = 3000;
+const OSC_IN_PORT = 5000;
+const OSC_OUT_PORT = OSC_IN_PORT + 1;
+const PID_FILE = "/usr/local/var/run/supercollider-ui.pid";
 
-var postmsg = utils.postmsg;
-var postln = utils.postln;
+var log = utils.log;
 
-var server_globals = {};
-server_globals.http = http;
-server_globals.app = app;
-server_globals.io = io;
+var APP_GLOBAL = {};
+APP_GLOBAL.http = http;
+APP_GLOBAL.app = app;
+APP_GLOBAL.io = io;
 
 try {
+    // handle Ctrl+C terminate
+    process.on('SIGINT', function() {
+        process.exit(2);
+    });
+
     var pid = npid.create(PID_FILE);
     pid.removeOnExit();
 
@@ -32,39 +36,35 @@ try {
     var oscClient = new osc.Client('127.0.0.1', OSC_OUT_PORT);
     var serverTimer = new timer.ServerTimer(io, '/server/timer');
 
-    server_globals.osc = {};
-    server_globals.osc.server = oscServer;
-    server_globals.osc.client = oscClient;
+    APP_GLOBAL.osc = {};
+    APP_GLOBAL.osc.server = oscServer;
+    APP_GLOBAL.osc.client = oscClient;
 
-    mod_server.init(app, oscServer, oscClient, io);
-    ui.init(oscServer, oscClient, io);
-    sounds.init();
+    mod_server.init(APP_GLOBAL);
+    // ui.init(oscServer, oscClient, io);
+    // sounds.init();
+
+    io.on('connection', function(socket) {
+        mod_server.bindSocket(APP_GLOBAL, socket);
+
+        //
+        // // socket.on(serverTimer.controlPath, function(msg) {
+        // //     timer.control(socket, serverTimer, msg);
+        // // });
+        //
+
+        // ui.bindClient(socket);
+        // ping.bindSocket(io, socket);
+        // sounds.bindSocket(io, socket);
+    });
+
+    http.listen(NODE_PORT, function() {
+        log.info('listening HTTP on *:' + NODE_PORT);
+        log.info('listening OSC on *:' + OSC_IN_PORT);
+        log.info('sending OSC to localhost:' + OSC_OUT_PORT);
+        mod_server.notifyOnBoot(APP_GLOBAL);
+    });
 } catch (err) {
-    console.log(err.what);
+    log.error(err.message);
     process.exit(1);
 }
-
-io.on('connection', function(socket) {
-    mod_server.notify_SC_OnClientConnect(socket);
-
-    // socket.on(serverTimer.controlPath, function(msg) {
-    //     timer.control(socket, serverTimer, msg);
-    // });
-
-    mod_server.bindSocket(io, socket, oscClient);
-    ui.bindClient(socket);
-    ping.bindSocket(io, socket);
-    sounds.bindSocket(io, socket);
-
-
-    socket.on('disconnect', function() {
-        postln('disconnected: ' + addr);
-    });
-});
-
-http.listen(NODE_PORT, function() {
-    postln('listening HTTP on *:' + NODE_PORT);
-    postln('listening OSC on *:' + OSC_IN_PORT);
-    postln('sending OSC to localhost:' + OSC_OUT_PORT);
-    mod_server.notify_SC_OnBoot();
-});
