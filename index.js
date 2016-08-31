@@ -4,10 +4,10 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var osc = require('node-osc');
 var timer = require('./lib/timer');
-var mod_server = require('./lib/server');
-var ui = require('./lib/ui');
 var utils = require('./lib/utils');
-var ping = require('./lib/ping');
+var mod_server = require('./lib/server');
+var mod_ping = require('./lib/ping');
+var mod_ui = require('./lib/ui');
 var sounds = require('./lib/sound.js');
 var npid = require('npid');
 
@@ -16,7 +16,7 @@ const OSC_IN_PORT = 5000;
 const OSC_OUT_PORT = OSC_IN_PORT + 1;
 const PID_FILE = "/usr/local/var/run/supercollider-ui.pid";
 
-var log = utils.log;
+var log = utils.log();
 
 var APP_GLOBAL = {};
 APP_GLOBAL.http = http;
@@ -41,15 +41,14 @@ try {
     APP_GLOBAL.osc.client = oscClient;
 
     mod_server.init(APP_GLOBAL);
-    // ui.init(oscServer, oscClient, io);
+    mod_ui.init(APP_GLOBAL);
     // sounds.init();
 
     io.on('connection', function(socket) {
-        mod_server.bindSocket(APP_GLOBAL, socket);
         serverTimer.bindSocket(APP_GLOBAL, socket);
-
-        // ui.bindClient(socket);
-        // ping.bindSocket(io, socket);
+        mod_server.bindSocket(APP_GLOBAL, socket);
+        mod_ping.bindSocket(APP_GLOBAL, socket);
+        mod_ui.bindSocket(APP_GLOBAL, socket);
         // sounds.bindSocket(io, socket);
     });
 
